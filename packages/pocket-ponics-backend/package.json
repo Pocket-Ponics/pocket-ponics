@@ -1,0 +1,22 @@
+{
+  "name": "pocketponics",
+  "version": "1.0.0",
+  "description": "pocket ponics backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js --exec babel-node --presets env", 
+    "release": "npm run clean && npm run build && npm run serve", 
+    "clean": "rm -rf dist && mkdir dist", "build": "babel . -s -D -d dist --presets env --ignore node_modules", 
+    "serve": "node dist/server.js" 
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "nodemon": "^1.19.3"
+  }
+}
