@@ -4,8 +4,11 @@ exports.getToken = (req, res) => {
     let cred = req.headers.authorization.split(" ")[1]
     let buff = new Buffer(cred, 'base64');
     let text = buff.toString('ascii');
-    console.log(text)
-
+    
+    //calculate hash for provided password
+    const bcrypt = require('bcrypt');
+    var result = bcrypt.hashSync(text.split(":")[1], 10);
+    
     res.json({token: "d93nlHS134nHWSOOEW"})
 };
 

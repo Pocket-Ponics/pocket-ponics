@@ -4,14 +4,16 @@
   "description": "pocket ponics backend",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js --exec babel-node --presets env", 
-    "release": "npm run clean && npm run build && npm run serve", 
-    "clean": "rm -rf dist && mkdir dist", "build": "babel . -s -D -d dist --presets env --ignore node_modules", 
-    "serve": "node dist/server.js" 
+    "start": "nodemon server.js --exec babel-node --presets env",
+    "release": "npm run clean && npm run build && npm run serve",
+    "clean": "rm -rf dist && mkdir dist",
+    "build": "babel . -s -D -d dist --presets env --ignore node_modules",
+    "serve": "node dist/server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^3.0.6",
     "express": "^4.17.1"
   },
   "devDependencies": {
