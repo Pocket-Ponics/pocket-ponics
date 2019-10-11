@@ -1,5 +1,6 @@
 import sensorgrid from '../controllers/sensorgridController';
 import mobileapp from '../controllers/mobileappController';
+import auth from '../controllers/authController';
 
 export default (app) => {
 
@@ -49,4 +50,14 @@ export default (app) => {
 
     app.route('/mobileapp/sensor/:greenhouse_id')
         .get(mobileapp.getReadingsGreenhouse)
+
+    //Authentication Endpoints
+    app.route('/auth/get_token')
+        .get(auth.getToken)
+
+    app.route('/auth/reset_password')
+        .post(auth.resetPassword)
+
+    app.route('/auth/change_password')
+        .post(auth.changePassword)
 };
