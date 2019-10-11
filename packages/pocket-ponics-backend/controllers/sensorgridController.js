@@ -11,9 +11,7 @@ exports.postReadingsGreenhouse = (req, res) => {
     //sensor readings
     console.log(req.body)
 
-    res.json({
-        test: "test"
-    })
+    res.json( {200: "OK"})
 };
 
 //Post the all the sensor readings for a specific level
@@ -31,9 +29,7 @@ exports.postReadingsLevel = (req, res) => {
     //sensor readings
     console.log(req.body)
 
-    res.json({
-        test: "test"
-    })
+    res.json( {200: "OK"})
 };
 
 //Post a reading for a single sensor
@@ -51,9 +47,7 @@ exports.postReadingsSingle = (req, res) => {
     //sensor readings
     console.log(req.body)
 
-    res.json({
-        test: "test"
-    })
+    res.json( {200: "OK"})
 };
 
 //Update the greenhouse's current power source
@@ -68,9 +62,7 @@ exports.updatePowerSource = (req, res) => {
     //sensor readings
     console.log(req.body)
 
-    res.json({
-        test: "test"
-    })
+    res.json( {200: "OK"})
 };
 
 //Update the current backup battery level
@@ -85,9 +77,7 @@ exports.updateBackupBatteryLevel = (req, res) => {
     //sensor readings
     console.log(req.body)
 
-    res.json({
-        test: "test"
-    })
+    res.json( {200: "OK"})
 };
 
 //Get any pending adjustment commands from backend
@@ -99,7 +89,5 @@ exports.getAdjustments = (req, res) => {
     let text = buff.toString('ascii');
     console.log(text)
 
-    res.json({
-        test: []
-    })
+    res.json({adjustments: [{type: 0, amount: 34.0}, {type: 1, amount: 4.0},]})
 };

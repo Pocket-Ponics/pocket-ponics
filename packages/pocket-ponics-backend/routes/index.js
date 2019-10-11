@@ -7,10 +7,10 @@ export default (app) => {
     app.route('/sensorgrid/sensor/greenhouse')
         .post(sensorgrid.postReadingsGreenhouse);
 
-    app.route('/sensorgrid/sensor/level/:level')
+    app.route('/sensorgrid/sensor/:level')
         .post(sensorgrid.postReadingsLevel)
 
-    app.route('/sensorgrid/sensor/single/:level/:sensor_type')
+    app.route('/sensorgrid/sensor/:level/:sensor_type')
         .post(sensorgrid.postReadingsSingle)
 
     app.route('/sensorgrid/powersource')
@@ -25,13 +25,28 @@ export default (app) => {
     //Mobile App Endpoints
     app.route('/mobileapp/greenhouses')
         .get(mobileapp.getGreenhouses)
-    
+
     app.route('/mobileapp/levels/:greenhouse_id/:level')
         .put(mobileapp.updateLevel)
         .get(mobileapp.getLevel)
 
+    app.route('/mobileapp/greenhouses')
+        .post(mobileapp.createGreenhouse)
     
+    app.route('/mobileapp/greenhouses/:greenhouse_id')
+        .put(mobileapp.updateGreenhouse)
+        .delete(mobileapp.deleteGreenhouse)
+        .get(mobileapp.getGreenhouse)
+    
+    app.route('/mobileapp/adjustments/:greenhouse_id/:level')
+        .post(mobileapp.makeAdjustments)
 
-    
-    
+    app.route('/mobileapp/sensor/:greenhouse_id/:level/:sensor_type')
+        .get(mobileapp.getReadingsSingle)
+
+    app.route('/mobileapp/sensor/:greenhouse_id/:level')
+        .get(mobileapp.getReadingsLevel)
+
+    app.route('/mobileapp/sensor/:greenhouse_id')
+        .get(mobileapp.getReadingsGreenhouse)
 };
