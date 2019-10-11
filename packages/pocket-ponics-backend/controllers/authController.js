@@ -20,6 +20,14 @@ exports.resetPassword = (req, res) => {
     res.json({200: "OK"})
 };
 
+//Create a user with provided username and password
+exports.createUser = (req, res) => {
+    //provided values
+    console.log(req.body)
+
+    res.json({200: "OK"})
+};
+
 //Change the user's password
 exports.changePassword = (req, res) => {
     //provided values
