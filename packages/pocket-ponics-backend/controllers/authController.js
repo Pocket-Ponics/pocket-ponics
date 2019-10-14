@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+
 //Get an authentication token for given user credentials
 exports.getToken = (req, res) => {
     //convert base64 credentials to ascii
@@ -6,7 +8,6 @@ exports.getToken = (req, res) => {
     let text = buff.toString('ascii');
     
     //calculate hash for provided password
-    const bcrypt = require('bcrypt');
     var result = bcrypt.hashSync(text.split(":")[1], 10);
     
     res.json({token: "d93nlHS134nHWSOOEW"})

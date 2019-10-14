@@ -1,7 +1,6 @@
 
-//Post all sensor readings for all levels of greenhouse
+//Post all sensor readings for all tiers of greenhouse
 exports.postReadingsGreenhouse = (req, res) => {
-
     //convert base64 credentials to ascii
     let cred = req.headers.authorization.split(" ")[1]
     let buff = new Buffer(cred, 'base64');
@@ -14,9 +13,8 @@ exports.postReadingsGreenhouse = (req, res) => {
     res.json( {200: "OK"})
 };
 
-//Post the all the sensor readings for a specific level
-exports.postReadingsLevel = (req, res) => {
-
+//Post the all the sensor readings for a specific tier
+exports.postReadingsTier = (req, res) => {
     //convert base64 credentials to ascii
     let cred = req.headers.authorization.split(" ")[1]
     let buff = new Buffer(cred, 'base64');
@@ -34,7 +32,6 @@ exports.postReadingsLevel = (req, res) => {
 
 //Post a reading for a single sensor
 exports.postReadingsSingle = (req, res) => {
-
     //convert base64 credentials to ascii
     let cred = req.headers.authorization.split(" ")[1]
     let buff = new Buffer(cred, 'base64');
@@ -52,7 +49,6 @@ exports.postReadingsSingle = (req, res) => {
 
 //Update the greenhouse's current power source
 exports.updatePowerSource = (req, res) => {
-
     //convert base64 credentials to ascii
     let cred = req.headers.authorization.split(" ")[1]
     let buff = new Buffer(cred, 'base64');
@@ -67,7 +63,6 @@ exports.updatePowerSource = (req, res) => {
 
 //Update the current backup battery level
 exports.updateBackupBatteryLevel = (req, res) => {
-
     //convert base64 credentials to ascii
     let cred = req.headers.authorization.split(" ")[1]
     let buff = new Buffer(cred, 'base64');
@@ -82,7 +77,6 @@ exports.updateBackupBatteryLevel = (req, res) => {
 
 //Get any pending adjustment commands from backend
 exports.getAdjustments = (req, res) => {
-
     //convert base64 credentials to ascii
     let cred = req.headers.authorization.split(" ")[1]
     let buff = new Buffer(cred, 'base64');

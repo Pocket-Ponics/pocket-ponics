@@ -1,6 +1,5 @@
 //Retrieves all greenhouses for a specific user
 exports.getGreenhouses = (req, res) => {
-
     //get auth token
     let cred = req.headers.authorization.split(" ")[1]
     console.log(cred)
@@ -10,9 +9,8 @@ exports.getGreenhouses = (req, res) => {
     })
 };
 
-//Update a specified level of the greenhouse with provided values
-exports.updateLevel = (req, res) => {
-
+//Update a specified tier of the greenhouse with provided values
+exports.updateTier = (req, res) => {
     //get auth token
     let cred = req.headers.authorization.split(" ")[1]
     console.log(cred)
@@ -28,9 +26,8 @@ exports.updateLevel = (req, res) => {
     })
 };
 
-//Get all data for specified level of the greenhouse
-exports.getLevel = (req, res) => {
-
+//Get all data for specified tier of the greenhouse
+exports.getTier = (req, res) => {
     //get auth token
     let cred = req.headers.authorization.split(" ")[1]
     console.log(cred)
@@ -43,7 +40,6 @@ exports.getLevel = (req, res) => {
 
 //Create a new greenhouse with provided values
 exports.createGreenhouse = (req, res) => {
-
     //get auth token
     let cred = req.headers.authorization.split(" ")[1]
     console.log(cred)
@@ -59,7 +55,6 @@ exports.createGreenhouse = (req, res) => {
 
 //Get values for a greenhouse with specified greenhouse_id
 exports.getGreenhouse = (req, res) => {
-
     //get auth token
     let cred = req.headers.authorization.split(" ")[1]
     console.log(cred)
@@ -67,12 +62,23 @@ exports.getGreenhouse = (req, res) => {
     //get parameters passed through url
     console.log(req.params)
 
-    res.json({greenhouse_id: "937502957290", user_id: "834058102935", backup_batt_level: 94.0, power_source: 0, level1: "23", level2: "34", level3: "35", level4: "62", greenhouse_name: "Test Greenhouse"})
+    res.json({greenhouse_id: "937502957290", user_id: "834058102935", backup_batt_level: 94.0, power_source: 0, tier1: "23", tier2: "34", tier3: "35", tier4: "62", greenhouse_name: "Test Greenhouse"})
+};
+
+//Get readings for a greenhouse with specified greenhouse_id for specified date range
+exports.getGreenhouseReadings = (req, res) => {
+    //get auth token
+    let cred = req.headers.authorization.split(" ")[1]
+    console.log(cred)
+
+    //get parameters passed through url
+    console.log(req.params)
+
+    res.json({greenhouse_id: "937502957290", user_id: "834058102935", backup_batt_level: [{date: "2016-09-26", reading: 94.0},{date: "2016-09-27", reading: 93.1}], power_source: [{date: "2016-09-26", reading: 0},{date: "2016-09-27", reading: 1}], greenhouse_name: "Test Greenhouse"})
 };
 
 //Update greenhouse with provided values
 exports.updateGreenhouse = (req, res) => {
-
     //get auth token
     let cred = req.headers.authorization.split(" ")[1]
     console.log(cred)
@@ -88,7 +94,6 @@ exports.updateGreenhouse = (req, res) => {
 
 //Delete greenhouse with specified greenhouse_id
 exports.deleteGreenhouse = (req, res) => {
-
     //get auth token
     let cred = req.headers.authorization.split(" ")[1]
     console.log(cred)
@@ -99,9 +104,8 @@ exports.deleteGreenhouse = (req, res) => {
     res.json({200: "OK"})
 };
 
-//Adjust the water level, nutrient level or light level for specific level in greenhouse
+//Adjust the water level, nutrient level or light level for specific tier in greenhouse
 exports.makeAdjustments = (req, res) => {
-
     //get auth token
     let cred = req.headers.authorization.split(" ")[1]
     console.log(cred)
@@ -117,7 +121,6 @@ exports.makeAdjustments = (req, res) => {
 
 //Get the current sensor reading for a single sensor type
 exports.getReadingsSingle = (req, res) => {
-
     //get auth token
     let cred = req.headers.authorization.split(" ")[1]
     console.log(cred)
@@ -128,9 +131,8 @@ exports.getReadingsSingle = (req, res) => {
     res.json({reading: 23.0})
 };
 
-//Get all sensor readings for specified level in greenhouse
-exports.getReadingsLevel = (req, res) => {
-
+//Get all sensor readings for specified tier in greenhouse
+exports.getReadingsTier = (req, res) => {
     //get auth token
     let cred = req.headers.authorization.split(" ")[1]
     console.log(cred)
@@ -141,9 +143,8 @@ exports.getReadingsLevel = (req, res) => {
     res.json({water_level: 23.0, pH_level: 7.9, elec_cond: 1.9})
 };
 
-//Get all sensor readings for all levels of greenhouse
+//Get all sensor readings for all tiers of greenhouse
 exports.getReadingsGreenhouse = (req, res) => {
-
     //get auth token
     let cred = req.headers.authorization.split(" ")[1]
     console.log(cred)
@@ -151,5 +152,5 @@ exports.getReadingsGreenhouse = (req, res) => {
     //get parameters passed through url
     console.log(req.params)
 
-    res.json({level1: {water_level: 23.0, pH_level: 7.9, elec_cond: 1.9}, level2: {water_level: 23.0, pH_level: 7.9, elec_cond: 1.9}, level3: {water_level: 23.0, pH_level: 7.9, elec_cond: 1.9}, level4: {water_level: 23.0, pH_level: 7.9, elec_cond: 1.9},})
+    res.json({tier1: {water_level: 23.0, pH_level: 7.9, elec_cond: 1.9}, tier2: {water_level: 23.0, pH_level: 7.9, elec_cond: 1.9}, tier3: {water_level: 23.0, pH_level: 7.9, elec_cond: 1.9}, tier4: {water_level: 23.0, pH_level: 7.9, elec_cond: 1.9},})
 };
