@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+import mySQL from '../models/mySQLModel';
 
 //Get an authentication token for given user credentials
 exports.getToken = (req, res) => {
@@ -14,7 +15,8 @@ exports.getToken = (req, res) => {
     
     //Retrieve password hash from database for given username
     //TODO: retrieve hash from DB
-
+    mySQL.conTest()
+    
     //Calculate hash for provided password
     var passwordHash = bcrypt.hashSync(password, 10);
 

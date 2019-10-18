@@ -1,0 +1,7 @@
+insert into pocketponics.user (user_id, email, password_hash) VALUES (6, "test@gmail.com", 'asdf22321sad3f21s32df03asdf');
+
+insert into pocketponics.active_sessions (token, expiration_date, user_id) VALUES ('ksd1g6s8d1rg981sd351fg65sd1fg', '2019-10-17', 6)
+
+select user_id from pocketponics.active_sessions where token = 'ksd1g6s8d1rg981sd351fg65sd1fg'
+
+select password_hash from pocketponics.user where user_id = 6

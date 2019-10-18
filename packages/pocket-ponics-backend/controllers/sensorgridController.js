@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 
 //Post all sensor readings for all tiers of greenhouse
 exports.postReadingsGreenhouse = (req, res) => {
@@ -170,5 +171,5 @@ exports.getAdjustments = (req, res) => {
     //Retrieve adjustments from DB
     //TODO: query DB
 
-    res.json({adjustments: [{type: 0, amount: 34.0}, {type: 1, amount: 4.0},]})
+    res.json({adjustments: [[{type: 0, amount: 34.0}, {type: 1, amount: 4.0},], [{type: 1, amount: 3.0}, {type: 2, amount: 41.0},]]})
 };
