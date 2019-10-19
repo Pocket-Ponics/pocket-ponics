@@ -1,10 +1,11 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-const TierScreen = () => {
+const TierScreen = props => {
+	const { navigate } = props.navigation
 	return (
 		<View>
-			<Text>TierScreen</Text>
+			<Text>{props.navigation.getParam('plant')}</Text>
 		</View>
 	)
 }
