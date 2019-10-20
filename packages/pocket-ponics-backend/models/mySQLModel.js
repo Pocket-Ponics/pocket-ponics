@@ -14,7 +14,8 @@ exports.getHashForUser = (email, callback) => {
         if(result.rows.length == 1)
         {        
             callback(result.rows[0])
-        } else if(result.rows.length == 0)
+        } 
+        else if(result.rows.length == 0)
         {
             callback(undefined)
         }

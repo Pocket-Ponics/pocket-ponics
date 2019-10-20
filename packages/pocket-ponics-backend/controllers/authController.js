@@ -32,9 +32,11 @@ exports.getToken = (req, res) => {
                     mySQL.insertTokenForUser(token, record.user_id, mySQL.getExpirationDateString(), (err, result) => {
                         if(!err)
                         {
-                            console.log("insert operation successful")
-                        } else {
-                            console.log("unable to insert token in db")
+                            console.log("Insert operation successful")
+                        } 
+                        else 
+                        {
+                            console.log("Unable to insert token in db")
                         }
                     })
                     res.json({token: token})
