@@ -1,7 +1,9 @@
-insert into pocketponics.user (user_id, email, password_hash) VALUES (6, "test@gmail.com", 'asdf22321sad3f21s32df03asdf');
+insert into pocketponics.user (email, password_hash) VALUES ("test3@gmail.com", 'asdf22321sad3f21s32df03asdf');
 
-insert into pocketponics.active_sessions (token, expiration_date, user_id) VALUES ('ksd1g6s8d1rg981sd351fg65sd1fg', '2019-10-17', 6)
+select user_id, password_hash from user where email = '${email}'
 
-select user_id from pocketponics.active_sessions where token = 'ksd1g6s8d1rg981sd351fg65sd1fg'
+DELETE FROM active_sessions WHERE (user_id = '${user_id}')
 
-select password_hash from pocketponics.user where user_id = 6
+insert into active_sessions (token, expiration_date, user_id) VALUES ('${token}', '${expiration}', ${user_id})
+
+UPDATE user SET password_hash = '${password_hash}' WHERE (user_id = '${user_id}')

@@ -22,6 +22,39 @@ exports.getHashForUser = (email, callback) => {
     })
 }
 
+exports.createUser = (email, password_hash, callback) => {
+    sqlController.execute(`insert into user (email, password_hash) VALUES ("${email}", '${password_hash}')`, function(err, result) {
+        if(err)
+        {
+            console.log(result)
+            callback(err, result)
+        }
+        callback(err, result)
+    })
+}
+
+exports.revokeTokens = (user_id, callback) => {
+    sqlController.execute(`DELETE FROM active_sessions WHERE (user_id = '${user_id}')`, function(err, result) {
+        if(err)
+        {
+            console.log(result)
+            callback(err, result)
+        }
+        callback(err, result)
+    })
+}
+
+exports.updateUserHash = (user_id, password_hash, callback) => {
+    sqlController.execute(`UPDATE user SET password_hash = '${password_hash}' WHERE (user_id = '${user_id}')`, function(err, result) {
+        if(err)
+        {
+            console.log(result)
+            callback(err, result)
+        }
+        callback(err, result)
+    })
+}
+
 exports.insertTokenForUser = (token, user_id, expiration, callback) => {
     sqlController.execute(`insert into active_sessions (token, expiration_date, user_id) VALUES ('${token}', '${expiration}', ${user_id})`, function(err, result){
         if(err)
