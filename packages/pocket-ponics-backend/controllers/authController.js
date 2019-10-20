@@ -12,21 +12,39 @@ exports.getToken = (req, res) => {
     //Store username and password provided
     var username = credentials[0];
     var password = credentials[1];
-    
+
     //Retrieve password hash from database for given username
-    //TODO: retrieve hash from DB
-    mySQL.conTest()
-    
-    //Calculate hash for provided password
-    var passwordHash = bcrypt.hashSync(password, 10);
-
-    //Compare calculated hash to retrieved hash
-    //TODO: compare calculated hash to retrieved hash
-
-    //Calculate token, store in DB and return as response
-    var token = crypto.randomBytes(32).toString('ascii')
-    //TODO: store token in DB
-    res.json({token: token})
+    mySQL.getHashForUser(username, function(record) {
+        if(record == undefined)
+        {
+            res.json({402: "User Not Found"})
+        } 
+        else 
+        {
+            //Calculate password hash and compare to retrieved hash
+            bcrypt.compare(password, record.password_hash, (err, result) => {
+                if(result)
+                {
+                    //Calculate token, store in DB and return as response
+                    var token = crypto.randomBytes(32).toString('ascii')
+                    
+                    //Store token in DB
+                    mySQL.insertTokenForUser(token, record.user_id, mySQL.getExpirationDateString(), (err, result) => {
+                        if(!err)
+                        {
+                            console.log("insert operation successful")
+                        } else {
+                            console.log("unable to insert token in db")
+                        }
+                    })
+                    res.json({token: token})
+                }
+                else {
+                    res.json({401: "Unauthorized"})
+                }        
+            })
+        }
+    })
 };
 
 //Send a reset password command to backend
