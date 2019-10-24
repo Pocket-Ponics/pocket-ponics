@@ -22,6 +22,40 @@ exports.getHashForUser = (email, callback) => {
     })
 }
 
+exports.getGreenhousesForUser = (user_id, callback) => {
+    sqlController.execute(`select greenhouse_id from greenhouse where user_id = "${user_id}"`, function(err, result) {
+        callback(result.rows)
+    })
+}
+
+exports.createGreenhouseForUser = (name, user_id, callback) => {
+    sqlController.execute(`insert into greenhouse (name, user_id) values ("${name}", ${user_id});`, function(err, result) {
+        sqlController.execute(`SELECT LAST_INSERT_ID()`, function(err, result){
+            callback(result.rows[0])
+        })
+    })
+}
+
+exports.createEmptyTierForNewGreenhouse = (greenhouse_id, tier, callback) => {
+    sqlController.execute(`insert into tiers (tier, greenhouse_id) VALUES (${tier}, ${greenhouse_id});`, function(err, result) {
+        callback(result)
+    })
+}
+
+exports.getUserForToken = (token, callback) => {
+    sqlController.execute(`select user_id from active_sessions where expiration_date > NOW() and token = "${token}";
+    `, function(err, result) {
+        if(result.rows.length == 1)
+        {
+            callback(result.rows[0])
+        }
+        else if(result.rows.length == 0)
+        {
+            callback(undefined)
+        }
+    })
+}
+
 exports.createUser = (email, password_hash, callback) => {
     sqlController.execute(`insert into user (email, password_hash) VALUES ("${email}", '${password_hash}')`, function(err, result) {
         if(err)
@@ -68,5 +102,6 @@ exports.insertTokenForUser = (token, user_id, expiration, callback) => {
 
 exports.getExpirationDateString = () => {
     var date = new Date(new Date().getTime() + 30*60000)
-    return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + " " + date.getHours()+ ":" + date.getMinutes() + ":" + date.getSeconds()
+    console.log(date.getMonth())
+    return date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours()+ ":" + date.getMinutes() + ":" + date.getSeconds()
 }

@@ -7,3 +7,15 @@ DELETE FROM active_sessions WHERE (user_id = '${user_id}')
 insert into active_sessions (token, expiration_date, user_id) VALUES ('${token}', '${expiration}', ${user_id})
 
 UPDATE user SET password_hash = '${password_hash}' WHERE (user_id = '${user_id}')
+
+select user_id from pocketponics.active_sessions where expiration_date > NOW() and token = "kU8X2GtHbhDBcW6SbnoZeJ9F4QeNuTuxg96oIGBbgwk="
+
+insert into pocketponics.tiers (tier, greenhouse_id) VALUES (1, ${greenhouse_id});
+insert into pocketponics.tiers (tier, greenhouse_id) VALUES (2, ${greenhouse_id});
+insert into pocketponics.tiers (tier, greenhouse_id) VALUES (3, ${greenhouse_id});
+insert into pocketponics.tiers (tier, greenhouse_id) VALUES (4, ${greenhouse_id});
+
+ALTER TABLE tiers
+ADD FOREIGN KEY (greenhouse_id) REFERENCES greenhouse(greenhouse_id);
+
+insert into greenhouse (name, user_id) values ("test", 1); SELECT LAST_INSERT_ID();

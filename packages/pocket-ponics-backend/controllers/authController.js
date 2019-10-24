@@ -26,7 +26,7 @@ exports.getToken = (req, res) => {
                 if(result)
                 {
                     //Calculate token, store in DB and return as response
-                    var token = crypto.randomBytes(32).toString('ascii')
+                    var token = crypto.randomBytes(32).toString('base64')
                     
                     //Store token in DB
                     mySQL.insertTokenForUser(token, record.user_id, mySQL.getExpirationDateString(), (err, result) => {

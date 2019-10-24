@@ -1,16 +1,32 @@
+import mySQL from '../models/mySQLModel';
+import async from 'async'
+import { callbackify } from 'util';
+
 //Retrieves all greenhouses for a specific user
 exports.getGreenhouses = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
 
     //Retrieve user_id for given auth token
-    //TODO: retrieve user_id from DB
+    mySQL.getUserForToken(cred, function(record) {
+        if(record != undefined)
+        {    
+            //Retrieve all greenhouse_id values from DB for user_id
+            mySQL.getGreenhousesForUser(record.user_id, function(record) {
+                var result = []
+                record.forEach(row => {
+                    result.push(row.greenhouse_id)
+                });
 
-    //Retrieve all greenhouse_id values from DB for user_id
-    //TODO: retrieve greenhouse_id values from DB
-
-    res.json({
-        greenhouses: ["298379827453","872932938740","234234235467"]
+                res.json({
+                    greenhouses: result
+                })
+            })
+        }
+        else 
+        {
+            res.json({401: "Unauthorized"})
+        }
     })
 };
 
@@ -64,15 +80,33 @@ exports.createGreenhouse = (req, res) => {
     let cred = req.headers.authorization.split(" ")[1]
 
     //Retrieve user_id for given auth token
-    //TODO: retrieve user_id from DB
+    mySQL.getUserForToken(cred, function(record) {
+        if(record != undefined)
+        {    
+            //Store greenhouse name provided
+            var greenhouse_name = req.body.name
 
-    //Store greenhouse name provided
-    var greenhouse_name = req.body.name
+            //Insert new greenhouse
+            mySQL.createGreenhouseForUser(greenhouse_name, record.user_id, function(record) {
+                var newGreenhouseID = record["LAST_INSERT_ID()"]
 
-    // Insert new values into tier table for given greenhouse_name
-    //TODO: insert into DB
-
-    res.json({200: "OK"})
+                // Insert new values into tier table for given greenhouse_name
+                mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 1, function(record){
+                    mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 2, function(record){
+                        mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 3, function(record){
+                            mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 4, function(record){
+                                res.json({200: "OK"})
+                            })
+                        })
+                    })
+                })
+            })
+        }
+        else 
+        {
+            res.json({401: "Unauthorized"})
+        }
+    })
 };
 
 //Get values for a greenhouse with specified greenhouse_id
