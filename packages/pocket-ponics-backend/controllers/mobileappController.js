@@ -8,19 +8,28 @@ exports.getGreenhouses = (req, res) => {
     let cred = req.headers.authorization.split(" ")[1]
 
     //Retrieve user_id for given auth token
-    mySQL.getUserForToken(cred, function(record) {
-        if(record != undefined)
+    mySQL.getUserForToken(cred, function(err, record) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(record != undefined)
         {    
             //Retrieve all greenhouse_id values from DB for user_id
-            mySQL.getGreenhousesForUser(record.user_id, function(record) {
-                var result = []
-                record.forEach(row => {
-                    result.push(row.greenhouse_id)
-                });
-
-                res.json({
-                    greenhouses: result
-                })
+            mySQL.getGreenhousesForUser(record.user_id, function(err, record) {
+                if(!err)
+                {
+                    var result = []
+                    record.forEach(row => {
+                        result.push(row.greenhouse_id)
+                    });
+    
+                    res.json({
+                        greenhouses: result
+                    })
+                } else {
+                    res.json({201: "Unable to retrieve greenhouses"})
+                }
             })
         }
         else 
@@ -80,26 +89,64 @@ exports.createGreenhouse = (req, res) => {
     let cred = req.headers.authorization.split(" ")[1]
 
     //Retrieve user_id for given auth token
-    mySQL.getUserForToken(cred, function(record) {
-        if(record != undefined)
+    mySQL.getUserForToken(cred, function(err, record) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(record != undefined)
         {    
             //Store greenhouse name provided
             var greenhouse_name = req.body.name
 
             //Insert new greenhouse
-            mySQL.createGreenhouseForUser(greenhouse_name, record.user_id, function(record) {
-                var newGreenhouseID = record["LAST_INSERT_ID()"]
+            mySQL.createGreenhouseForUser(greenhouse_name, record.user_id, function(err, record) {
+                if(!err)
+                {
+                    var newGreenhouseID = record["LAST_INSERT_ID()"]
 
-                // Insert new values into tier table for given greenhouse_name
-                mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 1, function(record){
-                    mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 2, function(record){
-                        mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 3, function(record){
-                            mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 4, function(record){
-                                res.json({200: "OK"})
+                    // Insert new values into tier table for given greenhouse_name
+                    mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 1, function(err, record){
+                        if(!err)
+                        {
+                            mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 2, function(err, record){
+                                if(!err)
+                                {
+                                    mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 3, function(err, record){
+                                        if(!err)
+                                        {
+                                            mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 4, function(err, record){
+                                                if(!err)
+                                                {
+                                                    res.json({200: "Greenhouse Created"})
+                                                } 
+                                                else 
+                                                { 
+                                                    res.json({201: "Error creating greenhouse tier"}) 
+                                                }
+                                            })
+                                        } 
+                                        else 
+                                        { 
+                                            res.json({201: "Error creating greenhouse tier"}) 
+                                        }
+                                    })
+                                } 
+                                else 
+                                { 
+                                    res.json({201: "Error creating greenhouse tier"}) 
+                                }
                             })
-                        })
+                        } 
+                        else 
+                        { 
+                            res.json({201: "Error creating greenhouse tier"}) 
+                        }
                     })
-                })
+                }
+                else {
+                    res.json({201: "Error creating greenhouse"})
+                }
             })
         }
         else 
@@ -114,16 +161,32 @@ exports.getGreenhouse = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
 
-    //Retrieve user_id for given auth token
-    //TODO: retrieve user_id from DB
-
     //Store greenhouse_id provided
     var greenhouse_id = req.params.greenhouse_id
 
-    //Check if greenhouse_id is valid for user_id and greenhouse_id provided - do this in the model to make sure nothing gets missed
-    //TODO: query DB
-
-    res.json({greenhouse_id: "937502957290", user_id: "834058102935", backup_batt_level: 94.0, power_source: 0, tier1: "23", tier2: "34", tier3: "35", tier4: "62", greenhouse_name: "Test Greenhouse"})
+    //Retrieve user_id for given auth token
+    mySQL.getUserForToken(cred, function(err, record) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(record != undefined)
+        {    
+            mySQL.getGreenhouseForUser(record.user_id, greenhouse_id, function(err, record) {
+                if(!err)
+                {
+                    res.json({greenhouse_id: greenhouse_id, user_id: record.user_id, water_level: record.rows[0].water_level, nutrient_level: record.rows[0].nutrient_level, seedling_time: record.rows[0].seedling_time, backup_batt_level: record.rows[0].battery, power_source: record.rows[0].power_source, greenhouse_name: record.rows[0].name})
+                }
+                else {
+                    res.json({201: "Error retrieving greenhouse"})
+                }
+            })
+        }
+        else 
+        {
+            res.json({401: "Unauthorized"})
+        }
+    })
 };
 
 //Get readings for a greenhouse with specified greenhouse_id for specified date range

@@ -14,8 +14,12 @@ exports.getToken = (req, res) => {
     var password = credentials[1];
 
     //Retrieve password hash from database for given email
-    mySQL.getHashForUser(email, function(record) {
-        if(record == undefined)
+    mySQL.getHashForUser(email, function(err, record) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(record == undefined)
         {
             res.json({402: "User Not Found"})
         } 
@@ -66,8 +70,12 @@ exports.createUser = (req, res) => {
     var email = req.body.email;
     
     //Retrieve email from database
-    mySQL.getHashForUser(email, function(record) {
-        if(record == undefined)
+    mySQL.getHashForUser(email, function(err, record) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(record == undefined)
         {    
             //Calculate hash for provided password
             var password_hash = bcrypt.hashSync(password, 10)
@@ -101,9 +109,12 @@ exports.changePassword = (req, res) => {
     var newPassword = req.body.new_password;
     
     //Retrieve password hash from DB for provided email
-    //TODO: retrieve hash from DB
-    mySQL.getHashForUser(email, function(record) {
-        if(record == undefined)
+    mySQL.getHashForUser(email, function(err, record) {
+        if(err)
+        {
+            res.json({403:"Authentication Error"})
+        }
+        else if(record == undefined)
         {
             res.json({402: "User Not Found"})
         } 
