@@ -15,12 +15,12 @@ exports.getHashForUser = (email, callback) => {
         {        
             callback(err, result.rows[0])
         } 
-        else if(result.rows.length == 0 || err)
+        else if(result.rows.length > 1)
         {
-            if(err)
-            {
-                console.log(result)
-            }
+            callback(true, undefined)
+        }
+        else
+        {
             callback(err, undefined)
         }
     })
@@ -54,8 +54,8 @@ exports.createGreenhouseForUser = (name, user_id, callback) => {
     })
 }
 
-exports.createEmptyTierForNewGreenhouse = (greenhouse_id, tier, callback) => {
-    sqlController.execute(`insert into tiers (tier, greenhouse_id) VALUES (${tier}, ${greenhouse_id});`, function(err, result) {
+exports.createEmptyTierForNewGreenhouse = (greenhouse_id, tier, user_id, callback) => {
+    sqlController.execute(`insert into tiers (tier, greenhouse_id, user_id) VALUES (${tier}, ${greenhouse_id}, ${user_id};`, function(err, result) {
         if(err)
         {
             console.log(result)
@@ -70,9 +70,30 @@ exports.getUserForToken = (token, callback) => {
         {
             callback(err, result.rows[0])
         }
-        else if(result.rows.length == 0 || err)
+        else if(result.rows.length > 1)
+        {
+            callback(true, undefined)
+        }
+        else
         {
             callback(err, undefined)
+        }
+    })
+}
+
+exports.getTierForGreenhouse = (greenhouse_id, tier, user_id, callback) => {
+    sqlController.execute(`SELECT * FROM tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id} and tier = ${tier}`, function(err, result) {
+        if(result.rows.length == 1)
+        {
+            callback(err, result.rows[0])
+        }
+        else
+        {
+            if(err)
+            {
+                console.log(err)
+            }
+            callback(true, undefined)
         }
     })
 }
@@ -99,11 +120,18 @@ exports.revokeTokens = (user_id, callback) => {
 
 exports.getGreenhouseForUser = (user_id, greenhouse_id, callback) => {
     sqlController.execute(`select name, water_level, nutrient_level, battery, power_source, seedling_time from greenhouse where greenhouse_id = ${greenhouse_id} and user_id = ${user_id}`, function(err, result) {
-        if(err)
+        if(result.rows.length == 1)
         {
-            console.log(result)
+            callback(err, result.rows[0])
         }
-        callback(err, result)
+        else
+        {
+            if(err)
+            {
+                console.log(err)
+            }
+            callback(true, undefined)
+        }
     })
 }
 

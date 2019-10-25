@@ -1,6 +1,4 @@
 import mySQL from '../models/mySQLModel';
-import async from 'async'
-import { callbackify } from 'util';
 
 //Retrieves all greenhouses for a specific user
 exports.getGreenhouses = (req, res) => {
@@ -39,7 +37,7 @@ exports.getGreenhouses = (req, res) => {
     })
 };
 
-//Update a specified tier of the greenhouse with provided values
+//TODO: Update a specified tier of the greenhouse with provided values
 exports.updateTier = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
@@ -66,21 +64,37 @@ exports.updateTier = (req, res) => {
 exports.getTier = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
-    
-    //Retrieve user_id for given auth token
-    //TODO: retrieve user_id from DB
 
     //Store greenhouse_id and tier_id provided
     var greenhouse_id = req.params.greenhouse_id
     var tier_id = req.params.tier
 
-    //Check if greenhouse_id is valid for user_id and greenhouse_id provided - do this in the model to make sure nothing gets missed
-    //TODO: query DB
+    //Retrieve user_id for given auth token
+    mySQL.getUserForToken(cred, function(err, record) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(record != undefined)
+        {    
+            //Retrieve values from tier table for given greenhouse_id, user_id and tier_id
+            mySQL.getTierForGreenhouse(greenhouse_id, tier_id, record.user_id, function(err, record) {
+                if(!err)
+                {
+                    res.json( {plant_id: record.plant_id, growth_stage: record.growth_stage, water_level: record.water_level, light_level: record.light_level, cycle_time: record.cycle_time, pH_level: record.pH_level, elec_cond: record.ec_level, temp: record.temp, num_plants: record.num_plants})
+                }
+                else
+                {
+                    res.json({201: "Unable to retrieve tier"})
+                }
+            })
 
-    //Retrieve values from tier table for given greenhouse_id and tier_id
-    //TODO: query DB
-
-    res.json( {plant_id: "029468109359", growth_stage: "2", plant_type_id: "3", water_level: 23.0, light_level: 8.0, cycle_time: 24.0, pH_level: 7.8, elec_cond: 2.1})
+        }
+        else 
+        {
+            res.json({401: "Unauthorized"})
+        }
+    })
 };
 
 //Create a new greenhouse with provided values
@@ -106,16 +120,16 @@ exports.createGreenhouse = (req, res) => {
                     var newGreenhouseID = record["LAST_INSERT_ID()"]
 
                     // Insert new values into tier table for given greenhouse_name
-                    mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 1, function(err, record){
+                    mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 1, record.user_id, function(err, record){
                         if(!err)
                         {
-                            mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 2, function(err, record){
+                            mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 2, record.user_id, function(err, record){
                                 if(!err)
                                 {
-                                    mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 3, function(err, record){
+                                    mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 3, record.user_id, function(err, record){
                                         if(!err)
                                         {
-                                            mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 4, function(err, record){
+                                            mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 4, record.user_id, function(err, record){
                                                 if(!err)
                                                 {
                                                     res.json({200: "Greenhouse Created"})
@@ -189,7 +203,7 @@ exports.getGreenhouse = (req, res) => {
     })
 };
 
-//Get readings for a greenhouse with specified greenhouse_id for specified date range
+//TODO: Get readings for a greenhouse with specified greenhouse_id for specified date range
 exports.getGreenhouseReadings = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
@@ -211,7 +225,7 @@ exports.getGreenhouseReadings = (req, res) => {
     res.json({greenhouse_id: "937502957290", user_id: "834058102935", backup_batt_level: [{date: "2016-09-26", reading: 94.0},{date: "2016-09-27", reading: 93.1}], power_source: [{date: "2016-09-26", reading: 0},{date: "2016-09-27", reading: 1}], greenhouse_name: "Test Greenhouse"})
 };
 
-//Update greenhouse with provided values
+//TODO: Update greenhouse with provided values
 exports.updateGreenhouse = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
@@ -231,7 +245,7 @@ exports.updateGreenhouse = (req, res) => {
     res.json({200: "OK"})
 };
 
-//Delete greenhouse with specified greenhouse_id
+//TODO: Delete greenhouse with specified greenhouse_id
 exports.deleteGreenhouse = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
@@ -251,7 +265,7 @@ exports.deleteGreenhouse = (req, res) => {
     res.json({200: "OK"})
 };
 
-//Adjust the water level, nutrient level or light level for specific tier in greenhouse
+//TODO: Adjust the water level, nutrient level or light level for specific tier in greenhouse
 exports.makeAdjustments = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
@@ -272,7 +286,7 @@ exports.makeAdjustments = (req, res) => {
     res.json({200: "OK"})
 };
 
-//Get the current sensor reading for a single sensor type
+//TODO: Get the current sensor reading for a single sensor type
 exports.getReadingsSingle = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
@@ -294,7 +308,7 @@ exports.getReadingsSingle = (req, res) => {
     res.json({reading: 23.4})
 };
 
-//Get all sensor readings for specified tier in greenhouse
+//TODO: Get all sensor readings for specified tier in greenhouse
 exports.getReadingsTier = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
@@ -315,7 +329,7 @@ exports.getReadingsTier = (req, res) => {
     res.json({water_level: 23.0, pH_level: 7.9, elec_cond: 1.9})
 };
 
-//Get all sensor readings for all tiers of greenhouse
+//TODO: Get all sensor readings for all tiers of greenhouse
 exports.getReadingsGreenhouse = (req, res) => {
      //Get auth token
      let cred = req.headers.authorization.split(" ")[1]

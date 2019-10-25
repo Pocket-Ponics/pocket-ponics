@@ -54,7 +54,7 @@ exports.getToken = (req, res) => {
     })
 };
 
-//Send a reset password command to backend
+//TODO: Send a reset password command to backend
 exports.resetPassword = (req, res) => {
     var username = req.body.username
     

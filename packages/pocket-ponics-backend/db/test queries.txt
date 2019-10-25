@@ -19,3 +19,5 @@ ALTER TABLE tiers
 ADD FOREIGN KEY (greenhouse_id) REFERENCES greenhouse(greenhouse_id);
 
 insert into greenhouse (name, user_id) values ("test", 1); SELECT LAST_INSERT_ID();
+
+select name, water_level, nutrient_level, battery, power_source, seedling_time from greenhouse where greenhouse_id = 1 and user_id = 1
