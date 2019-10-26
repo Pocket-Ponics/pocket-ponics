@@ -1,10 +1,28 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
+
+const mockGreenhouseList = [
+	{
+		id: '1',
+		name: "Salad 'Ponic"
+	},
+	{
+		id: '2',
+		name: "Pizza 'Ponic"
+	}
+]
 
 const DotScrollMenu = () => {
 	return (
 		<View>
-			<Text>DotScrollMenu</Text>
+			{mockGreenhouseList.map(greenhouse => (
+				<TouchableOpacity onPress={() => console.log(greenhouse)}>
+					<Text>•</Text>
+				</TouchableOpacity>
+			))}
+			<TouchableOpacity onPress={() => console.log("add greenhouse")}>
+				<Text>+</Text>
+			</TouchableOpacity>
 		</View>
 	)
 }
