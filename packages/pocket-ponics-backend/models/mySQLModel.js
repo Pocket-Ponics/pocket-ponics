@@ -54,8 +54,30 @@ exports.createGreenhouseForUser = (name, user_id, callback) => {
     })
 }
 
+exports.deleteGreenhouseForUser = (greenhouse_id, user_id, callback) => {
+    sqlController.execute(`delete from greenhouse where user_id = ${user_id} and greenhouse_id = ${greenhouse_id}`, function(err, result) {
+        if(err)
+        {
+            console.log(result)
+        } 
+        else {
+            callback(err, result)
+        }
+    })
+}
+
 exports.createEmptyTierForNewGreenhouse = (greenhouse_id, tier, user_id, callback) => {
-    sqlController.execute(`insert into tiers (tier, greenhouse_id, user_id) VALUES (${tier}, ${greenhouse_id}, ${user_id};`, function(err, result) {
+    sqlController.execute(`insert into tiers (tier, greenhouse_id, user_id) VALUES (${tier}, ${greenhouse_id}, ${user_id});`, function(err, result) {
+        if(err)
+        {
+            console.log(result)
+        }
+        callback(err, result)
+    })
+}
+
+exports.deleteTiersForGreenhouse = (greenhouse_id, user_id, callback) => {
+    sqlController.execute(`delete from tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id}`, function(err, result) {
         if(err)
         {
             console.log(result)

@@ -6,15 +6,15 @@ exports.getGreenhouses = (req, res) => {
     let cred = req.headers.authorization.split(" ")[1]
 
     //Retrieve user_id for given auth token
-    mySQL.getUserForToken(cred, function(err, record) {
+    mySQL.getUserForToken(cred, function(err, rec) {
         if(err)
         {
             res.json({403: "Authentication Error"})
         }
-        else if(record != undefined)
+        else if(rec != undefined)
         {    
             //Retrieve all greenhouse_id values from DB for user_id
-            mySQL.getGreenhousesForUser(record.user_id, function(err, record) {
+            mySQL.getGreenhousesForUser(rec.user_id, function(err, record) {
                 if(!err)
                 {
                     var result = []
@@ -70,15 +70,15 @@ exports.getTier = (req, res) => {
     var tier_id = req.params.tier
 
     //Retrieve user_id for given auth token
-    mySQL.getUserForToken(cred, function(err, record) {
+    mySQL.getUserForToken(cred, function(err, rec) {
         if(err)
         {
             res.json({403: "Authentication Error"})
         }
-        else if(record != undefined)
+        else if(rec != undefined)
         {    
             //Retrieve values from tier table for given greenhouse_id, user_id and tier_id
-            mySQL.getTierForGreenhouse(greenhouse_id, tier_id, record.user_id, function(err, record) {
+            mySQL.getTierForGreenhouse(greenhouse_id, tier_id, rec.user_id, function(err, record) {
                 if(!err)
                 {
                     res.json( {plant_id: record.plant_id, growth_stage: record.growth_stage, water_level: record.water_level, light_level: record.light_level, cycle_time: record.cycle_time, pH_level: record.pH_level, elec_cond: record.ec_level, temp: record.temp, num_plants: record.num_plants})
@@ -103,33 +103,33 @@ exports.createGreenhouse = (req, res) => {
     let cred = req.headers.authorization.split(" ")[1]
 
     //Retrieve user_id for given auth token
-    mySQL.getUserForToken(cred, function(err, record) {
+    mySQL.getUserForToken(cred, function(err, rec) {
         if(err)
         {
             res.json({403: "Authentication Error"})
         }
-        else if(record != undefined)
+        else if(rec != undefined)
         {    
             //Store greenhouse name provided
             var greenhouse_name = req.body.name
 
             //Insert new greenhouse
-            mySQL.createGreenhouseForUser(greenhouse_name, record.user_id, function(err, record) {
+            mySQL.createGreenhouseForUser(greenhouse_name, rec.user_id, function(err, record) {
                 if(!err)
                 {
                     var newGreenhouseID = record["LAST_INSERT_ID()"]
-
+                    
                     // Insert new values into tier table for given greenhouse_name
-                    mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 1, record.user_id, function(err, record){
+                    mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 1, rec.user_id, function(err, record){
                         if(!err)
                         {
-                            mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 2, record.user_id, function(err, record){
+                            mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 2, rec.user_id, function(err, record){
                                 if(!err)
                                 {
-                                    mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 3, record.user_id, function(err, record){
+                                    mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 3, rec.user_id, function(err, record){
                                         if(!err)
                                         {
-                                            mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 4, record.user_id, function(err, record){
+                                            mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 4, rec.user_id, function(err, record){
                                                 if(!err)
                                                 {
                                                     res.json({200: "Greenhouse Created"})
@@ -179,14 +179,14 @@ exports.getGreenhouse = (req, res) => {
     var greenhouse_id = req.params.greenhouse_id
 
     //Retrieve user_id for given auth token
-    mySQL.getUserForToken(cred, function(err, record) {
+    mySQL.getUserForToken(cred, function(err, rec) {
         if(err)
         {
             res.json({403: "Authentication Error"})
         }
-        else if(record != undefined)
+        else if(rec != undefined)
         {    
-            mySQL.getGreenhouseForUser(record.user_id, greenhouse_id, function(err, record) {
+            mySQL.getGreenhouseForUser(rec.user_id, greenhouse_id, function(err, record) {
                 if(!err)
                 {
                     res.json({greenhouse_id: greenhouse_id, user_id: record.user_id, water_level: record.rows[0].water_level, nutrient_level: record.rows[0].nutrient_level, seedling_time: record.rows[0].seedling_time, backup_batt_level: record.rows[0].battery, power_source: record.rows[0].power_source, greenhouse_name: record.rows[0].name})
@@ -245,24 +245,48 @@ exports.updateGreenhouse = (req, res) => {
     res.json({200: "OK"})
 };
 
-//TODO: Delete greenhouse with specified greenhouse_id
+//Delete greenhouse with specified greenhouse_id
 exports.deleteGreenhouse = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
 
-    //Retrieve user_id for given auth token
-    //TODO: retrieve user_id from DB
-
     //Store greenhouse_id provided
     var greenhouse_id = req.params.greenhouse_id
 
-    //Check if greenhouse_id is valid for user_id and greenhouse_id provided - do this in the model to make sure nothing gets missed
-    //TODO: query DB
-
-    //Delete greenhouse given greenhouse_id
-    //TODO: query DB
-
-    res.json({200: "OK"})
+    //Retrieve user_id for given auth token
+    mySQL.getUserForToken(cred, function(err, rec) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(rec != undefined)
+        {    
+            //Delete greenhouse
+            mySQL.deleteTiersForGreenhouse(greenhouse_id, rec.user_id, function(err, record) {
+                if(!err)
+                {
+                    // Delete records in tier table for given greenhouse_id
+                    mySQL.deleteGreenhouseForUser(greenhouse_id, rec.user_id, function(err, record){
+                        if(!err)
+                        {
+                            res.json({200: "Greenhouse Deleted"})
+                        } 
+                        else 
+                        { 
+                            res.json({201: "Error deleting greenhouse"}) 
+                        }
+                    })
+                }
+                else {
+                    res.json({201: "Error deleting greenhouse tier(s)"})
+                }
+            })
+        }
+        else 
+        {
+            res.json({401: "Unauthorized"})
+        }
+    })
 };
 
 //TODO: Adjust the water level, nutrient level or light level for specific tier in greenhouse
