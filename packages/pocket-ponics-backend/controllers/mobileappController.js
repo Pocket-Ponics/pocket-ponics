@@ -81,7 +81,7 @@ exports.getTier = (req, res) => {
             mySQL.getTierForGreenhouse(greenhouse_id, tier_id, rec.user_id, function(err, record) {
                 if(!err)
                 {
-                    res.json( {plant_id: record.plant_id, growth_stage: record.growth_stage, water_level: record.water_level, light_level: record.light_level, cycle_time: record.cycle_time, pH_level: record.pH_level, elec_cond: record.ec_level, temp: record.temp, num_plants: record.num_plants})
+                    res.json( {plant_id: record.plant_id, growth_stage: record.growth_stage, water_level: record.water_level, cycle_time: record.cycle_time, pH_level: record.pH_level, elec_cond: record.ec_level, num_plants: record.num_plants})
                 }
                 else
                 {
@@ -189,7 +189,7 @@ exports.getGreenhouse = (req, res) => {
             mySQL.getGreenhouseForUser(rec.user_id, greenhouse_id, function(err, record) {
                 if(!err)
                 {
-                    res.json({greenhouse_id: greenhouse_id, user_id: record.user_id, water_level: record.rows[0].water_level, nutrient_level: record.rows[0].nutrient_level, seedling_time: record.rows[0].seedling_time, backup_batt_level: record.rows[0].battery, power_source: record.rows[0].power_source, greenhouse_name: record.rows[0].name})
+                    res.json({water_level: record.water_level, nutrient_level: record.nutrient_level, light_level: record.light_level, seedling_time: record.seedling_time, backup_batt_level: record.battery, power_source: record.power_source, greenhouse_name: record.name})
                 }
                 else {
                     res.json({201: "Error retrieving greenhouse"})

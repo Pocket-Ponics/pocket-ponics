@@ -141,7 +141,7 @@ exports.revokeTokens = (user_id, callback) => {
 }
 
 exports.getGreenhouseForUser = (user_id, greenhouse_id, callback) => {
-    sqlController.execute(`select name, water_level, nutrient_level, battery, power_source, seedling_time from greenhouse where greenhouse_id = ${greenhouse_id} and user_id = ${user_id}`, function(err, result) {
+    sqlController.execute(`select name, water_level, nutrient_level, battery, light_level, power_source, seedling_time from greenhouse where greenhouse_id = ${greenhouse_id} and user_id = ${user_id}`, function(err, result) {
         if(result.rows.length == 1)
         {
             callback(err, result.rows[0])
