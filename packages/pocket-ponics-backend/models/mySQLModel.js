@@ -104,7 +104,7 @@ exports.getUserForToken = (token, callback) => {
 }
 
 exports.getTierForGreenhouse = (greenhouse_id, tier, user_id, callback) => {
-    sqlController.execute(`SELECT * FROM tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id} and tier = ${tier}`, function(err, result) {
+    sqlController.execute(`SELECT tier, growth_stage, plant_id, ph_level, ec_level, water_level, cycle_time, num_plants FROM tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id} and tier = ${tier}`, function(err, result) {
         if(result.rows.length == 1)
         {
             callback(err, result.rows[0])
