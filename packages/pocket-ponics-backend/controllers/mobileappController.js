@@ -37,7 +37,7 @@ exports.getGreenhouses = (req, res) => {
     })
 };
 
-//TODO: Update a specified tier of the greenhouse with provided values
+//Update a specified tier of the greenhouse with provided values
 exports.updateTier = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
@@ -45,18 +45,43 @@ exports.updateTier = (req, res) => {
     //Store greenhouse_id and tier_id provided
     var greenhouse_id = req.params.greenhouse_id
     var tier_id = req.params.tier
-    
+
+    //Store tier information provided
+    var growth_stage = req.body.growth_stage
+    var plant_id = req.body.plant_id
+    var cycle_time = req.body.cycle_time
+    var num_plants = req.body.num_plants
+
     //Retrieve user_id for given auth token
-    //TODO: retrieve user_id from DB
-    
-    //Check if greenhouse_id is valid for user_id and greenhouse_id provided - do this in the model to make sure nothing gets missed
-    //TODO: query DB
-
-    //Insert new values into tier table for given greenhouse_id and tier_id
-    //TODO: insert into DB
-
-    res.json({
-        200: "OK"
+    mySQL.getUserForToken(cred, function(err, rec) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(rec != undefined)
+        {    
+            if(growth_stage == undefined || plant_id == undefined || cycle_time == undefined || num_plants == undefined)
+            {
+                res.json({202: "Error: Missing data for update"})
+            }
+            else 
+            {
+                mySQL.updateTierForGreenhouse(rec.user_id, greenhouse_id, tier_id, plant_id, growth_stage, cycle_time, num_plants, function(err, record) {
+                    if(!err)
+                    {
+                        res.json({200: "Updated tier"})
+                    }
+                    else
+                    {
+                        res.json({201: "Unable to update tier"})
+                    }
+                })
+            }
+        }
+        else 
+        {
+            res.json({401: "Unauthorized"})
+        }
     })
 };
 
@@ -225,24 +250,49 @@ exports.getGreenhouseReadings = (req, res) => {
     res.json({greenhouse_id: "937502957290", user_id: "834058102935", backup_batt_level: [{date: "2016-09-26", reading: 94.0},{date: "2016-09-27", reading: 93.1}], power_source: [{date: "2016-09-26", reading: 0},{date: "2016-09-27", reading: 1}], greenhouse_name: "Test Greenhouse"})
 };
 
-//TODO: Update greenhouse with provided values
+//Update greenhouse with provided values
 exports.updateGreenhouse = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
 
-    //Retrieve user_id for given auth token
-    //TODO: retrieve user_id from DB
-
     //Store greenhouse_id provided
     var greenhouse_id = req.params.greenhouse_id
 
-    //Check if greenhouse_id is valid for user_id and greenhouse_id provided - do this in the model to make sure nothing gets missed
-    //TODO: query DB
+    //Store greenhouse information provided
+    var name = req.body.name
+    var seedling_time = req.body.seedling_time
 
-    //Insert new values into greenhouse table for given greenhouse_id
-    //TODO: insert into DB
-
-    res.json({200: "OK"})
+    //Retrieve user_id for given auth token
+    mySQL.getUserForToken(cred, function(err, rec) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(rec != undefined)
+        {    
+            if(seedling_time == undefined || name == undefined)
+            {
+                res.json({202: "Error: Missing data for update"})
+            }
+            else 
+            {
+                mySQL.updateGreenhouseForUser(rec.user_id, greenhouse_id, name, seedling_time, function(err, record) {
+                    if(!err)
+                    {
+                        res.json({200: "Updated greenhouse"})
+                    }
+                    else
+                    {
+                        res.json({201: "Unable to update greenhouse"})
+                    }
+                })
+            }
+        }
+        else 
+        {
+            res.json({401: "Unauthorized"})
+        }
+    })
 };
 
 //Delete greenhouse with specified greenhouse_id

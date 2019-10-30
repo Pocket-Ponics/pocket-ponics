@@ -103,6 +103,26 @@ exports.getUserForToken = (token, callback) => {
     })
 }
 
+exports.updateTierForGreenhouse = (user_id, greenhouse_id, tier, plant_id, growth_stage, cycle_time, num_plants, callback) => {
+    sqlController.execute(`UPDATE tiers SET plant_id = ${plant_id}, growth_stage = ${growth_stage}, cycle_time = "${cycle_time}", num_plants = ${num_plants} WHERE user_id = ${user_id} and tier = ${tier} and greenhouse_id = ${greenhouse_id}`, function(err, result) {
+        if(err)
+        {
+            console.log(result)
+        }
+        callback(err, result)
+    })
+}
+
+exports.updateGreenhouseForUser = (user_id, greenhouse_id, name, seedling_time, callback) => {
+    sqlController.execute(`UPDATE greenhouse SET name = "${name}", seedling_time = "${seedling_time}" WHERE user_id = ${user_id} and greenhouse_id = ${greenhouse_id}`, function(err, result) {
+        if(err)
+        {
+            console.log(result)
+        }
+        callback(err, result)
+    })
+}
+
 exports.getTierForGreenhouse = (greenhouse_id, tier, user_id, callback) => {
     sqlController.execute(`SELECT tier, growth_stage, plant_id, ph_level, ec_level, water_level, cycle_time, num_plants FROM tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id} and tier = ${tier}`, function(err, result) {
         if(result.rows.length == 1)
@@ -131,7 +151,7 @@ exports.createUser = (email, password_hash, callback) => {
 }
 
 exports.revokeTokens = (user_id, callback) => {
-    sqlController.execute(`DELETE FROM active_sessions WHERE (user_id = '${user_id}')`, function(err, result) {
+    sqlController.execute(`DELETE FROM active_sessions WHERE (user_id = ${user_id})`, function(err, result) {
         if(err)
         {
             console.log(result)
@@ -158,7 +178,7 @@ exports.getGreenhouseForUser = (user_id, greenhouse_id, callback) => {
 }
 
 exports.updateUserHash = (user_id, password_hash, callback) => {
-    sqlController.execute(`UPDATE user SET password_hash = '${password_hash}' WHERE (user_id = '${user_id}')`, function(err, result) {
+    sqlController.execute(`UPDATE user SET password_hash = '${password_hash}' WHERE (user_id = ${user_id})`, function(err, result) {
         if(err)
         {
             console.log(result)
