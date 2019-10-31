@@ -20,9 +20,21 @@ ADD FOREIGN KEY (greenhouse_id) REFERENCES greenhouse(greenhouse_id);
 
 insert into greenhouse (name, user_id) values ("test", 1); SELECT LAST_INSERT_ID();
 
+UPDATE greenhouse SET name = "greenhouse2electricboogaloo", seedling_time = "2019-10-24 12:59:22" WHERE user_id = 1 and greenhouse_id = 24
+
+UPDATE tiers SET plant_id = ${plant_id}, growth_stage = ${growth_stage}, cycle_time = "${cycle_time}", num_plants = ${num_plants} WHERE user_id = ${user_id} and tier = ${tier} and greenhouse_id = ${greenhouse_id}
+
 select name, water_level, nutrient_level, battery, power_source, seedling_time from greenhouse where greenhouse_id = 1 and user_id = 1
 
 SELECT * FROM pocketponics.tiers where greenhouse_id = 1 and user_id = 1 and tier = 1
 
 delete from tiers where greenhouse_id = 23 and user_id = 1
 delete from greenhouse where greenhouse_id = 23 and user_id = 1
+
+select * from adjustments where user_id = 1 and tier = 2 and greenhouse_id = 24 and adjustment_type = 1
+
+select count(*) from adjustments where user_id = 1 and tier = 2 and greenhouse_id = 24 and adjustment_type = 1
+
+SELECT ph_level, ec_level, water_level FROM pocketponics.tiers where user_id = 1 and greenhouse_id = 24 and tier = 1;
+
+insert into adjustments values (1,23,1,2,24)

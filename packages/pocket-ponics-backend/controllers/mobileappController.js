@@ -42,9 +42,9 @@ exports.updateTier = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
 
-    //Store greenhouse_id and tier_id provided
+    //Store greenhouse_id and tier provided
     var greenhouse_id = req.params.greenhouse_id
-    var tier_id = req.params.tier
+    var tier = req.params.tier
 
     //Store tier information provided
     var growth_stage = req.body.growth_stage
@@ -66,7 +66,7 @@ exports.updateTier = (req, res) => {
             }
             else 
             {
-                mySQL.updateTierForGreenhouse(rec.user_id, greenhouse_id, tier_id, plant_id, growth_stage, cycle_time, num_plants, function(err, record) {
+                mySQL.updateTierForGreenhouse(rec.user_id, greenhouse_id, tier, plant_id, growth_stage, cycle_time, num_plants, function(err, record) {
                     if(!err)
                     {
                         res.json({200: "Updated tier"})
@@ -90,9 +90,9 @@ exports.getTier = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
 
-    //Store greenhouse_id and tier_id provided
+    //Store greenhouse_id and tier provided
     var greenhouse_id = req.params.greenhouse_id
-    var tier_id = req.params.tier
+    var tier = req.params.tier
 
     //Retrieve user_id for given auth token
     mySQL.getUserForToken(cred, function(err, rec) {
@@ -102,8 +102,8 @@ exports.getTier = (req, res) => {
         }
         else if(rec != undefined)
         {    
-            //Retrieve values from tier table for given greenhouse_id, user_id and tier_id
-            mySQL.getTierForGreenhouse(greenhouse_id, tier_id, rec.user_id, function(err, record) {
+            //Retrieve values from tier table for given greenhouse_id, user_id and tier
+            mySQL.getTierForGreenhouse(greenhouse_id, tier, rec.user_id, function(err, record) {
                 if(!err)
                 {
                     res.json( {plant_id: record.plant_id, growth_stage: record.growth_stage, water_level: record.water_level, cycle_time: record.cycle_time, pH_level: record.pH_level, elec_cond: record.ec_level, num_plants: record.num_plants})
@@ -123,6 +123,7 @@ exports.getTier = (req, res) => {
 };
 
 //Create a new greenhouse with provided values
+//TODO: Replace current sql statements with transaction
 exports.createGreenhouse = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
@@ -296,6 +297,8 @@ exports.updateGreenhouse = (req, res) => {
 };
 
 //Delete greenhouse with specified greenhouse_id
+//TODO: Replace current sql statements with transaction
+//TODO: Remove historical data for deleted greenhouse
 exports.deleteGreenhouse = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
@@ -339,86 +342,159 @@ exports.deleteGreenhouse = (req, res) => {
     })
 };
 
-//TODO: Adjust the water level, nutrient level or light level for specific tier in greenhouse
+//Adjust the water level, nutrient level or light level for specific tier in greenhouse
 exports.makeAdjustments = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
 
-    //Retrieve user_id for given auth token
-    //TODO: retrieve user_id from DB
+    //Store greenhouse information provided
+    var adjustment_type = req.body.adjustment_type
+    var amount = req.body.amount
 
-    //Store greenhouse_id and tier_id provided
+    //Store greenhouse_id and tier provided
     var greenhouse_id = req.params.greenhouse_id
-    var tier_id = req.params.tier
+    var tier = req.params.tier
 
-    //Check if greenhouse_id is valid for user_id and greenhouse_id provided - do this in the model to make sure nothing gets missed
-    //TODO: query DB
-
-    //Store adjustment in DB
-    //TODO: query DB
-
-    res.json({200: "OK"})
+    //Retrieve user_id for given auth token
+    mySQL.getUserForToken(cred, function(err, rec) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(rec != undefined)
+        {    
+            //Add adjustment to queue
+            mySQL.createAdjustmentForGreenhouse(rec.user_id, greenhouse_id, adjustment_type, amount, tier, function(err, record) {
+                if(!err)
+                {
+                    res.json({200: "Adjustment Queued"})
+                }
+                else {
+                    res.json({201: "Error adding adjustment to queue"})
+                }
+            })
+        }
+        else 
+        {
+            res.json({401: "Unauthorized"})
+        }
+    })
 };
 
-//TODO: Get the current sensor reading for a single sensor type
+//Get the current sensor reading for a single sensor type
 exports.getReadingsSingle = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
 
-    //Retrieve user_id for given auth token
-    //TODO: retrieve user_id from DB
-
-    //Store greenhouse_id, tier_id and sensor type provided
+    //Store greenhouse_id, tier and sensor type provided
     var greenhouse_id = req.params.greenhouse_id
-    var tier_id = req.params.tier
+    var tier = req.params.tier
     var sensor_type = req.params.sensor_type
 
-    //Check if greenhouse_id is valid for user_id and greenhouse_id provided - do this in the model to make sure nothing gets missed
-    //TODO: query DB
-
-    //Retrieve sensor reading for specified greenhouse_id, tier_id and sensor_type
-    //TODO: query DB
-
-    res.json({reading: 23.4})
+    //Retrieve user_id for given auth token
+    mySQL.getUserForToken(cred, function(err, rec) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(rec != undefined)
+        {    
+            //Get sensor reading
+            mySQL.getReadingForSensors(rec.user_id, greenhouse_id, tier, function(err, record) {
+                if(!err)
+                {
+                    var value = 0.0
+                    if(sensor_type == 0)
+                    {
+                        value = record.water_level
+                    } 
+                    else if(sensor_type == 1) 
+                    {
+                        value = record.ec_level
+                    } 
+                    else if(sensor_type == 2)
+                    {
+                        value = record.ph_level
+                    }
+                    res.json({200: {reading: value}})
+                }
+                else {
+                    res.json({201: "Error retrieving sensor reading"})
+                }
+            })
+        }
+        else 
+        {
+            res.json({401: "Unauthorized"})
+        }
+    })
 };
 
-//TODO: Get all sensor readings for specified tier in greenhouse
+//Get all sensor readings for specified tier in greenhouse
 exports.getReadingsTier = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
 
-    //Retrieve user_id for given auth token
-    //TODO: retrieve user_id from DB
-
-    //Store greenhouse_id and tier_id provided
+    //Store greenhouse_id, tier and provided
     var greenhouse_id = req.params.greenhouse_id
-    var tier_id = req.params.tier
+    var tier = req.params.tier
 
-    //Check if greenhouse_id is valid for user_id and greenhouse_id provided - do this in the model to make sure nothing gets missed
-    //TODO: query DB
-
-    //Retrieve sensor readings for specified greenhouse_id and tier_id
-    //TODO: query DB
-
-    res.json({water_level: 23.0, pH_level: 7.9, elec_cond: 1.9})
+    //Retrieve user_id for given auth token
+    mySQL.getUserForToken(cred, function(err, rec) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(rec != undefined)
+        {    
+            //Get sensor readings
+            mySQL.getReadingForSensors(rec.user_id, greenhouse_id, tier, function(err, record) {
+                if(!err)
+                {
+                    res.json({200: {water_level: record.water_level, ph_level: record.ph_level, ec_level: record.ec_level}})
+                }
+                else {
+                    res.json({201: "Error retrieving sensor readings"})
+                }
+            })
+        }
+        else 
+        {
+            res.json({401: "Unauthorized"})
+        }
+    })
 };
 
-//TODO: Get all sensor readings for all tiers of greenhouse
+//Get all sensor readings for all tiers of greenhouse
 exports.getReadingsGreenhouse = (req, res) => {
      //Get auth token
-     let cred = req.headers.authorization.split(" ")[1]
+    let cred = req.headers.authorization.split(" ")[1]
 
-     //Retrieve user_id for given auth token
-     //TODO: retrieve user_id from DB
- 
-     //Store greenhouse_id provided
-     var greenhouse_id = req.params.greenhouse_id
- 
-     //Check if greenhouse_id is valid for user_id and greenhouse_id provided - do this in the model to make sure nothing gets missed
-     //TODO: query DB
- 
-     //Retrieve sensor readings for specified greenhouse_id
-     //TODO: query DB
+    //Store greenhouse_id provided
+    var greenhouse_id = req.params.greenhouse_id
 
-    res.json({tier1: {water_level: 23.0, pH_level: 7.9, elec_cond: 1.9}, tier2: {water_level: 23.0, pH_level: 7.9, elec_cond: 1.9}, tier3: {water_level: 23.0, pH_level: 7.9, elec_cond: 1.9}, tier4: {water_level: 23.0, pH_level: 7.9, elec_cond: 1.9},})
+    //Retrieve user_id for given auth token
+    mySQL.getUserForToken(cred, function(err, rec) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(rec != undefined)
+        {    
+            //Get sensor readings
+            mySQL.getReadingsForGreenhouse(rec.user_id, greenhouse_id, function(err, record) {
+                if(!err)
+                {
+                    res.json({readings: record})
+                }
+                else {
+                    res.json({201: "Error retrieving sensor readings"})
+                }
+            })
+        }
+        else 
+        {
+            res.json({401: "Unauthorized"})
+        }
+    })
 };

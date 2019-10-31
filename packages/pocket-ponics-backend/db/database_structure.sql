@@ -46,9 +46,12 @@ CREATE TABLE `adjustments` (
   `amount` decimal(10,0) NOT NULL,
   `user_id` int(11) NOT NULL,
   `tier` int(11) NOT NULL,
+  `greenhouse_id` int(11) NOT NULL,
   PRIMARY KEY (`adjustment_type`),
   KEY `user_id` (`user_id`) /*!80000 INVISIBLE */,
   KEY `tier` (`tier`) /*!80000 INVISIBLE */,
+  KEY `greenhouse_id` (`greenhouse_id`),
+  CONSTRAINT `adjustments_ibfk_1` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
   CONSTRAINT `tier` FOREIGN KEY (`tier`) REFERENCES `tiers` (`tier`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `user_id_fkadj` FOREIGN KEY (`user_id`) REFERENCES `greenhouse` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -201,4 +204,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-29 10:53:07
+-- Dump completed on 2019-10-31 15:34:26

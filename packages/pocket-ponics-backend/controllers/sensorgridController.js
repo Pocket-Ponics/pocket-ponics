@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 
 //Post all sensor readings for all tiers of greenhouse
+//TODO: Add trigger for inserting rows into historical data table
 exports.postReadingsGreenhouse = (req, res) => {
     //convert base64 credentials to ascii
     let basicAuth = req.headers.authorization.split(" ")[1]
@@ -88,6 +89,7 @@ exports.postReadingsSingle = (req, res) => {
 };
 
 //Update the greenhouse's current power source
+//TODO: Add trigger for inserting rows into historical data table
 exports.updatePowerSource = (req, res) => {
     //convert base64 credentials to ascii
     let basicAuth = req.headers.authorization.split(" ")[1]
@@ -117,6 +119,7 @@ exports.updatePowerSource = (req, res) => {
 };
 
 //Update the current backup battery level
+//TODO: Add trigger for inserting rows into historical data table
 exports.updateBackupBatteryLevel = (req, res) => {
     //convert base64 credentials to ascii
     let basicAuth = req.headers.authorization.split(" ")[1]

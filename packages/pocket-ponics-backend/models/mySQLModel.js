@@ -123,6 +123,74 @@ exports.updateGreenhouseForUser = (user_id, greenhouse_id, name, seedling_time, 
     })
 }
 
+exports.getReadingForSensors = (user_id, greenhouse_id, tier, callback) => {
+    sqlController.execute(`select ph_level, ec_level, water_level from tiers WHERE user_id = ${user_id} and greenhouse_id = ${greenhouse_id} and tier = ${tier}`, function(err, result) {
+        if(result.rows.length == 1)
+        {
+            callback(err, result.rows[0])
+        }
+        else
+        {
+            if(err)
+            {
+                console.log(err)
+            }
+            callback(true, undefined)
+        }
+    })
+}
+
+
+exports.getReadingsForGreenhouse = (user_id, greenhouse_id, callback) => {
+    sqlController.execute(`select ph_level, ec_level, water_level, tier from tiers WHERE user_id = ${user_id} and greenhouse_id = ${greenhouse_id}`, function(err, result) {
+        if(result.rows.length == 4)
+        {
+            callback(err, result.rows)
+        }
+        else
+        {
+            if(err)
+            {
+                console.log(err)
+            }
+            callback(true, undefined)
+        }
+    })
+}
+
+exports.createAdjustmentForGreenhouse = (user_id, greenhouse_id, adjustment_type, amount, tier, callback) => {
+    sqlController.execute(`select amount from adjustments WHERE user_id = ${user_id} and greenhouse_id = ${greenhouse_id} and tier = ${tier} and adjustment_type = ${adjustment_type}`, function(err, result) {
+        if(err)
+        {
+            console.log(result)
+            callback(err, result)
+        }
+        else if(result.rows.length == 1)
+        {
+            sqlController.execute(`UPDATE adjustments SET amount = "${amount}" WHERE user_id = ${user_id} and greenhouse_id = ${greenhouse_id} and tier = ${tier} and adjustment_type = ${adjustment_type}`, function(err, result) {
+                if(err)
+                {
+                    console.log(result)
+                }
+                callback(err, result)
+            })
+        } 
+        else if (result.rows.length == 0)
+        {
+            sqlController.execute(`insert into adjustments values (${adjustment_type}, ${amount}, ${user_id}, ${tier}, ${greenhouse_id})`, function(err, result) {
+                if(err)
+                {
+                    console.log(result)
+                }
+                callback(err, result)
+            })
+        } 
+        else {
+            callback(true, undefined)
+        }
+    })
+}
+
 exports.getTierForGreenhouse = (greenhouse_id, tier, user_id, callback) => {
     sqlController.execute(`SELECT tier, growth_stage, plant_id, ph_level, ec_level, water_level, cycle_time, num_plants FROM tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id} and tier = ${tier}`, function(err, result) {
         if(result.rows.length == 1)
