@@ -4,7 +4,13 @@ import bodyParser from 'body-parser';
 import routes from './routes/index.js';
 
 const app = express();
+const dotenv = require('dotenv')
 
+const result = dotenv.config()
+ 
+if (result.error) {
+  throw result.error
+}
 /**
     * Middleware
     */
