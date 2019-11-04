@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `pocketponics` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `pocketponics`;
 -- MySQL dump 10.13  Distrib 8.0.18, for macos10.14 (x86_64)
 --
 -- Host: localhost    Database: pocketponics
@@ -30,8 +28,9 @@ CREATE TABLE `active_sessions` (
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`token`),
   UNIQUE KEY `token_UNIQUE` (`token`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `user_id_fkas` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,19 +41,17 @@ DROP TABLE IF EXISTS `adjustments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `adjustments` (
-  `adjustment_type` varchar(45) NOT NULL,
-  `amount` decimal(10,0) NOT NULL,
+  `adjustment_type` tinyint(4) NOT NULL,
+  `amount` decimal(5,2) NOT NULL,
   `user_id` int(11) NOT NULL,
   `tier` int(11) NOT NULL,
   `greenhouse_id` int(11) NOT NULL,
   PRIMARY KEY (`adjustment_type`),
-  KEY `user_id` (`user_id`) /*!80000 INVISIBLE */,
-  KEY `tier` (`tier`) /*!80000 INVISIBLE */,
+  KEY `user_id` (`user_id`),
   KEY `greenhouse_id` (`greenhouse_id`),
-  CONSTRAINT `adjustments_ibfk_1` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
-  CONSTRAINT `tier` FOREIGN KEY (`tier`) REFERENCES `tiers` (`tier`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `user_id_fkadj` FOREIGN KEY (`user_id`) REFERENCES `greenhouse` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  CONSTRAINT `greenhouse_id_fkadj` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
+  CONSTRAINT `user_id_fkadj` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,18 +64,18 @@ DROP TABLE IF EXISTS `greenhouse`;
 CREATE TABLE `greenhouse` (
   `greenhouse_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
-  `water_level` int(11) DEFAULT '0',
-  `nutrient_level` int(11) DEFAULT '0',
-  `battery` tinyint(4) DEFAULT '0',
+  `water_level` decimal(5,2) DEFAULT '0.00',
+  `nutrient_level` decimal(5,2) DEFAULT '0.00',
+  `battery` decimal(5,2) DEFAULT '0.00',
   `seedling_time` datetime DEFAULT NULL,
-  `user_id` int(11) NOT NULL,
   `power_source` tinyint(4) DEFAULT '0',
-  `light_level` int(11) DEFAULT NULL,
+  `light_level` decimal(5,2) DEFAULT '0.00',
+  `user_id` int(11) NOT NULL,
   PRIMARY KEY (`greenhouse_id`),
   UNIQUE KEY `greenhouse_id_UNIQUE` (`greenhouse_id`),
-  KEY `user_id_fkg_idx` (`user_id`),
-  CONSTRAINT `user_id_fkg` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `user_id_fkgr` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -90,19 +87,19 @@ DROP TABLE IF EXISTS `historical_data`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `historical_data` (
   `date` datetime NOT NULL,
-  `water_level` int(11) NOT NULL,
-  `nutrient_level` int(11) NOT NULL,
-  `battery` tinyint(4) NOT NULL,
+  `water_level` decimal(5,2) NOT NULL,
+  `nutrient_level` decimal(5,2) NOT NULL,
+  `battery` decimal(5,2) NOT NULL,
+  `power_source` tinyint(4) NOT NULL,
   `greenhouse_id` int(11) NOT NULL,
-  `power_source` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`date`,`greenhouse_id`,`user_id`),
+  PRIMARY KEY (`date`,`user_id`,`greenhouse_id`),
   UNIQUE KEY `date_UNIQUE` (`date`),
-  KEY `historical_data_ibfk_1` (`greenhouse_id`),
-  KEY `historical_data_ibfk_2` (`user_id`),
-  CONSTRAINT `historical_data_ibfk_1` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
-  CONSTRAINT `historical_data_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `user_id` (`user_id`),
+  KEY `greenhouse_id` (`greenhouse_id`),
+  CONSTRAINT `greenhouse_id_fkhd` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
+  CONSTRAINT `user_id_fkhd` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -115,17 +112,14 @@ DROP TABLE IF EXISTS `plant_ideal`;
 CREATE TABLE `plant_ideal` (
   `plant_id` int(11) NOT NULL,
   `growth_stage` int(11) NOT NULL,
-  `ph_level_low` decimal(10,0) NOT NULL,
-  `ph_level_high` decimal(10,0) NOT NULL,
-  `ec_level_low` decimal(10,0) NOT NULL,
-  `ec_level_high` decimal(10,0) NOT NULL,
-  `water_level_low` int(11) NOT NULL,
-  `water_level_high` int(11) NOT NULL,
-  `temp_low` decimal(10,0) NOT NULL,
-  `temp_high` decimal(10,0) NOT NULL,
+  `ph_level_med` decimal(5,2) NOT NULL,
+  `ec_level_med` decimal(5,2) NOT NULL,
+  `water_level_med` decimal(5,2) NOT NULL,
+  `temp_med` decimal(5,2) NOT NULL,
   `cycle_time` time NOT NULL,
-  PRIMARY KEY (`growth_stage`,`plant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`plant_id`,`growth_stage`),
+  UNIQUE KEY `plant_id_UNIQUE` (`plant_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -136,7 +130,7 @@ DROP TABLE IF EXISTS `sensor_grid`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sensor_grid` (
-  `serial_no` int(11) NOT NULL,
+  `serial_no` varchar(45) NOT NULL,
   `password_hash` varchar(128) NOT NULL,
   `user_id` int(11) NOT NULL,
   `greenhouse_id` int(11) NOT NULL,
@@ -144,10 +138,11 @@ CREATE TABLE `sensor_grid` (
   UNIQUE KEY `greenhouse_id_UNIQUE` (`greenhouse_id`),
   UNIQUE KEY `password_hash_UNIQUE` (`password_hash`),
   UNIQUE KEY `serial_no_UNIQUE` (`serial_no`),
+  KEY `greenhouse_id` (`greenhouse_id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `sensor_grid_ibfk_1` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
-  CONSTRAINT `sensor_id_fkus` FOREIGN KEY (`user_id`) REFERENCES `greenhouse` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  CONSTRAINT `greenhouse_id_fksg` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
+  CONSTRAINT `user_id_fksg` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -159,22 +154,23 @@ DROP TABLE IF EXISTS `tiers`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tiers` (
   `tier` int(11) NOT NULL,
-  `growth_stage` int(8) DEFAULT '0',
-  `plant_id` int(11) DEFAULT '0',
-  `ph_level` int(11) DEFAULT '0',
-  `ec_level` int(11) DEFAULT '0',
-  `water_level` int(11) DEFAULT '0',
-  `cycle_time` time DEFAULT '00:00:00',
+  `growth_stage` int(11) DEFAULT '0',
+  `plant_id` int(11) DEFAULT NULL,
+  `ph_level` decimal(5,2) DEFAULT '0.00',
+  `ec_level` decimal(5,2) DEFAULT '0.00',
+  `water_level` decimal(5,2) DEFAULT '0.00',
+  `cycle_time` time DEFAULT NULL,
   `num_plants` int(11) DEFAULT '0',
   `greenhouse_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`tier`,`greenhouse_id`,`user_id`),
-  KEY `tier` (`tier`),
+  KEY `plant_id` (`plant_id`),
   KEY `greenhouse_id` (`greenhouse_id`),
-  KEY `tiers_ibfk_2` (`user_id`),
-  CONSTRAINT `tiers_ibfk_1` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
-  CONSTRAINT `tiers_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `greenhouse_id_fkt` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
+  CONSTRAINT `plant_id_fkt` FOREIGN KEY (`plant_id`) REFERENCES `plant_ideal` (`plant_id`),
+  CONSTRAINT `user_id_fkt` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -186,13 +182,13 @@ DROP TABLE IF EXISTS `user`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(256) NOT NULL,
+  `email` varchar(128) NOT NULL,
   `password_hash` varchar(128) NOT NULL,
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `password_hash_UNIQUE` (`password_hash`),
+  UNIQUE KEY `user_id_UNIQUE` (`user_id`),
   UNIQUE KEY `email_UNIQUE` (`email`),
-  UNIQUE KEY `user_id_UNIQUE` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  UNIQUE KEY `password_hash_UNIQUE` (`password_hash`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -204,4 +200,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-31 15:34:26
+-- Dump completed on 2019-11-04 13:55:44
