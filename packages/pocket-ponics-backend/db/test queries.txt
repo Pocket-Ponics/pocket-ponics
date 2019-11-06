@@ -38,3 +38,5 @@ select count(*) from adjustments where user_id = 1 and tier = 2 and greenhouse_i
 SELECT ph_level, ec_level, water_level FROM pocketponics.tiers where user_id = 1 and greenhouse_id = 24 and tier = 1;
 
 insert into adjustments values (1,23,1,2,24)
+
+UPDATE pocketponics.greenhouse SET water_level = 0.00, nutrient_level = 0.00, battery = 0.00, power_source = 0, seedling_time = '2019-09-09 12:00:00', light_level = 0.00  WHERE (user_id = '1' and greenhouse_id = '1')

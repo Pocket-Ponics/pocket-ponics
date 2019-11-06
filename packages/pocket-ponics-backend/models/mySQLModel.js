@@ -26,6 +26,24 @@ exports.getHashForUser = (email, callback) => {
     })
 }
 
+exports.getHashForSensorGrid = (serial_no, callback) => {
+    sqlController.execute(`select user_id, greenhouse_id, password_hash from sensor_grid where serial_no = "${serial_no}"`, function(err, result)
+    {
+        if(result.rows.length == 1)
+        {        
+            callback(err, result.rows[0])
+        } 
+        else if(result.rows.length > 1)
+        {
+            callback(true, undefined)
+        }
+        else
+        {
+            callback(err, undefined)
+        }
+    })
+}
+
 exports.getGreenhousesForUser = (user_id, callback) => {
     sqlController.execute(`select greenhouse_id from greenhouse where user_id = "${user_id}"`, function(err, result) {
         if(err)
@@ -115,6 +133,17 @@ exports.updateTierForGreenhouse = (user_id, greenhouse_id, tier, plant_id, growt
 
 exports.updateGreenhouseForUser = (user_id, greenhouse_id, name, seedling_time, callback) => {
     sqlController.execute(`UPDATE greenhouse SET name = "${name}", seedling_time = "${seedling_time}" WHERE user_id = ${user_id} and greenhouse_id = ${greenhouse_id}`, function(err, result) {
+        if(err)
+        {
+            console.log(result)
+        }
+        callback(err, result)
+    })
+}
+
+exports.updateReadingsForGreenhouse = (user_id, greenhouse_id, water_level, nutrient_level, battery, power_source, seedling_time, light_level, callback) => {
+    sqlController.execute(`UPDATE greenhouse SET water_level = ${water_level}, nutrient_level = ${nutrient_level}, battery = ${battery}, power_source = ${power_source}, seedling_time = ${seedling_time}, light_level = ${light_level} WHERE (user_id = ${user_id} and greenhouse_id = ${greenhouse_id})
+    `, function(err, result) {
         if(err)
         {
             console.log(result)
