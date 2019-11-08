@@ -1,4 +1,5 @@
 import mySQL from '../models/mySQLModel';
+const bcrypt = require('bcrypt');
 
 //Retrieves all greenhouses for a specific user
 exports.getGreenhouses = (req, res) => {
@@ -69,7 +70,7 @@ exports.updateTier = (req, res) => {
                 mySQL.updateTierForGreenhouse(rec.user_id, greenhouse_id, tier, plant_id, growth_stage, cycle_time, num_plants, function(err, record) {
                     if(!err)
                     {
-                        res.json({200: "Updated tier"})
+                        res.json({200: "Updated Tier"})
                     }
                     else
                     {
@@ -123,7 +124,6 @@ exports.getTier = (req, res) => {
 };
 
 //Create a new greenhouse with provided values
-//TODO: Replace current sql statements with transaction
 exports.createGreenhouse = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
@@ -138,6 +138,11 @@ exports.createGreenhouse = (req, res) => {
         {    
             //Store greenhouse name provided
             var greenhouse_name = req.body.name
+            var serial_no = req.body.serial_no
+            var grid_password = req.body.grid_password
+
+            //Generate password hash for sensor grid
+            var grid_hash = bcrypt.hashSync(grid_password, 10)
 
             //Insert new greenhouse
             mySQL.createGreenhouseForUser(greenhouse_name, rec.user_id, function(err, record) {
@@ -146,41 +151,20 @@ exports.createGreenhouse = (req, res) => {
                     var newGreenhouseID = record["LAST_INSERT_ID()"]
                     
                     // Insert new values into tier table for given greenhouse_name
-                    mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 1, rec.user_id, function(err, record){
+                    mySQL.createEmptyTiersAndGridForNewGreenhouse(newGreenhouseID, rec.user_id, serial_no, grid_hash, function(err, record){
                         if(!err)
                         {
-                            mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 2, rec.user_id, function(err, record){
-                                if(!err)
-                                {
-                                    mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 3, rec.user_id, function(err, record){
-                                        if(!err)
-                                        {
-                                            mySQL.createEmptyTierForNewGreenhouse(newGreenhouseID, 4, rec.user_id, function(err, record){
-                                                if(!err)
-                                                {
-                                                    res.json({200: "Greenhouse Created"})
-                                                } 
-                                                else 
-                                                { 
-                                                    res.json({201: "Error creating greenhouse tier"}) 
-                                                }
-                                            })
-                                        } 
-                                        else 
-                                        { 
-                                            res.json({201: "Error creating greenhouse tier"}) 
-                                        }
-                                    })
-                                } 
-                                else 
-                                { 
-                                    res.json({201: "Error creating greenhouse tier"}) 
-                                }
-                            })
+                            res.json({200: "Greenhouse Created"})                                                
                         } 
                         else 
                         { 
-                            res.json({201: "Error creating greenhouse tier"}) 
+                            mySQL.deleteGreenhouseForUser(newGreenhouseID, rec.user_id, function(err, record) {
+                                if(err)
+                                {
+                                    console.log("Error in rollback of greenhouse creation")
+                                }
+                            })
+                            res.json({201: "Error creating greenhouse tiers/sensor grid registration"}) 
                         }
                     })
                 }
@@ -229,26 +213,39 @@ exports.getGreenhouse = (req, res) => {
     })
 };
 
-//TODO: Get readings for a greenhouse with specified greenhouse_id for specified date range
+//Get readings for a greenhouse with specified greenhouse_id for specified date range
 exports.getGreenhouseReadings = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
 
-    //Retrieve user_id for given auth token
-    //TODO: retrieve user_id from DB
-
     //Store greenhouse_id and date range provided
     var greenhouse_id = req.params.greenhouse_id
-    var start_date = req.params.start
-    var end_date = req.params.end
+    var start_date = req.body.start_date
+    var end_date = req.body.end_date
 
-    //Check if greenhouse_id is valid for user_id and greenhouse_id provided - do this in the model to make sure nothing gets missed
-    //TODO: query DB
-
-    //Retrieve sensor readings for greenhouse_id and date range provided
-    //TODO: query DB
-
-    res.json({greenhouse_id: "937502957290", user_id: "834058102935", backup_batt_level: [{date: "2016-09-26", reading: 94.0},{date: "2016-09-27", reading: 93.1}], power_source: [{date: "2016-09-26", reading: 0},{date: "2016-09-27", reading: 1}], greenhouse_name: "Test Greenhouse"})
+    //Retrieve user_id for given auth token
+    mySQL.getUserForToken(cred, function(err, rec) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(rec != undefined)
+        {    
+            mySQL.getGreenhouseHistoricalData(rec.user_id, greenhouse_id, start_date, end_date, function(err, record) {
+                if(!err)
+                {
+                    res.json({history: record})
+                }
+                else {
+                    res.json({201: "Error retrieving greenhouse historical data"})
+                }
+            })
+        }
+        else 
+        {
+            res.json({401: "Unauthorized"})
+        }
+    })
 };
 
 //Update greenhouse with provided values
@@ -280,7 +277,7 @@ exports.updateGreenhouse = (req, res) => {
                 mySQL.updateGreenhouseForUser(rec.user_id, greenhouse_id, name, seedling_time, function(err, record) {
                     if(!err)
                     {
-                        res.json({200: "Updated greenhouse"})
+                        res.json({200: "Updated Greenhouse"})
                     }
                     else
                     {
@@ -297,8 +294,6 @@ exports.updateGreenhouse = (req, res) => {
 };
 
 //Delete greenhouse with specified greenhouse_id
-//TODO: Replace current sql statements with transaction
-//TODO: Remove historical data for deleted greenhouse
 exports.deleteGreenhouse = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
@@ -314,24 +309,14 @@ exports.deleteGreenhouse = (req, res) => {
         }
         else if(rec != undefined)
         {    
-            //Delete greenhouse
-            mySQL.deleteTiersForGreenhouse(greenhouse_id, rec.user_id, function(err, record) {
+            mySQL.deleteGreenhouseForUser(greenhouse_id, rec.user_id, function(err, record){
                 if(!err)
                 {
-                    // Delete records in tier table for given greenhouse_id
-                    mySQL.deleteGreenhouseForUser(greenhouse_id, rec.user_id, function(err, record){
-                        if(!err)
-                        {
-                            res.json({200: "Greenhouse Deleted"})
-                        } 
-                        else 
-                        { 
-                            res.json({201: "Error deleting greenhouse"}) 
-                        }
-                    })
-                }
-                else {
-                    res.json({201: "Error deleting greenhouse tier(s)"})
+                    res.json({200: "Greenhouse Deleted"})
+                } 
+                else 
+                { 
+                    res.json({201: "Error deleting greenhouse"}) 
                 }
             })
         }
@@ -410,13 +395,13 @@ exports.getReadingsSingle = (req, res) => {
                     } 
                     else if(sensor_type == 1) 
                     {
-                        value = record.ec_level
+                        value = record.ph_level
                     } 
                     else if(sensor_type == 2)
                     {
-                        value = record.ph_level
+                        value = record.ec_level
                     }
-                    res.json({200: {reading: value}})
+                    res.json({reading: value})
                 }
                 else {
                     res.json({201: "Error retrieving sensor reading"})
@@ -451,7 +436,7 @@ exports.getReadingsTier = (req, res) => {
             mySQL.getReadingForSensors(rec.user_id, greenhouse_id, tier, function(err, record) {
                 if(!err)
                 {
-                    res.json({200: {water_level: record.water_level, ph_level: record.ph_level, ec_level: record.ec_level}})
+                    res.json({water_level: record.water_level, ph_level: record.ph_level, ec_level: record.ec_level})
                 }
                 else {
                     res.json({201: "Error retrieving sensor readings"})
@@ -498,3 +483,5 @@ exports.getReadingsGreenhouse = (req, res) => {
         }
     })
 };
+
+//TODO: Set greenhouse sensor grid values

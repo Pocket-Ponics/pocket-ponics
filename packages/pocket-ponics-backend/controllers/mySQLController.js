@@ -1,4 +1,5 @@
-var mysql = require('mysql')
+var Promise = require('bluebird');
+var mysql = require('mysql');
 
 var pool = mysql.createPool({
     connectionLimit : 100, 
@@ -28,4 +29,35 @@ exports.execute = (query,callback) => {
               return;     
         });
     });
+}
+
+exports.executeTransaction = (statements, callback) => {
+    pool.getConnection(function(err, connection) {
+        if(err)
+        {
+            connection.release()
+            throw err
+        }
+        else
+        {
+            Promise.promisifyAll(connection)
+
+            return connection.beginTransactionAsync().then(() => {
+                var queue = [];
+                for(var i = 0; i< statements.length; i++)
+                {
+                    queue.push(connection.queryAsync(statements[i]));
+                }
+                return Promise.all(queue);
+            }).then(() => {
+                return connection.commitAsync().then(connection.releaseAsync()).then(() => {
+                    callback(false, err)
+                });
+            }).catch(err => {
+                return connection.rollbackAsync().then(connection.releaseAsync()).then(() => {
+                    callback(true, err)
+                });
+            });
+        }
+    })
 }

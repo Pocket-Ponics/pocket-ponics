@@ -29,6 +29,6 @@ module.exports = function(app)
     app.route('/mobileapp/sensor/:greenhouse_id')
         .get(mobileapp.getReadingsGreenhouse)
 
-    app.route('/mobileapp/greenhouses/:greenhouse_id/:start/:end')
+    app.route('/mobileapp/greenhouses/history/:greenhouse_id/')
         .get(mobileapp.getGreenhouseReadings)
 }

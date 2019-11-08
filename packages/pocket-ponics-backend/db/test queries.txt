@@ -40,3 +40,5 @@ SELECT ph_level, ec_level, water_level FROM pocketponics.tiers where user_id = 1
 insert into adjustments values (1,23,1,2,24)
 
 UPDATE pocketponics.greenhouse SET water_level = 0.00, nutrient_level = 0.00, battery = 0.00, power_source = 0, seedling_time = '2019-09-09 12:00:00', light_level = 0.00  WHERE (user_id = '1' and greenhouse_id = '1')
+
+select * from pocketponics.historical_data where greenhouse_id = 2 and user_id = 1 order by date DESC limit 1
