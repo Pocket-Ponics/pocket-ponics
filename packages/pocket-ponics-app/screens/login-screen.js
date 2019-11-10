@@ -9,25 +9,6 @@ import {
 	Dimensions
 } from 'react-native';
 
-/*
-import LoginScreen from './screens/login-screen'
-import GreenhouseScreen from './screens/greenhouse-screen'
-import TierScreen from './screens/tier-screen'
-
-import {createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
-
-const MainNavigator = createStackNavigator({
-	Login: {screen: LoginScreen},
-	Greenhouse: {screen: GreenhouseScreen},
-	Tier: { screen: TierScreen }
-})
-
-const App = createAppContainer(MainNavigator);
-
-export default App;
-*/
-
 
 import bgImage from './assets/background.png'
 import Icon from 'react-native-vector-icons/Ionicons'
