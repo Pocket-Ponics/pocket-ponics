@@ -1,28 +1,21 @@
 import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 
-const mockGreenhouseList = [
-	{
-		id: '1',
-		name: "Salad 'Ponic"
-	},
-	{
-		id: '2',
-		name: "Pizza 'Ponic"
-	}
-]
+import styles from './dot-scroll-menu-style'
 
-const DotScrollMenu = () => {
+const DotScrollMenu = props => {
 	return (
-		<View>
-			{mockGreenhouseList.map(greenhouse => (
-				<TouchableOpacity onPress={() => console.log(greenhouse)}>
-					<Text>•</Text>
+		<View style={styles.background}>
+			<View style={styles.dotBar}>
+				{props.greenhouseList.map((greenhouse, index) => (
+					<TouchableOpacity key={greenhouse.id} onPress={() => console.log(greenhouse)}>
+						<Text style={index === props.current ? styles.current : styles.dot}>•</Text>
+					</TouchableOpacity>
+				))}
+				<TouchableOpacity onPress={() => console.log("add greenhouse")}>
+					<Text style={styles.dot}>+</Text>
 				</TouchableOpacity>
-			))}
-			<TouchableOpacity onPress={() => console.log("add greenhouse")}>
-				<Text>+</Text>
-			</TouchableOpacity>
+			</View>
 		</View>
 	)
 }

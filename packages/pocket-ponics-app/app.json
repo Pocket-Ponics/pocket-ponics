@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "pocket 'ponics",
-    "slug": "pocket-ponics-app",
+    "slug": "pocket-ponics",
     "privacy": "public",
     "sdkVersion": "35.0.0",
     "platforms": [
@@ -11,7 +11,7 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "assets/icon.png",
+    "icon": "assets/pocket-ponics.png",
     "splash": {
       "image": "assets/pocket-ponics.png",
       "resizeMode": "contain",
@@ -26,6 +26,6 @@
     "ios": {
       "supportsTablet": true
     },
-    "description": ""
+    "description": "Pocket 'Ponics is a semi-automated hydroponic greenhouse, with an integrated app that allows users to grow fresh fruits and vegetables from the comfort of their own home.  With no technical knowledge or agricultural experience, users can set up the greenhouse in a few easy steps, and then allow our automated servers to take care of all the finicky details, like nutrient and water levels.  The Pocket 'Ponics app will alert users whenever water needs to be refilled or plants are ready to harvest, so users can enjoy all the benefits of a personal vegetable garden without having to worry about keeping track of it!"
   }
 }

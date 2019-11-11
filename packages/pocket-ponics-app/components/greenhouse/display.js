@@ -4,6 +4,7 @@ import { Text, View, TouchableOpacity, Image } from 'react-native';
 import styles from './display-styles'
 
 const tierImage = require('../../assets/tier.png')
+const toptierImage = require('../../assets/top-tier.png')
 
 const onPress = event => {
 	console.log(event)
@@ -15,7 +16,7 @@ const GreenhouseDisplay = props => {
 	return (
 		<View style={styles.background}>
 			<TouchableOpacity onPress={() => navigate('Tier', { plant: 'Tomato' })}>
-				<Image source={tierImage} style={styles.tier}/>
+				<Image source={toptierImage} style={styles.toptier}/>
 			</TouchableOpacity>
 			<TouchableOpacity onPress={() => navigate('Tier', { plant: 'Spinach' })}>
 				<Image source={tierImage} style={styles.tier}/>
