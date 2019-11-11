@@ -19,19 +19,19 @@ const GreenhouseStatsDisplay = props => {
 			<TouchableOpacity>
 				<View style={styles.iconContainer}>
 					<Image source={batteryImage} style={styles.iconWide}/>
-					<Text style={styles.text}>70%</Text>
+					<Text style={styles.text}>{props.stats.battery}%</Text>
 				</View>
 			</TouchableOpacity>
 			<TouchableOpacity>
 				<View style={styles.iconContainer}>
 					<Image source={waterImage} style={styles.icon}/>
-					<Text style={styles.text}>60%</Text>
+					<Text style={styles.text}>{props.stats.water}%</Text>
 				</View>
 			</TouchableOpacity>
 			<TouchableOpacity>
 				<View style={styles.iconContainer}>
 					<Image source={nutrientImage} style={styles.icon}/>
-					<Text style={styles.text}>20%</Text>
+					<Text style={styles.text}>{props.stats.nutrient}%</Text>
 				</View>
 			</TouchableOpacity>
 		</View>

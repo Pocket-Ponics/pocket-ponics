@@ -12,11 +12,23 @@ import DotScrollMenu from '../components/greenhouse/dot-scroll-menu'
 const mockGreenhouseList = [
 	{
 		id: '1',
-		name: "Greenhouse 1"
+		name: "Greenhouse 1",
+		stats: {
+			battery: 61,
+			water: 78,
+			nutrient: 14
+		},
+		tiers: ['tomato', 'spinach', 'turnip', 'greenbeans']
 	},
 	{
 		id: '2',
-		name: "Greenhouse 2"
+		name: "Greenhouse 2",
+		stats: {
+			battery: 74,
+			water: 63,
+			nutrient: 23
+		},
+		tiers: ['tomato', 'greenbeans', 'greenbeans', 'greenbeans']
 	}
 ]
 

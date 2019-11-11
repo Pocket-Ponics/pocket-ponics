@@ -8,16 +8,43 @@ export default StyleSheet.create({
 		color: '#FFFFFF',
 		padding: 50,
 		borderRadius: 10,
-		margin: 20
+		margin: 20,
+		alignItems: 'center',
+		justifyContent: 'center'
 	},
 	tier: {
-		width: '100%',
-		height: 60,
-		resizeMode: 'contain'
+		width: 200,
+		height: 90,
+		resizeMode: 'contain',
+		flexDirection: 'row',
+		justifyContent: 'center'
 	},
 	toptier: {
-		width: '100%',
-		height: 105,
-		resizeMode: 'contain'
+		width: 200,
+		height: 160,
+		resizeMode: 'contain',
+		flexDirection: 'row',
+		justifyContent: 'center'
+	},
+	topImage: {
+		width: 200,
+		height: 120,
+		marginTop: 15,
+		resizeMode: 'contain',
+		paddingLeft: 40
+	},
+	image: {
+		width: 50,
+		height: 50,
+		marginTop: 5,
+		resizeMode: 'contain',
+		paddingLeft: 40
+	},
+	seedling: {
+		width: 1,
+		height: 30,
+		marginTop: 24,
+		resizeMode: 'contain',
+		paddingLeft: 40
 	},
 })
