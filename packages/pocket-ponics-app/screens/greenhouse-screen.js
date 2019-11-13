@@ -1,6 +1,5 @@
 import React from 'react';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { Text, View, ScrollView } from 'react-native';
+import { Text, View, ScrollView, SafeAreaView } from 'react-native';
 
 import GreenhouseDisplay from '../components/greenhouse/display'
 import GreenhouseSwipeable from '../components/greenhouse/swipeable'
@@ -33,8 +32,10 @@ const mockGreenhouseList = [
 ]
 
 class GreenhouseScreen extends React.Component {
-	static navigationOptions = {
-		title: 'Greenhouse 1',
+	static navigationOptions = ({ navigation }) => {
+		return {
+			title: navigation.getParam('title', mockGreenhouseList[0].name),
+		}
 	}
 
 	constructor(props) {
@@ -46,22 +47,22 @@ class GreenhouseScreen extends React.Component {
 	}
 
 	swapItem(index) {
+		this.props.navigation.setParams({ title: mockGreenhouseList[index].name })
 		this.setState({ currentGreenhouse: index })
 	}
 
 	render() {
 		return (
-			<View>
+			<SafeAreaView>
 				<DotScrollMenu 
 					greenhouseList={mockGreenhouseList} 
 					current={this.state.currentGreenhouse}/>
-
 				<GreenhouseList 
 					greenhouses={mockGreenhouseList} 
 					navigation={this.props.navigation}
 					current={this.state.currentGreenhouse}
 					swapItem={this.swapItem.bind(this)}/>
-			</View>
+			</SafeAreaView>
 		)
 	}
 }

@@ -11,7 +11,8 @@ export default StyleSheet.create({
 	iconContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		justifyContent: 'center'
+		justifyContent: 'center',
+		padding: 10
 	},
 	text: {
 		fontSize: 40,

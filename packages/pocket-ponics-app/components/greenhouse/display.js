@@ -15,36 +15,57 @@ const onPress = event => {
 	console.log(event)
 }
 
+const displayTopTier = (type) => {
+	switch(type) {
+		case 'tomato': 
+			return (
+				<Image source={tomatoImage} style={styles.topImage}/>
+			)
+	}
+}
+
+const displayTier = (type) => {
+	let imageSrc
+	switch(type) {
+		case 'greenbeans': 
+			imageSrc = greenbeanImage
+			break
+		case 'spinach': 
+			imageSrc = spinachImage
+			break
+		case 'turnip': 
+			imageSrc = turnipImage
+			break
+	}
+
+	return (
+		<ImageBackground source={tierImage} style={styles.tier}>
+			<Image source={imageSrc} style={styles.image}/>
+			<Image source={imageSrc} style={styles.image}/>
+			<Image source={imageSrc} style={styles.image}/>
+		</ImageBackground>
+	)
+}
+
 const GreenhouseDisplay = props => {
 	const { navigate } = props.navigation
+	console.log(props.tiers)
 
 	return (
 		<View style={styles.background}>
 			<TouchableOpacity onPress={() => navigate('Tier', { plant: 'Tomato' })}>
 				<ImageBackground source={toptierImage} style={styles.toptier}>
-					<Image source={tomatoImage} style={styles.topImage}/>
+					{displayTopTier(props.tiers[0])}
 				</ImageBackground>
 			</TouchableOpacity>
 			<TouchableOpacity onPress={() => navigate('Tier', { plant: 'Spinach' })}>
-				<ImageBackground source={tierImage} style={styles.tier}>
-					<Image source={greenbeanImage} style={styles.image}/>
-					<Image source={greenbeanImage} style={styles.image}/>
-					<Image source={greenbeanImage} style={styles.image}/>
-				</ImageBackground>
+				{displayTier(props.tiers[1])}
 			</TouchableOpacity>
 			<TouchableOpacity onPress={() => navigate('Tier', { plant: 'Green Beans' })}>
-				<ImageBackground source={tierImage} style={styles.tier}>
-					<Image source={spinachImage} style={styles.image}/>
-					<Image source={spinachImage} style={styles.image}/>
-					<Image source={spinachImage} style={styles.image}/>
-				</ImageBackground>
+				{displayTier(props.tiers[2])}
 			</TouchableOpacity>
 			<TouchableOpacity onPress={() => navigate('Tier', { plant: 'Turnip' })}>
-				<ImageBackground source={tierImage} style={styles.tier}>
-					<Image source={turnipImage} style={styles.image}/>
-					<Image source={turnipImage} style={styles.image}/>
-					<Image source={turnipImage} style={styles.image}/>
-				</ImageBackground>
+				{displayTier(props.tiers[3])}
 			</TouchableOpacity>
 			<TouchableOpacity onPress={() => navigate('Tier', { plant: 'Seedlings' })}>
 				<ImageBackground source={tierImage} style={styles.tier}>

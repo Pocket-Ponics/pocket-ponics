@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text, View, ScrollView, FlatList, Animated, Dimensions } from 'react-native';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
-import SideSwipe from 'react-native-sideswipe';
+import Carousel from 'react-native-snap-carousel';
 
 import styles from './display-styles'
 
@@ -22,19 +21,27 @@ class GreenhouseList extends React.Component {
 		const contentOffset = (width - width) / 2;
 
 		return (
-			<SideSwipe
-				index={this.props.current}
-				itemWidth={width}
-				style={{ width }}
+			<Carousel
 				data={this.props.greenhouses}
-				contentOffset={contentOffset}
-				onIndexChange={this.props.swapItem}
-				onEndReached={() => console.log('end')}
-				renderItem={({ itemIndex, currentIndex, item, animatedValue }) => (
-				 	<GreenhouseSwipeable
-				 		greenhouse={item}
-				 		navigation={this.props.navigation}/>
-				)}
+				renderItem={({ item }) => {
+					console.log(item)
+					return (
+					<GreenhouseSwipeable
+						greenhouse={item}
+						navigation={this.props.navigation}/>
+				)}}
+				itemWidth={width}
+				sliderWidth={width}
+				inactiveSlideScale={0.95}
+				inactiveSlideOpacity={1}
+				enableMomentum={false}
+				activeSlideAlignment={'start'}
+				activeAnimationType={'spring'}
+				onSnapToItem={this.props.swapItem}
+				activeAnimationOptions={{
+					friction: 4,
+					tension: 40
+				}}
 			/>
 		)
 	}
