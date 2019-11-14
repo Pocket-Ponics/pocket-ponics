@@ -9,7 +9,7 @@ import {
 //import Expo from 'expo';
 //import { StackNavigator } from 'react-navigation';
 
-import bgImage from './tomtier.png'
+import bgImage from './toptier.png'
 
 /* class tierscreen extends react.component {
 	static navigationOptions = {
