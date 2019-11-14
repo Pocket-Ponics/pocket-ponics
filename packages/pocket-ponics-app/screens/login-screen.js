@@ -8,44 +8,92 @@ import {
 	TextInput,
 	Dimensions,
 	TouchableOpacity,
-	KeyboardAvoidingView
+	KeyboardAvoidingView,
+	Alert,
+	Button
 } from 'react-native';
 
 // import bgImage from './background.png'
 import Icon from 'react-native-vector-icons/Ionicons'
+const iconImage = require('../assets/pocket-ponics.png')
 
 const { width: WIDTH } = Dimensions.get('window')
-const LoginScreen = props => (
-	<KeyboardAvoidingView style={styles.backgroundContainer}>
-		<View style={styles.inputContainer}>
-			<Icon name={'ios-person'} size={28} color={'rgba(255, 255, 255, 0.2)'}
-				style={styles.inputIcon} />
-			<TextInput
-				style={styles.input}
-				placeholder={'Username'}
-				placeholderTextColor={'rgba(255, 255, 255, 0.7)'}/>
-		</View>
-		<View style={styles.inputContainer}>
-			<Icon name={'ios-lock'} size={28} color={'rgba(255, 255, 255, 0.2)'}
-				style={styles.inputIcon} />
-			<TextInput
-				style={styles.input}
-				placeholder={'Password'}
-				placeholderTextColor={'rgba(255, 255, 255, 0.7)'}/>
-		</View>
-		<TouchableOpacity style={styles.btnLogin} onPress={() => props.navigation.navigate('App')}>
-			<Text sytle={styles.text} >Login</Text>
-		</TouchableOpacity>
-	</KeyboardAvoidingView>
-)
+class LoginScreen extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			username: "",
+			password: ""
+		}
+
+		this.onChangeUsername = this.onChangeUsername.bind(this)
+		this.onChangePassword = this.onChangePassword.bind(this)
+		this.login = this.login.bind(this)
+	}
+
+	onChangeUsername(username) {
+		this.setState({ username })
+	}
+
+	onChangePassword(password) {
+		this.setState({ password })
+	}
+
+	login() {
+		if (this.state.username === "demouser" && this.state.password === "demopass") {
+			return this.props.navigation.navigate('App')
+		}
+
+		Alert.alert('Invalid username or password')
+	}
+
+	render() {
+		return (
+			<KeyboardAvoidingView style={styles.backgroundContainer}>
+				<Image source={iconImage} style={styles.icon}/>
+				<View style={styles.inputContainer}>
+					<Icon name={'ios-person'} size={28} color={'rgba(255, 255, 255, 0.2)'}
+						style={styles.inputIcon} />
+					<TextInput
+						style={styles.input}
+						placeholder={'Username'}
+						placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
+						value={this.state.username}
+						onChangeText={this.onChangeUsername}
+						autoCapitalize="none"
+						textContentType="username"/>
+				</View>
+				<View style={styles.inputContainer}>
+					<Icon name={'ios-lock'} size={28} color={'rgba(255, 255, 255, 0.2)'}
+						style={styles.inputIcon} />
+					<TextInput
+						style={styles.input}
+						placeholder={'Password'}
+						placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
+						value={this.state.password}
+						onChangeText={this.onChangePassword}
+						autoCapitalize="none"
+						textContentType="password"
+						secureTextEntry={true}/>
+				</View>
+				<Button
+					title="Login"
+					onPress={this.login}/>
+			</KeyboardAvoidingView>
+		)
+	}
+}
 
 const styles = StyleSheet.create({  
 	backgroundContainer: {
 		flex: 1,
-		width: null,
-		height: null,
-		justifyContent: 'center',
 		alignItems: 'center',
+		paddingTop: 50
+	},
+	icon: {
+		height: 250,
+		width: 250
 	},
 	inputContainer: {
 		marginTop: 30
@@ -65,19 +113,6 @@ const styles = StyleSheet.create({
 		top: 8,
 		left: 37
 	},
-	btnLogin: {
-		width: WIDTH - 55,
-		height: 45,
-		borderRadius: 25,
-		backgroundColor: '#432577',
-		justifyContent: 'center',
-		marginTop: 20
-	},
-	text: {
-		color: 'rgba(255, 255, 255, 0.7)',
-		fontSize: 16,
-		textAlign: 'center'
-	}
 });
 
 export default LoginScreen
