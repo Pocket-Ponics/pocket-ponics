@@ -8,4 +8,9 @@ export default StyleSheet.create({
 		borderRadius: 10,
 		margin: 20
 	},
+	history: {
+		height: 275,
+		width: 275,
+		resizeMode: 'contain'
+	}
 })
