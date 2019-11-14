@@ -3,15 +3,28 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import GreenhouseScreen from './screens/greenhouse-screen'
 import TierScreen from './screens/tier-screen'
+import LoginScreen from './screens/login-screen'
 
-import {createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
-const MainNavigator = createStackNavigator({
-  Greenhouse: {screen: GreenhouseScreen},
-  Tier: { screen: TierScreen }
-});
+const AuthStack = createStackNavigator({ 
+	Login: { screen: LoginScreen } 
+})
 
-const App = createAppContainer(MainNavigator);
+const AppStack = createStackNavigator({
+	Greenhouse: { screen: GreenhouseScreen },
+	Tier: { screen: TierScreen }
+})
+
+const App = createAppContainer(createSwitchNavigator(
+	{
+		App: AppStack,
+		Auth: AuthStack,
+	},
+	{
+		initialRouteName: 'Auth',
+	}
+ ))
 
 export default App;

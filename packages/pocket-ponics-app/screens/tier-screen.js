@@ -1,13 +1,32 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { 
+	StyleSheet, 
+	Text, 
+	View, 
+	ImageBackground,
+} from 'react-native';
 
-const TierScreen = props => {
-	const { navigate } = props.navigation
-	return (
-		<View>
-			<Text>{props.navigation.getParam('plant')}</Text>
-		</View>
-	)
+
+const bgImage = require('../assets/top-tier.png')
+
+export default class Example extends React.Component {
+	render() {
+		return (
+			<ImageBackground source={bgImage} style={styles.backgroundContainer}>
+				<Text>{this.props.navigation.getParam('plant')}</Text>
+			</ImageBackground>
+
+		);
+	}
 }
 
-export default TierScreen
+const styles = StyleSheet.create({
+	backgroundContainer: {
+		flex: 1,
+		width: null,
+		height: null,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+
+});
