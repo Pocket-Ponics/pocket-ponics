@@ -75,11 +75,12 @@ class LoginScreen extends React.Component {
 						onChangeText={this.onChangePassword}
 						autoCapitalize="none"
 						textContentType="password"
-						secureTextEntry={true}/>
+						secureTextEntry={true}
+						onSubmitEditing={this.login}/>
 				</View>
-				<Button
-					title="Login"
-					onPress={this.login}/>
+				<TouchableOpacity onPress={this.login}>
+					<Text style={styles.button}>LOGIN</Text>
+				</TouchableOpacity>
 			</KeyboardAvoidingView>
 		)
 	}
@@ -113,6 +114,18 @@ const styles = StyleSheet.create({
 		top: 8,
 		left: 37
 	},
+	button: {
+		backgroundColor: '#638E4E',
+		width: WIDTH - 55,
+		borderRadius: 22,
+		fontSize: 16,
+		color: 'white',
+		fontWeight: 'bold',
+		overflow: 'hidden',
+		padding: 12,
+		textAlign:'center',
+		marginTop: 30
+	}
 });
 
 export default LoginScreen

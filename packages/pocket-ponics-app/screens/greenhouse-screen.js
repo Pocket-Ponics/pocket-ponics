@@ -17,7 +17,28 @@ const mockGreenhouseList = [
 			water: 78,
 			nutrient: 14
 		},
-		tiers: ['tomato', 'spinach', 'turnip', 'greenbeans']
+		tiers: [
+			{
+				name: 'tomato',
+				pH: 6.3,
+				ec: 3.2
+			}, 
+			{
+				name: 'spinach',
+				pH: 6.1,
+				ec: 1.9,
+			}, 
+			{
+				name: 'turnip',
+				pH: 6.2,
+				ec: 2.0
+			}, 
+			{
+				name: 'greenbeans',
+				pH: 6.4,
+				ec: 3.9
+			}
+		]
 	},
 	{
 		id: '2',
@@ -27,7 +48,28 @@ const mockGreenhouseList = [
 			water: 63,
 			nutrient: 23
 		},
-		tiers: ['tomato', 'greenbeans', 'greenbeans', 'greenbeans']
+		tiers: [
+			{
+				name: 'tomato',
+				pH: 6.7,
+				ec: 5.5
+			},
+			{
+				name: 'greenbeans',
+				pH: 7.1,
+				ec: 4.3
+			},
+			{
+				name: 'greenbeans',
+				pH: 6.9,
+				ec: 4.2
+			},
+			{
+				name: 'greenbeans',
+				pH: 6.6,
+				ec: 4.1
+			}
+		]
 	}
 ]
 

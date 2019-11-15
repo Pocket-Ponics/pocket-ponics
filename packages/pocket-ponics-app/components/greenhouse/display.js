@@ -53,19 +53,19 @@ const GreenhouseDisplay = props => {
 
 	return (
 		<View style={styles.background}>
-			<TouchableOpacity onPress={() => navigate('Tier', { plant: 'Tomato' })}>
+			<TouchableOpacity onPress={() => navigate('Tier', { plant: props.tiers[0] })}>
 				<ImageBackground source={toptierImage} style={styles.toptier}>
-					{displayTopTier(props.tiers[0])}
+					{displayTopTier(props.tiers[0].name)}
 				</ImageBackground>
 			</TouchableOpacity>
-			<TouchableOpacity onPress={() => navigate('Tier', { plant: 'Spinach' })}>
-				{displayTier(props.tiers[1])}
+			<TouchableOpacity onPress={() => navigate('Tier', { plant: props.tiers[1] })}>
+				{displayTier(props.tiers[1].name)}
 			</TouchableOpacity>
-			<TouchableOpacity onPress={() => navigate('Tier', { plant: 'Green Beans' })}>
-				{displayTier(props.tiers[2])}
+			<TouchableOpacity onPress={() => navigate('Tier', { plant: props.tiers[2] })}>
+				{displayTier(props.tiers[2].name)}
 			</TouchableOpacity>
-			<TouchableOpacity onPress={() => navigate('Tier', { plant: 'Turnip' })}>
-				{displayTier(props.tiers[3])}
+			<TouchableOpacity onPress={() => navigate('Tier', { plant: props.tiers[3] })}>
+				{displayTier(props.tiers[3].name)}
 			</TouchableOpacity>
 			<TouchableOpacity onPress={() => navigate('Tier', { plant: 'Seedlings' })}>
 				<ImageBackground source={tierImage} style={styles.tier}>
