@@ -67,7 +67,7 @@ const GreenhouseDisplay = props => {
 			<TouchableOpacity onPress={() => navigate('Tier', { plant: props.tiers[3] })}>
 				{displayTier(props.tiers[3].name)}
 			</TouchableOpacity>
-			<TouchableOpacity onPress={() => navigate('Tier', { plant: 'Seedlings' })}>
+			<TouchableOpacity>
 				<ImageBackground source={tierImage} style={styles.tier}>
 					<Image source={seedlingImage} style={styles.seedling}/>
 					<Image source={seedlingImage} style={styles.seedling}/>
