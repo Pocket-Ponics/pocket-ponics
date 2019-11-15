@@ -10,7 +10,8 @@ import {
 	TouchableOpacity,
 	KeyboardAvoidingView,
 	Alert,
-	Button
+	Button,
+	Platform
 } from 'react-native';
 
 // import bgImage from './background.png'
@@ -50,37 +51,39 @@ class LoginScreen extends React.Component {
 
 	render() {
 		return (
-			<KeyboardAvoidingView style={styles.backgroundContainer}>
-				<Image source={iconImage} style={styles.icon}/>
-				<View style={styles.inputContainer}>
-					<Icon name={'ios-person'} size={28} color={'rgba(255, 255, 255, 0.2)'}
-						style={styles.inputIcon} />
-					<TextInput
-						style={styles.input}
-						placeholder={'Username'}
-						placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
-						value={this.state.username}
-						onChangeText={this.onChangeUsername}
-						autoCapitalize="none"
-						textContentType="username"/>
+			<KeyboardAvoidingView style={styles.backgroundContainer} behavior={Platform.OS === "ios" ? "padding" : null}>
+				<View style={styles.loginContainer}>
+					<Image source={iconImage} style={styles.icon}/>
+					<View style={styles.inputContainer}>
+						<Icon name={'ios-person'} size={28} color={'rgba(255, 255, 255, 0.2)'}
+							style={styles.inputIcon} />
+						<TextInput
+							style={styles.input}
+							placeholder={'Username'}
+							placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
+							value={this.state.username}
+							onChangeText={this.onChangeUsername}
+							autoCapitalize="none"
+							textContentType="username"/>
+					</View>
+					<View style={styles.inputContainer}>
+						<Icon name={'ios-lock'} size={28} color={'rgba(255, 255, 255, 0.2)'}
+							style={styles.inputIcon} />
+						<TextInput
+							style={styles.input}
+							placeholder={'Password'}
+							placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
+							value={this.state.password}
+							onChangeText={this.onChangePassword}
+							autoCapitalize="none"
+							textContentType="password"
+							secureTextEntry={true}
+							onSubmitEditing={this.login}/>
+					</View>
+					<TouchableOpacity onPress={this.login}>
+						<Text style={styles.button}>LOGIN</Text>
+					</TouchableOpacity>
 				</View>
-				<View style={styles.inputContainer}>
-					<Icon name={'ios-lock'} size={28} color={'rgba(255, 255, 255, 0.2)'}
-						style={styles.inputIcon} />
-					<TextInput
-						style={styles.input}
-						placeholder={'Password'}
-						placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
-						value={this.state.password}
-						onChangeText={this.onChangePassword}
-						autoCapitalize="none"
-						textContentType="password"
-						secureTextEntry={true}
-						onSubmitEditing={this.login}/>
-				</View>
-				<TouchableOpacity onPress={this.login}>
-					<Text style={styles.button}>LOGIN</Text>
-				</TouchableOpacity>
 			</KeyboardAvoidingView>
 		)
 	}
@@ -88,16 +91,21 @@ class LoginScreen extends React.Component {
 
 const styles = StyleSheet.create({  
 	backgroundContainer: {
+		flex: 1
+	},
+	loginContainer: {
 		flex: 1,
 		alignItems: 'center',
-		paddingTop: 50
+		justifyContent: 'center',
+		paddingBottom: 100
 	},
 	icon: {
-		height: 250,
-		width: 250
+		height: 200,
+		resizeMode: 'contain',
 	},
 	inputContainer: {
-		marginTop: 30
+		marginTop: 30,
+		alignItems: 'center'
 	},
 	input: {
 		width: WIDTH - 55,
