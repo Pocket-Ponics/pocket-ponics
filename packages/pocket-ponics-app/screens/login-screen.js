@@ -11,7 +11,7 @@ import {
 	KeyboardAvoidingView,
 	Alert,
 	Button,
-	Platform
+	Platform,
 } from 'react-native';
 
 // import bgImage from './background.png'
