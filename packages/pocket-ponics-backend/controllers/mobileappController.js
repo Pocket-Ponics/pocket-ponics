@@ -349,15 +349,20 @@ exports.makeAdjustments = (req, res) => {
         else if(rec != undefined)
         {    
             //Add adjustment to queue
-            mySQL.createAdjustmentForGreenhouse(rec.user_id, greenhouse_id, adjustment_type, amount, tier, function(err, record) {
-                if(!err)
-                {
-                    res.json({200: "Adjustment Queued"})
-                }
-                else {
-                    res.json({201: "Error adding adjustment to queue"})
-                }
-            })
+            if(adjustment_type >= 0 && adjustment_type <= 2)
+            {
+                mySQL.createAdjustmentForGreenhouse(rec.user_id, greenhouse_id, adjustment_type, amount, tier, function(err, record) {
+                    if(!err)
+                    {
+                        res.json({200: "Adjustment Queued"})
+                    }
+                    else {
+                        res.json({201: "Error adding adjustment to queue"})
+                    }
+                })
+            } else {
+                res.json({201: "Error adding adjustment to queue"})
+            }
         }
         else 
         {

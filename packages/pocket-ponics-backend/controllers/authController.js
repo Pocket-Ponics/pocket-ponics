@@ -37,12 +37,10 @@ exports.getToken = (req, res) => {
                         if(!err)
                         {
                             res.json({token: token})
-                            console.log("Insert operation successful")
                         } 
                         else 
                         {
                             res.json({403: "Error generating token"})
-                            console.log("Unable to insert token in db")
                         }
                     })
                 }

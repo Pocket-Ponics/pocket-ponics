@@ -78,13 +78,25 @@ exports.deleteGreenhouseForUser = (greenhouse_id, user_id, callback) => {
     var sensorGridQuery = `DELETE from sensor_grid where greenhouse_id = ${greenhouse_id} and user_id = ${user_id};`
     var greenhouseQuery = `DELETE from greenhouse where user_id = ${user_id} and greenhouse_id = ${greenhouse_id};`
 
-    sqlController.executeTransaction([tierQuery, historicalQuery, sensorGridQuery, greenhouseQuery], function(err, result) {
+    sqlController.execute(`SELECT * from greenhouse where user_id = ${user_id} and greenhouse_id = ${greenhouse_id}`, function(err, result){
         if(err)
         {
             console.log(result)
-        } 
-        else {
             callback(err, result)
+        }
+        else if(result.rows.length == 1) 
+        {
+            sqlController.executeTransaction([tierQuery, historicalQuery, sensorGridQuery, greenhouseQuery], function(err, result) {
+                if(err)
+                {
+                    console.log(result)
+                } 
+                callback(err, result)
+            })
+        } 
+        else 
+        {
+            callback(true, result)
         }
     })
 }
@@ -105,7 +117,7 @@ exports.createEmptyTiersAndGridForNewGreenhouse = (greenhouse_id, user_id, seria
     })
 }
 
-exports.getGreenhouseHistoricalData = (greenhouse_id, user_id, lower_limit, upper_limit, callback) => {
+exports.getGreenhouseHistoricalData = (user_id, greenhouse_id, lower_limit, upper_limit, callback) => {
     sqlController.execute(`select * from historical_data where user_id = ${user_id} and greenhouse_id = ${greenhouse_id} and date >= '${lower_limit}' and date < '${upper_limit}'`, function(err, result) {
         if(err)
         {
@@ -134,21 +146,27 @@ exports.getUserForToken = (token, callback) => {
 
 exports.updateTierForGreenhouse = (user_id, greenhouse_id, tier, plant_id, growth_stage, cycle_time, num_plants, callback) => {
     sqlController.execute(`UPDATE tiers SET plant_id = ${plant_id}, growth_stage = ${growth_stage}, cycle_time = "${cycle_time}", num_plants = ${num_plants} WHERE user_id = ${user_id} and tier = ${tier} and greenhouse_id = ${greenhouse_id}`, function(err, result) {
-        if(err)
+        if(result.rows.affectedRows == 1)
         {
-            console.log(result)
+            callback(err, result)
         }
-        callback(err, result)
+        else
+        {
+            callback(true, result)
+        }
     })
 }
 
 exports.updateGreenhouseForUser = (user_id, greenhouse_id, name, seedling_time, callback) => {
     sqlController.execute(`UPDATE greenhouse SET name = "${name}", seedling_time = "${seedling_time}" WHERE user_id = ${user_id} and greenhouse_id = ${greenhouse_id}`, function(err, result) {
-        if(err)
+        if(result.rows.affectedRows == 1)
         {
-            console.log(result)
+            callback(err, result)
         }
-        callback(err, result)
+        else
+        {
+            callback(true, result)
+        }
     })
 }
 

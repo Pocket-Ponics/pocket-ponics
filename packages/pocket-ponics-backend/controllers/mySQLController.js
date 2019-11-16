@@ -50,8 +50,8 @@ exports.executeTransaction = (statements, callback) => {
                 }
                 return Promise.all(queue);
             }).then(() => {
-                return connection.commitAsync().then(connection.releaseAsync()).then(() => {
-                    callback(false, err)
+                return connection.commitAsync().then(connection.releaseAsync()).then((result) => {
+                    callback(false, result)
                 });
             }).catch(err => {
                 return connection.rollbackAsync().then(connection.releaseAsync()).then(() => {
