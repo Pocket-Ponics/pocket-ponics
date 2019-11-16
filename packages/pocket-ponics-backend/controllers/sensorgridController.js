@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
-import mySQL from '../models/mySQLModel';
+import mySQL from './mySQLController';
 
 //Post all sensor readings for all tiers of greenhouse
 exports.postReadingsGreenhouse = (req, res) => {

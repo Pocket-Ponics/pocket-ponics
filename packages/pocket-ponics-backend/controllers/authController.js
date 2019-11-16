@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
-import mySQL from '../models/mySQLModel';
+import mySQL from './mySQLController';
 
 //Get an authentication token for given user credentials
 exports.getToken = (req, res) => {

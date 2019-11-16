@@ -1,4 +1,4 @@
-import mySQL from '../models/mySQLModel';
+import mySQL from './mySQLController';
 const bcrypt = require('bcrypt');
 
 //Retrieves all greenhouses for a specific user
