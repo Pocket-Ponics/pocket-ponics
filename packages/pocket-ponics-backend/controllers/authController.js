@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
-import mySQL from '../models/mySQLModel';
+import mySQL from './mySQLController';
 
 //Get an authentication token for given user credentials
 exports.getToken = (req, res) => {
@@ -37,12 +37,10 @@ exports.getToken = (req, res) => {
                         if(!err)
                         {
                             res.json({token: token})
-                            console.log("Insert operation successful")
                         } 
                         else 
                         {
                             res.json({403: "Error generating token"})
-                            console.log("Unable to insert token in db")
                         }
                     })
                 }
