@@ -5,6 +5,7 @@ import Carousel from 'react-native-snap-carousel';
 import styles from './display-styles'
 
 import GreenhouseSwipeable from './swipeable'
+import NewGreenhouse from './new-greenhouse'
 
 class GreenhouseList extends React.Component {
 
@@ -24,13 +25,18 @@ class GreenhouseList extends React.Component {
 			<Carousel
 				data={this.props.greenhouses}
 				renderItem={({ item }) => {
-					console.log(item)
-					return (
-					<GreenhouseSwipeable
-						greenhouse={item}
-						navigation={this.props.navigation}/>
-				)}}
+					if (item.type === 'greenhouse'){
+						return (
+							<GreenhouseSwipeable
+								greenhouse={item}
+								navigation={this.props.navigation}/>
+						)
+					}
+
+					return <NewGreenhouse navigation={this.props.navigation}/>
+				}}
 				itemWidth={width}
+				style={{flex: 1}}
 				sliderWidth={width}
 				inactiveSlideScale={0.95}
 				inactiveSlideOpacity={1}

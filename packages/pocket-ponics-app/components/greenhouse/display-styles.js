@@ -38,7 +38,7 @@ export default StyleSheet.create({
 		height: 50,
 		marginTop: 5,
 		resizeMode: 'contain',
-		paddingLeft: 40
+		paddingLeft: 40,
 	},
 	seedling: {
 		width: 1,

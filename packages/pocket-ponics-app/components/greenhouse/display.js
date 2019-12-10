@@ -15,8 +15,10 @@ const onPress = event => {
 	console.log(event)
 }
 
-const displayTopTier = (type) => {
-	switch(type) {
+const displayTopTier = (tier) => {
+	if(!tier || !tier.name) return null
+
+	switch(tier.name) {
 		case 'tomato': 
 			return (
 				<Image source={tomatoImage} style={styles.topImage}/>
@@ -24,9 +26,14 @@ const displayTopTier = (type) => {
 	}
 }
 
-const displayTier = (type) => {
+const displayTier = (tier) => {
+	if(!tier || !tier.name) return (
+		<ImageBackground source={tierImage} style={styles.tier}>
+		</ImageBackground>
+	)
+
 	let imageSrc
-	switch(type) {
+	switch(tier.name) {
 		case 'greenbeans': 
 			imageSrc = greenbeanImage
 			break
@@ -53,21 +60,21 @@ const GreenhouseDisplay = props => {
 
 	return (
 		<View style={styles.background}>
-			<TouchableOpacity onPress={() => navigate('Tier', { plant: props.tiers[0] })}>
+			<TouchableOpacity style={styles.button} onPress={() => navigate('Tier', { plant: props.tiers[0] })}>
 				<ImageBackground source={toptierImage} style={styles.toptier}>
-					{displayTopTier(props.tiers[0].name)}
+					{displayTopTier(props.tiers[0])}
 				</ImageBackground>
 			</TouchableOpacity>
-			<TouchableOpacity onPress={() => navigate('Tier', { plant: props.tiers[1] })}>
-				{displayTier(props.tiers[1].name)}
+			<TouchableOpacity style={styles.button} onPress={() => navigate('Tier', { plant: props.tiers[1] })}>
+				{displayTier(props.tiers[1])}
 			</TouchableOpacity>
-			<TouchableOpacity onPress={() => navigate('Tier', { plant: props.tiers[2] })}>
-				{displayTier(props.tiers[2].name)}
+			<TouchableOpacity style={styles.button} onPress={() => navigate('Tier', { plant: props.tiers[2] })}>
+				{displayTier(props.tiers[2])}
 			</TouchableOpacity>
-			<TouchableOpacity onPress={() => navigate('Tier', { plant: props.tiers[3] })}>
-				{displayTier(props.tiers[3].name)}
+			<TouchableOpacity style={styles.button} onPress={() => navigate('Tier', { plant: props.tiers[3] })}>
+				{displayTier(props.tiers[3])}
 			</TouchableOpacity>
-			<TouchableOpacity>
+			<TouchableOpacity style={styles.button}>
 				<ImageBackground source={tierImage} style={styles.tier}>
 					<Image source={seedlingImage} style={styles.seedling}/>
 					<Image source={seedlingImage} style={styles.seedling}/>

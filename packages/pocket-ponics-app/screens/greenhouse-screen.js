@@ -2,14 +2,13 @@ import React from 'react';
 import { Text, View, ScrollView, SafeAreaView } from 'react-native';
 
 import GreenhouseDisplay from '../components/greenhouse/display'
-import GreenhouseSwipeable from '../components/greenhouse/swipeable'
+import NewGreenhouse from '../components/greenhouse/new-greenhouse'
 import GreenhouseList from '../components/greenhouse/greenhouse-list'
-import GreenhouseStatsDisplay from '../components/greenhouse/stats'
-import GreenhouseHistoryDisplay from '../components/greenhouse/history'
 import DotScrollMenu from '../components/greenhouse/dot-scroll-menu'
 
 const mockGreenhouseList = [
 	{
+		type: 'greenhouse',
 		id: '1',
 		name: "Greenhouse 1",
 		stats: {
@@ -41,6 +40,7 @@ const mockGreenhouseList = [
 		]
 	},
 	{
+		type: 'greenhouse',
 		id: '2',
 		name: "Greenhouse 2",
 		stats: {
@@ -70,6 +70,10 @@ const mockGreenhouseList = [
 				ec: 4.1
 			}
 		]
+	},
+	{
+		type: 'add-page',
+		name: "Setup",
 	}
 ]
 
@@ -95,11 +99,12 @@ class GreenhouseScreen extends React.Component {
 
 	render() {
 		return (
-			<SafeAreaView>
+			<SafeAreaView style={{flex: 1}}>
 				<DotScrollMenu 
 					greenhouseList={mockGreenhouseList} 
 					current={this.state.currentGreenhouse}/>
 				<GreenhouseList 
+					style={{flex: 1}}
 					greenhouses={mockGreenhouseList} 
 					navigation={this.props.navigation}
 					current={this.state.currentGreenhouse}
@@ -108,5 +113,8 @@ class GreenhouseScreen extends React.Component {
 		)
 	}
 }
+
+
+				
 
 export default GreenhouseScreen

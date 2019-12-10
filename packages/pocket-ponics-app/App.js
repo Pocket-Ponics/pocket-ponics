@@ -3,6 +3,10 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import GreenhouseScreen from './screens/greenhouse-screen'
 import TierScreen from './screens/tier-screen'
+import PurpleLightScreen from './screens/purple-light-screen'
+import QRScannerScreen from './screens/qr-scanner-screen'
+import WifiScreen from './screens/wifi-screen'
+import TierSelectionScreen from './screens/tier-selection-screen'
 import LoginScreen from './screens/login-screen'
 
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
@@ -14,7 +18,11 @@ const AuthStack = createStackNavigator({
 
 const AppStack = createStackNavigator({
 	Greenhouse: { screen: GreenhouseScreen },
-	Tier: { screen: TierScreen }
+	Tier: { screen: TierScreen },
+	PurpleLight: { screen: PurpleLightScreen },
+	QRScanner: { screen: QRScannerScreen },
+	Wifi: { screen: WifiScreen },
+	TierSelection: { screen: TierSelectionScreen }
 })
 
 const App = createAppContainer(createSwitchNavigator(
@@ -23,7 +31,7 @@ const App = createAppContainer(createSwitchNavigator(
 		Auth: AuthStack,
 	},
 	{
-		initialRouteName: 'Auth',
+		initialRouteName: 'App',
 	}
  ))
 
