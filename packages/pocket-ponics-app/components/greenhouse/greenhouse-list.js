@@ -9,7 +9,7 @@ import GreenhouseSwipeable from './swipeable'
 class GreenhouseList extends React.Component {
 
 	constructor(props) {
-		super(props);
+		super(props)
 
 		this.state = {
 			currentIndex: 0
@@ -17,8 +17,8 @@ class GreenhouseList extends React.Component {
 	}
 
 	render() {
-		const { width } = Dimensions.get('window');
-		const contentOffset = (width - width) / 2;
+		const { width } = Dimensions.get('window')
+		const contentOffset = (width - width) / 2
 
 		return (
 			<Carousel
