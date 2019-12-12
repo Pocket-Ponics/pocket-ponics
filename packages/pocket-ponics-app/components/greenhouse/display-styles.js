@@ -6,45 +6,50 @@ export default StyleSheet.create({
 	background: {
 		backgroundColor: '#1A0E00',
 		color: '#FFFFFF',
-		padding: 50,
 		borderRadius: 10,
 		margin: 20,
+		padding: 10,
 		alignItems: 'center',
-		justifyContent: 'center'
+		justifyContent: 'center',
+		flex: 1
+	},
+	topButton: {
+		flex: 1.8,
+		width: '100%'
+	},
+	button: {
+		flex: 1, 
+		width: '100%'
 	},
 	tier: {
-		width: 200,
-		height: 90,
-		resizeMode: 'contain',
+		flex: 1,
 		flexDirection: 'row',
 		justifyContent: 'center'
 	},
+	backgroundImg: {
+		resizeMode: 'contain'
+	},
 	toptier: {
-		width: 200,
-		height: 160,
-		resizeMode: 'contain',
+		flex: 1,
 		flexDirection: 'row',
 		justifyContent: 'center'
 	},
 	topImage: {
-		width: 200,
-		height: 120,
-		marginTop: 15,
+		height: '75%',
+		width: '100%',
+		marginTop: '4%',
 		resizeMode: 'contain',
-		paddingLeft: 40
 	},
 	image: {
-		width: 50,
-		height: 50,
-		marginTop: 5,
+		height: '50%',
+		width: '20%',
 		resizeMode: 'contain',
-		paddingLeft: 40,
+		marginTop: '2.5%'
 	},
 	seedling: {
-		width: 1,
-		height: 30,
-		marginTop: 24,
+		width: '12%',
+		height: '50%',
+		marginTop: '2.5%',
 		resizeMode: 'contain',
-		paddingLeft: 40
 	},
 })

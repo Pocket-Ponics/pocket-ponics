@@ -16,9 +16,19 @@ export default StyleSheet.create({
 	},
 	image: {
 		resizeMode: 'contain',
-		width: '100%',
-		flex: 1,
-		marginBottom: 20
+		width: '80%',
+		height: '80%',
+		width: 100,
+		height: 100,
+		borderRadius: 50,
+		backgroundColor: '#1A0E00',
+	},
+	selectorButton: {
+		flex: 1, 
+		flexDirection: 'column', 
+		margin: 5,
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	scanner: {
 		flex: 1,
