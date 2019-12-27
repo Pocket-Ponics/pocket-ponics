@@ -17,6 +17,19 @@ class ProfileScreen extends React.Component {
 		)
 	}
 
+	logout() {
+		(async () => {
+			try {
+				const username = await AsyncStorage.setItem('username', null)
+				const password = await AsyncStorage.setItem('password', null)
+				this.setState({ username, password })
+			} catch(e) {
+				console.log(e)
+			}
+		})()
+		return this.props.navigation.navigate('Auth')
+	}
+
 	render() {
 		return (
 			<SafeAreaView style={{flex: 1}}>
@@ -27,7 +40,7 @@ class ProfileScreen extends React.Component {
 					<TouchableOpacity style={styles.button} onPress={this.changePassword.bind(this)}>
 						<Text style={styles.buttonText}>Change password</Text>
 					</TouchableOpacity>
-					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Auth')}>
+					<TouchableOpacity style={styles.button} onPress={this.logout.bind(this)}>
 						<Text style={styles.buttonText}>Logout</Text>
 					</TouchableOpacity>
 				</View>

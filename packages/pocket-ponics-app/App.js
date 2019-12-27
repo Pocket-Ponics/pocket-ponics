@@ -11,13 +11,15 @@ import FillWaterScreen from './screens/fill-water-screen'
 import FillNutrientsScreen from './screens/fill-nutrients-screen'
 import SoakWoolScreen from './screens/soak-wool-screen'
 import StartSeedlingsScreen from './screens/start-seedlings-screen'
-import LoginScreen from './screens/login-screen'
 import ProfileScreen from './screens/profile-screen'
+import AuthLoadingScreen from './screens/auth-loading-screen'
+import LoginScreen from './screens/login-screen'
 
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
-const AuthStack = createStackNavigator({ 
+const AuthStack = createSwitchNavigator({ 
+	AuthLoading: { screen: AuthLoadingScreen },
 	Login: { screen: LoginScreen } 
 })
 
@@ -51,7 +53,7 @@ const App = createAppContainer(createSwitchNavigator(
 		Auth: AuthStack,
 	},
 	{
-		initialRouteName: 'App',
+		initialRouteName: 'Auth',
 	}
  ))
 

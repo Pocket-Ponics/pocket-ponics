@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { 
 	StyleSheet, 
 	Text, 
@@ -12,7 +12,8 @@ import {
 	Alert,
 	Button,
 	Platform,
-} from 'react-native';
+	AsyncStorage
+} from 'react-native'
 
 // import bgImage from './background.png'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -43,6 +44,15 @@ class LoginScreen extends React.Component {
 
 	login() {
 		if (this.state.username === "demouser" && this.state.password === "demopass") {
+			(async () => {
+				try {
+					const username = await AsyncStorage.setItem('username', this.state.username)
+					const password = await AsyncStorage.setItem('password', this.state.password)
+					this.setState({ username, password })
+				} catch(e) {
+					console.log(e)
+				}
+			})()
 			return this.props.navigation.navigate('App')
 		}
 
