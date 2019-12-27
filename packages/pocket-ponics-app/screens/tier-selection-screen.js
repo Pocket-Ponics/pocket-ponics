@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text,View, SafeAreaView, Image, TouchableOpacity, Modal, FlatList } from 'react-native';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 import styles from './setup-styles'
 
@@ -28,7 +29,19 @@ const plants = [
 	}},
 ]
 
+const topplants = [
+	{ img: tomatoImage, display: 'Tomato', data: {
+		name: 'tomato',
+		pH: 6.3,
+		ec: 3.2
+	}},
+]
+
 class TierSelectionScreen extends React.Component {
+	static navigationOptions = {
+		title: 'Setup',
+	}
+
 	constructor(props) {
 		super(props)
 
@@ -39,8 +52,20 @@ class TierSelectionScreen extends React.Component {
 		}
 	}
 
-	static navigationOptions = {
-		title: 'Setup',
+	goToNext() {
+		const resetAction = StackActions.reset({
+			index: 0,
+			actions: [NavigationActions.navigate({ routeName: 'FillWater' })],
+		});
+		this.props.navigation.dispatch(resetAction);
+	}
+
+	cancel() {
+		const resetAction = StackActions.reset({
+			index: 0,
+			actions: [NavigationActions.navigate({ routeName: 'Greenhouse' })],
+		});
+		this.props.navigation.dispatch(resetAction);
 	}
 
 	setTier(data) {
@@ -67,10 +92,10 @@ class TierSelectionScreen extends React.Component {
 							<View style={{ height: 400, backgroundColor: '#FFF', borderRadius: 10}}>
 							<Text style={{...styles.heading, color: "#000", alignSelf: 'center', marginTop: 20 }}>Plant Choices</Text>
 							<FlatList
-								data={plants}
+								data={this.state.currIndex === 0 ? topplants : plants}
 								renderItem={({ item }) => (
 									<TouchableOpacity style={styles.selectorButton} onPress={() => this.setTier(item.data)}>
-										<Image source={item.img} style={styles.image}/>
+										<Image source={item.img} style={styles.selectorImg}/>
 										<Text>{item.display}</Text>
 									</TouchableOpacity>
 								)}
@@ -84,10 +109,10 @@ class TierSelectionScreen extends React.Component {
 					<View style={{ flex: 1 }}>
 						<Display tiers={this.state.tiers} navigation={{navigate: (name, data) => this.setState({ modalVisible: true, currIndex: data.index })}}/>
 					</View>
-					<TouchableOpacity style={styles.button} onPress={()=> this.props.navigation.navigate('QRScanner')}>
+					<TouchableOpacity style={styles.button} onPress={this.goToNext.bind(this)}>
 						<Text style={styles.buttonText}>Continue Setup</Text>
 					</TouchableOpacity>
-					<TouchableOpacity style={styles.cancelButton} onPress={()=> this.props.navigation.navigate('Greenhouse')}>
+					<TouchableOpacity style={styles.cancelButton} onPress={this.cancel.bind(this)}>
 						<Text style={styles.cancelButtonText}>Cancel Setup</Text>
 					</TouchableOpacity>
 				</View>

@@ -6,7 +6,7 @@ import styles from './setup-styles'
 
 const plugin = require('../assets/plug.jpg')
 
-class PurpleLightScreen extends React.Component {
+class FillWaterScreen extends React.Component {
 	static navigationOptions = {
 		title: 'Setup',
 	}
@@ -14,7 +14,7 @@ class PurpleLightScreen extends React.Component {
 	goToNext() {
 		const resetAction = StackActions.reset({
 			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'QRScanner' })],
+			actions: [NavigationActions.navigate({ routeName: 'FillNutrients' })],
 		});
 		this.props.navigation.dispatch(resetAction);
 	}
@@ -31,8 +31,8 @@ class PurpleLightScreen extends React.Component {
 		return (
 			<SafeAreaView style={{flex: 1}}>
 				<View style={styles.background}>
-					<Text style={styles.heading}>Wait for the purple light</Text>
-					<Text style={styles.text}>Once your greenhouse is plugged in, give it a minute to start up. When the lights on the greenhouse pulse purple, click the button to continue the setup.</Text>
+					<Text style={styles.heading}>Fill the water tank</Text>
+					<Text style={styles.text}>Unscrew the cap on the front of the water tank and pour in two gallons of water.  The water should be at the full tank mark.</Text>
 					<Image source={plugin} style={styles.image}/>
 					<TouchableOpacity style={styles.button} onPress={this.goToNext.bind(this)}>
 						<Text style={styles.buttonText}>Continue Setup</Text>
@@ -49,4 +49,4 @@ class PurpleLightScreen extends React.Component {
 
 				
 
-export default PurpleLightScreen
+export default FillWaterScreen

@@ -1,30 +1,30 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-
-// Contrast note: darkest brown, with darker green and lightest green meets WCAG standards
 export default StyleSheet.create({
 	background: {
-		backgroundColor: '#1A0E00',
 		color: '#FFFFFF',
-		borderRadius: 10,
-		margin: 20,
-		padding: 10,
 		alignItems: 'center',
 		justifyContent: 'center',
+		margin: 10,
 		flex: 1
 	},
 	topButton: {
 		flex: 1.8,
-		width: '100%'
+		width: '100%',
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	button: {
 		flex: 1, 
-		width: '100%'
+		width: '100%',
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	tier: {
 		flex: 1,
 		flexDirection: 'row',
-		justifyContent: 'center'
+		justifyContent: 'center',
+		aspectRatio: 15/7,
 	},
 	backgroundImg: {
 		resizeMode: 'contain'
@@ -32,24 +32,25 @@ export default StyleSheet.create({
 	toptier: {
 		flex: 1,
 		flexDirection: 'row',
-		justifyContent: 'center'
+		justifyContent: 'center',
+		aspectRatio: 150/126,
 	},
 	topImage: {
 		height: '75%',
 		width: '100%',
-		marginTop: '4%',
+		marginTop: '6%',
 		resizeMode: 'contain',
 	},
 	image: {
-		height: '50%',
-		width: '20%',
+		flex: 1,
+		aspectRatio: 1.5,
 		resizeMode: 'contain',
-		marginTop: '2.5%'
+		marginTop: '5%'
 	},
 	seedling: {
-		width: '12%',
-		height: '50%',
-		marginTop: '2.5%',
+		flex: 1,
+		aspectRatio: 1,
 		resizeMode: 'contain',
+		marginTop: '8%'
 	},
 })

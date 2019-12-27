@@ -11,10 +11,6 @@ const spinachImage = require('../../assets/spinach.png')
 const turnipImage = require('../../assets/turnip.png')
 const seedlingImage = require('../../assets/seedling.png')
 
-const onPress = event => {
-	console.log(event)
-}
-
 const displayTopTier = (tier) => {
 	if(!tier || !tier.name) return null
 
@@ -56,7 +52,6 @@ const displayTier = (tier) => {
 
 const GreenhouseDisplay = props => {
 	const { navigate } = props.navigation
-	console.log(props.tiers)
 
 	return (
 		<View style={styles.background}>

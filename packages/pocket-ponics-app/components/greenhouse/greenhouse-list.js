@@ -35,6 +35,7 @@ class GreenhouseList extends React.Component {
 
 					return <NewGreenhouse navigation={this.props.navigation}/>
 				}}
+				firstItem={this.props.current}
 				itemWidth={width}
 				style={{flex: 1}}
 				sliderWidth={width}

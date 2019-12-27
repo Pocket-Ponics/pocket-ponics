@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, SafeAreaView } from 'react-native';
+import { Text, View, ScrollView, SafeAreaView, Button } from 'react-native';
 
 import GreenhouseDisplay from '../components/greenhouse/display'
 import NewGreenhouse from '../components/greenhouse/new-greenhouse'
@@ -81,6 +81,12 @@ class GreenhouseScreen extends React.Component {
 	static navigationOptions = ({ navigation }) => {
 		return {
 			title: navigation.getParam('title', mockGreenhouseList[0].name),
+			headerRight: () => (
+				<Button
+					onPress={() => navigation.navigate('Profile')}
+					title="Profile"
+					color="#fff"/>
+			),
 		}
 	}
 
@@ -99,10 +105,11 @@ class GreenhouseScreen extends React.Component {
 
 	render() {
 		return (
-			<SafeAreaView style={{flex: 1}}>
+			<SafeAreaView style={{flex: 1, backgroundColor: '#472600' }}>
 				<DotScrollMenu 
 					greenhouseList={mockGreenhouseList} 
-					current={this.state.currentGreenhouse}/>
+					current={this.state.currentGreenhouse}
+					swapItem={this.swapItem.bind(this)}/>
 				<GreenhouseList 
 					style={{flex: 1}}
 					greenhouses={mockGreenhouseList} 

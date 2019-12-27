@@ -1,1 +1,9 @@
-<svg id="Layer_3" data-name="Layer 3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1217 661.82"><defs><style>.cls-1{fill:#09f;}.cls-2{fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:25px;}</style></defs><title>top-tier</title><rect class="cls-1" x="12.5" y="577.32" width="1192" height="72"/><polygon class="cls-2" points="1204.5 233.32 1204.5 577.32 12.5 577.32 12.5 233.32 608.5 13.32 1204.5 233.32"/><rect class="cls-2" x="12.5" y="577.32" width="1192" height="72"/></svg>
+<svg id="Layer_3" data-name="Layer 3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1217 661.82">
+	<defs>
+		<style>.cls-1{fill:#09f;}.cls-2{fill:none;stroke:#fff;stroke-miterlimit:10;stroke-width:25px;}</style>
+	</defs>
+	<title>top-tier</title>
+	<rect class="cls-1" x="12.5" y="577.32" width="1192" height="72"/>
+	<polygon class="cls-2" points="1204.5 233.32 1204.5 577.32 12.5 577.32 12.5 233.32 608.5 13.32 1204.5 233.32"/>
+	<rect class="cls-2" x="12.5" y="577.32" width="1192" height="72"/>
+</svg>

@@ -1,16 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-// Contrast note: darkest brown, with darker green and lightest green meets WCAG standards
 export default StyleSheet.create({
-	background: {
-		backgroundColor: '#294F16',
-		padding: 50,
-		borderRadius: 10,
-		margin: 20
+	background:{
+		alignItems: 'center',
+		justifyContent: 'center',
+		flex: 1,
+		marginTop: 20,
 	},
-	history: {
-		height: 275,
-		width: 275,
-		resizeMode: 'contain'
-	}
+	text: {
+		color: '#FFFFFF',
+		fontSize: 40
+	},
 })

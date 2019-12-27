@@ -1,32 +1,32 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-// Contrast note: darkest brown, with darker green and lightest green meets WCAG standards
 export default StyleSheet.create({
 	background: {
-		backgroundColor: '#73003A',
-		padding: 50,
-		borderRadius: 10,
-		margin: 20
+		marginTop: 20
 	},
 	iconContainer: {
 		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
 		padding: 10
 	},
 	text: {
-		fontSize: 40,
+		fontSize: 25,
 		paddingLeft: 30,
-		color: '#FFFFFF'
+		color: '#FFFFFF',
+		flex: 1,
+	},
+	title: {
+		fontSize: 40,
+		color: '#FFFFFF',
+		textAlign: 'center'
 	},
 	icon: {
-		height: 100,
-		width: 100,
+		height: 50,
+		width: 60,
 		resizeMode: 'contain'
 	},
 	iconWide: {
-		height: 60,
-		width: 100,
+		height: 50,
+		width: 60,
 		resizeMode: 'contain'
 	},
 })

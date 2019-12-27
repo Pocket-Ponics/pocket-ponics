@@ -1,6 +1,7 @@
 import React from 'react'
 import { Text, FlatList, View, SafeAreaView, Image, TouchableOpacity, AlertIOS } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 import styles from './setup-styles'
 
@@ -62,17 +63,39 @@ class WifiScreen extends React.Component {
 		title: 'Setup',
 	}
 
+	goToNext() {
+		const resetAction = StackActions.reset({
+			index: 0,
+			actions: [NavigationActions.navigate({ routeName: 'TierSelection' })],
+		});
+		this.props.navigation.dispatch(resetAction);
+	}
+
+	cancel() {
+		const resetAction = StackActions.reset({
+			index: 0,
+			actions: [NavigationActions.navigate({ routeName: 'Greenhouse' })],
+		});
+		this.props.navigation.dispatch(resetAction);
+	}
+
 	getPassword(){
 		AlertIOS.prompt(
 			'Enter the wifi password', 
 			null, 
-			text => this.props.navigation.navigate('TierSelection')
+			text => this.goToNext()
 		)
+	}
+
+	setWifi(passwordNeeded) {
+		if(passwordNeeded) return this.getPassword()
+
+		this.goToNext()
 	}
 
 	renderWifi(wifiData) {
 		return (
-			<TouchableOpacity style={styles.wifi} onPress={this.getPassword.bind(this)}>
+			<TouchableOpacity style={styles.wifi} onPress={this.setWifi.bind(this, wifiData.hasPassword)}>
 				<Text style={styles.wifiText}>{wifiData.name}</Text>
 				{wifiData.hasPassword ? <FontAwesome name="lock" size={20} color="white"/> : null }
 				<FontAwesome name="wifi" size={20} color="white"/>
@@ -90,7 +113,7 @@ class WifiScreen extends React.Component {
 						renderItem={({ item }) => this.renderWifi(item)}
 						keyExtractor={item => item.ssid}
 						style={styles.wifiList}/>
-					<TouchableOpacity style={styles.cancelButton} onPress={()=> this.props.navigation.navigate('Greenhouse')}>
+					<TouchableOpacity style={styles.cancelButton} onPress={this.cancel.bind(this)}>
 						<Text style={styles.cancelButtonText}>Cancel Setup</Text>
 					</TouchableOpacity>
 				</View>
