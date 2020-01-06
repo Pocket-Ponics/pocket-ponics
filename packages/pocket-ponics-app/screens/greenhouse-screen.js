@@ -37,7 +37,12 @@ const mockGreenhouseList = [
 				pH: 6.4,
 				ec: 3.9
 			}
-		]
+		],
+		seedlings: {
+			lastWater: '1/1/20',
+			nextWater: '1/8/20',
+			plant: '1/15/20'
+		}
 	},
 	{
 		type: 'greenhouse',
@@ -69,7 +74,12 @@ const mockGreenhouseList = [
 				pH: 6.6,
 				ec: 4.1
 			}
-		]
+		],
+		seedlings: {
+			lastWater: '1/1/20',
+			nextWater: '-',
+			plant: '1/8/20'
+		}
 	},
 	{
 		type: 'add-page',

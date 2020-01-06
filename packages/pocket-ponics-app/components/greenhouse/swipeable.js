@@ -18,7 +18,7 @@ class GreenhouseSwipeable extends React.Component {
 		return (
 			<ScrollView style={{ width, backgroundColor: '#472600' }}>
 				<View style={{ height: 600 }}>
-					<GreenhouseDisplay navigation={this.props.navigation} tiers={this.props.greenhouse.tiers}/>
+					<GreenhouseDisplay navigation={this.props.navigation} tiers={this.props.greenhouse.tiers} seedlings={this.props.greenhouse.seedlings}/>
 				</View>
 				<GreenhouseStatsDisplay stats={this.props.greenhouse.stats || {}} navigation={this.props.navigation} />
 				<GreenhouseHistoryDisplay navigation={this.props.navigation} />

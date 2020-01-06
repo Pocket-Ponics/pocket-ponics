@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text,View, SafeAreaView, Image, TouchableOpacity, AlertIOS } from 'react-native';
+import { Text,View, SafeAreaView, Image, TouchableOpacity, AlertIOS, AsyncStorage } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 import styles from './setup-styles'
@@ -20,14 +20,14 @@ class ProfileScreen extends React.Component {
 	logout() {
 		(async () => {
 			try {
-				const username = await AsyncStorage.setItem('username', null)
-				const password = await AsyncStorage.setItem('password', null)
+				const username = await AsyncStorage.setItem('username', '')
+				const password = await AsyncStorage.setItem('password', '')
 				this.setState({ username, password })
+				return this.props.navigation.navigate('Auth')
 			} catch(e) {
 				console.log(e)
 			}
 		})()
-		return this.props.navigation.navigate('Auth')
 	}
 
 	render() {

@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import GreenhouseScreen from './screens/greenhouse-screen'
 import TierScreen from './screens/tier-screen'
+import SeedlingsScreen from './screens/seedlings-screen'
 import PurpleLightScreen from './screens/purple-light-screen'
 import QRScannerScreen from './screens/qr-scanner-screen'
 import WifiScreen from './screens/wifi-screen'
@@ -26,6 +27,7 @@ const AuthStack = createSwitchNavigator({
 const AppStack = createStackNavigator({
 	Greenhouse: { screen: GreenhouseScreen },
 	Tier: { screen: TierScreen },
+	Seedlings: { screen: SeedlingsScreen },
 	PurpleLight: { screen: PurpleLightScreen },
 	QRScanner: { screen: QRScannerScreen },
 	Wifi: { screen: WifiScreen },

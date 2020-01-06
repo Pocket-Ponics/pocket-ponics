@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
 		width: null,
 		height: null,
 		alignItems: 'center',
+		backgroundColor: '#472600'
 	},
 	plantImage: {
 		width: 250,
@@ -130,7 +131,8 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 36,
 		fontWeight: 'bold',
-		marginBottom: 20
+		marginBottom: 20,
+		color: '#FFFFFF'
 	},
 	plantInfoContainer: {
 		flexDirection: 'row'
@@ -140,7 +142,8 @@ const styles = StyleSheet.create({
 	},
 	value: {
 		fontSize: 18,
-		paddingTop: 10
+		paddingTop: 10,
+		color: '#FFFFFF'
 	},
 	valueName: {
 		fontWeight: 'bold'

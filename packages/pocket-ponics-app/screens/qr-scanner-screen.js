@@ -8,6 +8,8 @@ import styles from './setup-styles'
 
 const plugin = require('../assets/plug.jpg')
 
+// TODO - set up wifi QR codes to follow the 'WIFI:T:WPA;S:<your Wi-Fi network name>;P:<your Wi-Fi network password>;;' pattern
+
 class QRScannerScreen extends React.Component {
 	static navigationOptions = {
 		title: 'Setup',
