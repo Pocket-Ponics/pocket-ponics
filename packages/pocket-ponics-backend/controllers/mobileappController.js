@@ -455,9 +455,44 @@ exports.getReadingsTier = (req, res) => {
     })
 };
 
+//Get greenhouse and teir data
+exports.getGreenhouseAndTiers = (req, res) => {
+    //Get auth token
+    let cred = req.headers.authorization.split(" ")[1]
+
+    //Store greenhouse_id provided
+    var greenhouse_id = req.params.greenhouse_id
+
+    //Retrieve user_id for given auth token
+    mySQL.getUserForToken(cred, function(err, rec) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(rec != undefined)
+        {    
+            //Get sensor readings
+            mySQL.getGreenhouseDetail(rec.user_id, greenhouse_id, function(err, record) {
+                if(!err)
+                {
+                    res.json(record)
+                }
+                else {
+                    console.log(err)
+                    res.json({201: "Error retrieving sensor readings"})
+                }
+            })
+        }
+        else 
+        {
+            res.json({401: "Unauthorized"})
+        }
+    })
+}
+
 //Get all sensor readings for all tiers of greenhouse
 exports.getReadingsGreenhouse = (req, res) => {
-     //Get auth token
+    //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
 
     //Store greenhouse_id provided

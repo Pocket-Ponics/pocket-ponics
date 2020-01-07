@@ -16,7 +16,10 @@ module.exports = function(app)
         .put(mobileapp.updateGreenhouse)
         .delete(mobileapp.deleteGreenhouse)
         .get(mobileapp.getGreenhouse)
-    
+
+    app.route('/mobileapp/greenhouses/detail/:greenhouse_id')
+        .get(mobileapp.getGreenhouseAndTiers)
+
     app.route('/mobileapp/adjustments/:greenhouse_id/:tier')
         .post(mobileapp.makeAdjustments)
 

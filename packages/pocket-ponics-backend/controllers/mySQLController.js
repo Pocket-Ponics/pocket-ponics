@@ -396,6 +396,34 @@ exports.getGreenhouseForUser = (user_id, greenhouse_id, callback) => {
     })
 }
 
+exports.getGreenhouseDetail = (user_id, greenhouse_id, callback) => {
+    sqlController.execute(`select name, water_level, nutrient_level, battery, light_level, power_source, seedling_time from greenhouse where greenhouse_id = ${greenhouse_id} and user_id = ${user_id}`, function(err, result) {
+
+        if(result.rows.length == 1)
+        {
+            var greenhouseData = result.rows[0]
+
+            sqlController.execute(`SELECT tier, growth_stage, plant_id, ph_level, ec_level, water_level, cycle_time, num_plants FROM tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id}`, function(err, result) {
+                if(result.rows.length == 4)
+                {
+                    greenhouseData.tiers = result.rows
+                    callback(err, greenhouseData)
+                }
+                else
+                {
+                    console.log(err)
+                    callback(true, undefined)
+                }
+            })
+        }
+        else
+        {
+            console.log(err)
+            callback(true, undefined)
+        }
+    })
+}
+
 exports.updateUserHash = (user_id, password_hash, callback) => {
     sqlController.execute(`UPDATE user SET password_hash = '${password_hash}' WHERE (user_id = ${user_id})`, function(err, result) {
         if(err)
