@@ -4,6 +4,27 @@ import { StackActions, NavigationActions } from 'react-navigation'
 
 const iconImage = require('../assets/pocket-ponics.png')
 
+const getAuthToken = async() => {
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+	var urlencoded = new URLSearchParams();
+	urlencoded.append("email", "test3@gmail.com");
+	urlencoded.append("password", "passwordtest3");
+
+	var requestOptions = {
+	  method: 'POST',
+	  headers: myHeaders,
+	  body: urlencoded,
+	  redirect: 'follow'
+	};
+
+	fetch("http://10.171.204.187:8080/auth/create_user", requestOptions)
+		.then(response => response.text())
+		.then(result => console.log(result))
+		.catch(error => console.log('error', error));
+}
+
 class AuthLoadingScreen extends React.Component {
 	constructor(props) {
 		super(props)
@@ -15,16 +36,17 @@ class AuthLoadingScreen extends React.Component {
 	}
 
 	componentDidMount() {
-		(async () => {
-			try {
-				const username = await AsyncStorage.getItem('username')
-				const password = await AsyncStorage.getItem('password')
-				console.log(username, password)
-				this.props.navigation.navigate(username && password ? 'App' : 'Login');
-			} catch(e) {
-				console.log(e)
-			}
-		})()
+		getAuthToken()
+		// (async () => {
+		// 	try {
+		// 		const username = await AsyncStorage.getItem('username')
+		// 		const password = await AsyncStorage.getItem('password')
+		// 		console.log(username, password)
+		// 		this.props.navigation.navigate(username && password ? 'App' : 'Login');
+		// 	} catch(e) {
+		// 		console.log(e)
+		// 	}
+		// })()
 	}
 
 	render() {
