@@ -1,25 +1,49 @@
 import React from 'react'
 import { Text,View, SafeAreaView, Image, TouchableOpacity, AlertIOS, AsyncStorage, StyleSheet } from 'react-native'
 import { StackActions, NavigationActions } from 'react-navigation'
+import base64 from 'base-64'
 
 const iconImage = require('../assets/pocket-ponics.png')
 
 const getAuthToken = async() => {
-	var myHeaders = new Headers();
-	myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-
-	var urlencoded = new URLSearchParams();
-	urlencoded.append("email", "test3@gmail.com");
-	urlencoded.append("password", "passwordtest3");
 
 	var requestOptions = {
-	  method: 'POST',
-	  headers: myHeaders,
-	  body: urlencoded,
+	  method: 'GET',
+	  headers: new Headers({
+	  	'Authorization': 'Bearer ' + 'lc9Bev3Bl5poBbDGZnb1cSGTZ75w/eBO0bB/5phTx4U=',
+	  	'Content-Type': 'application/x-www-form-urlencoded'
+	  }),
 	  redirect: 'follow'
-	};
+	}
 
-	fetch("http://10.171.204.187:8080/auth/create_user", requestOptions)
+	// get a token
+	// var requestOptions = {
+	//   method: 'GET',
+	//   headers: new Headers({
+	//   	'Authorization': 'Basic ' + base64.encode('test3@gmail.com:passwordtest3'),
+	//   	'Content-Type': 'application/x-www-form-urlencoded'
+	//   }),
+	//   redirect: 'follow'
+	// }
+
+	// // create a user
+	// var myHeaders = new Headers();
+	// myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+	// var urlencoded = new URLSearchParams();
+	// urlencoded.append("email", "test3@gmail.com");
+	// urlencoded.append("password", "passwordtest3");
+
+	// console.log(urlencoded)
+
+	// var requestOptions = {
+	//   method: 'POST',
+	//   headers: myHeaders,
+	//   body: "email=test3@gmail.com&password=passwordtest3",
+	//   redirect: 'follow'
+	// }
+
+	fetch("http://10.171.204.187:8080/mobileapp/greenhouses/", requestOptions)
 		.then(response => response.text())
 		.then(result => console.log(result))
 		.catch(error => console.log('error', error));
