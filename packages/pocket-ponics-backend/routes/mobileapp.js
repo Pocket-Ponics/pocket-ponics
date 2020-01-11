@@ -29,6 +29,9 @@ module.exports = function(app)
     app.route('/mobileapp/sensor/:greenhouse_id/:tier')
         .get(mobileapp.getReadingsTier)
 
+    app.route('/mobileapp/plantdata/')
+        .get(mobileapp.getPlantData)
+
     app.route('/mobileapp/sensor/:greenhouse_id')
         .get(mobileapp.getReadingsGreenhouse)
 

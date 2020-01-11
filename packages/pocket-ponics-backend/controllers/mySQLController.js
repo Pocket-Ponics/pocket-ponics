@@ -397,6 +397,23 @@ exports.getGreenhouseForUser = (user_id, greenhouse_id, callback) => {
     })
 }
 
+exports.getPlantIdealData = (callback) => {
+    sqlController.execute('SELECT `cycle_time`, `ec_level_high`, `ec_level_low`, `name`, `ph_level_high`, `ph_level_low`, `plant_id`, `temp_high`, `temp_low`, `water_level_high`, `water_level_low` FROM `plant_ideal`', function(err, result) {
+        if(!err)
+        {
+            callback(err, result)
+        }
+        else
+        {
+            if(err)
+            {
+                console.log(err)
+            }
+            callback(true, undefined)
+        }
+    })
+}
+
 exports.getGreenhouseDetail = (user_id, greenhouse_id, callback) => {
     sqlController.execute(`select name, water_level, nutrient_level, battery, light_level, power_source, seedling_time from greenhouse where greenhouse_id = ${greenhouse_id} and user_id = ${user_id}`, function(err, result) {
 

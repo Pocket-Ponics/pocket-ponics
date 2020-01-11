@@ -122,6 +122,39 @@ exports.getTier = (req, res) => {
     })
 };
 
+//Get all plant ideal data values
+exports.getPlantData = (req, res) => {
+    //Get auth token
+    let cred = req.headers.authorization.split(" ")[1]
+
+    //Retrieve user_id for given auth token
+    mySQL.getUserForToken(cred, function(err, rec) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(rec != undefined)
+        {    
+            //Retrieve values from plant_ideal table 
+            mySQL.getPlantIdealData(function(err, record) {
+                if(!err)
+                {
+                    console.log(record.rows)
+                    res.json(record.rows)
+                }
+                else
+                {
+                    res.json({201: "Unable to retrieve plant ideal data"})
+                }
+            })
+        }
+        else 
+        {
+            res.json({401: "Unauthorized"})
+        }
+    })
+};
+
 //Create a new greenhouse with provided values
 exports.createGreenhouse = (req, res) => {
     //Get auth token
