@@ -25,15 +25,16 @@ class GreenhouseList extends React.Component {
 			<Carousel
 				data={this.props.greenhouses}
 				renderItem={({ item }) => {
-					if (item.type === 'greenhouse'){
+					if ('tiers' in item){
 						return (
 							<GreenhouseSwipeable
 								greenhouse={item}
-								navigation={this.props.navigation}/>
+								navigation={this.props.navigation}
+								retrievedData={this.props.retrievedData}/>
 						)
 					}
 
-					return <NewGreenhouse navigation={this.props.navigation}/>
+					return <NewGreenhouse navigation={this.props.navigation} token={this.props.token}/>
 				}}
 				firstItem={this.props.current}
 				itemWidth={width}

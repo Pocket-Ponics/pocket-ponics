@@ -64,9 +64,13 @@ class WifiScreen extends React.Component {
 	}
 
 	goToNext() {
+		const token = this.props.navigation.getParam('token', "")
 		const resetAction = StackActions.reset({
 			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'TierSelection' })],
+			actions: [NavigationActions.navigate({ 
+				routeName: 'TierSelection',
+				params: { token }
+			})],
 		});
 		this.props.navigation.dispatch(resetAction);
 	}
@@ -74,7 +78,7 @@ class WifiScreen extends React.Component {
 	cancel() {
 		const resetAction = StackActions.reset({
 			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'Greenhouse' })],
+			actions: [NavigationActions.navigate({ routeName: 'Auth' })],
 		});
 		this.props.navigation.dispatch(resetAction);
 	}

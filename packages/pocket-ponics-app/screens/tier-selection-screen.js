@@ -33,7 +33,8 @@ const topplants = [
 	{ img: tomatoImage, display: 'Tomato', data: {
 		name: 'tomato',
 		pH: 6.3,
-		ec: 3.2
+		ec: 3.2,
+		'plant_id': 1
 	}},
 ]
 
@@ -53,9 +54,16 @@ class TierSelectionScreen extends React.Component {
 	}
 
 	goToNext() {
+		const token = this.props.navigation.getParam('token', "")
 		const resetAction = StackActions.reset({
 			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'FillWater' })],
+			actions: [NavigationActions.navigate({ 
+				routeName: 'FillWater',
+				params: {
+					token,
+					tiers: this.state.tiers
+				}
+			})],
 		});
 		this.props.navigation.dispatch(resetAction);
 	}
@@ -63,7 +71,7 @@ class TierSelectionScreen extends React.Component {
 	cancel() {
 		const resetAction = StackActions.reset({
 			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'Greenhouse' })],
+			actions: [NavigationActions.navigate({ routeName: 'Auth' })],
 		});
 		this.props.navigation.dispatch(resetAction);
 	}

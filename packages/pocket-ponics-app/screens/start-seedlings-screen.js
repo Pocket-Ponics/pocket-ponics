@@ -1,6 +1,7 @@
-import React from 'react';
-import { Text,View, SafeAreaView, Image, TouchableOpacity } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
+import React from 'react'
+import { Text,View, SafeAreaView, Image, TouchableOpacity } from 'react-native'
+import { StackActions, NavigationActions } from 'react-navigation'
+import APIUtil from '../util/api-util'
 
 import styles from './setup-styles'
 
@@ -11,13 +12,36 @@ class StartSeedlingsScreen extends React.Component {
 		title: 'Setup',
 	}
 
-	goToNext() {
-		console.log('Registering greenhouse!')
-		const resetAction = StackActions.reset({
-			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'Greenhouse' })],
-		});
-		this.props.navigation.dispatch(resetAction);
+	async goToNext() {
+		const name = this.props.navigation.getParam('name', "")
+		const serialNo = this.props.navigation.getParam('serialNo', "")
+		const password = this.props.navigation.getParam('password', "")
+		const token = this.props.navigation.getParam('token', "")
+		const tiers = this.props.navigation.getParam('tiers', [null, null, null, null])
+		const randomSerial = Math.floor(Math.random() * 899999 + 100000)
+
+		APIUtil.postGreenhouse(token)
+			.then(response => {
+				console.log('greenhouse response', response)
+				console.log('greenhouse:', response.id)
+				return Promise.all([
+					APIUtil.postTier(token, response.id, 1, 1, 1),
+					APIUtil.postTier(token, response.id, 2, 4, 1),
+					APIUtil.postTier(token, response.id, 3, 4, 1),
+					APIUtil.postTier(token, response.id, 4, 4, 1)
+				])
+			})
+			.then(response => console.log('tier response', response))
+			.catch(error => {
+				console.log('error', error)
+			})
+
+		// console.log('Registering greenhouse!')
+		// const resetAction = StackActions.reset({
+		// 	index: 0,
+		// 	actions: [NavigationActions.navigate({ routeName: 'Greenhouse' })],
+		// });
+		// this.props.navigation.dispatch(resetAction);
 	}
 
 	cancel() {

@@ -12,9 +12,14 @@ class SoakWoolScreen extends React.Component {
 	}
 
 	goToNext() {
+		const token = this.props.navigation.getParam('token', "")
+		const tiers = this.props.navigation.getParam('tiers', [null, null, null, null])
 		const resetAction = StackActions.reset({
 			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'StartSeedlings' })],
+			actions: [NavigationActions.navigate({ 
+				routeName: 'StartSeedlings',
+				params: { token, tiers } 
+			})],
 		});
 		this.props.navigation.dispatch(resetAction);
 	}
@@ -22,7 +27,7 @@ class SoakWoolScreen extends React.Component {
 	cancel() {
 		const resetAction = StackActions.reset({
 			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'Greenhouse' })],
+			actions: [NavigationActions.navigate({ routeName: 'Auth' })],
 		});
 		this.props.navigation.dispatch(resetAction);
 	}

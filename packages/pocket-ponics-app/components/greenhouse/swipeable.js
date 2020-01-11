@@ -12,6 +12,14 @@ class GreenhouseSwipeable extends React.Component {
 		this.swipeable = React.createRef();
 	}
 
+	getStats() {
+		return {
+			battery: this.props.greenhouse.battery,
+			water: this.props.greenhouse.water,
+			nutrient: this.props.greenhouse['nutrient_level']
+		}
+	}
+
 	render() {
 
 		const { width } = Dimensions.get('window');
@@ -20,7 +28,7 @@ class GreenhouseSwipeable extends React.Component {
 				<View style={{ height: 600 }}>
 					<GreenhouseDisplay navigation={this.props.navigation} tiers={this.props.greenhouse.tiers} seedlings={this.props.greenhouse.seedlings}/>
 				</View>
-				<GreenhouseStatsDisplay stats={this.props.greenhouse.stats || {}} navigation={this.props.navigation} />
+				<GreenhouseStatsDisplay stats={this.getStats() || {}} navigation={this.props.navigation} />
 				<GreenhouseHistoryDisplay navigation={this.props.navigation} />
 			</ScrollView>
 		)

@@ -4,13 +4,16 @@ import { StackActions, NavigationActions } from 'react-navigation';
 
 import styles from './new-greenhouse-styles'
 
-const plugin = require('../../assets/plug.jpg')
+const plugin = require('../../assets/plugin.png')
 
 class NewGreenhouse extends React.Component {
 	goToNext() {
 		const resetAction = StackActions.reset({
 			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'PurpleLight' })],
+			actions: [ NavigationActions.navigate({ 
+				routeName: 'PurpleLight',
+				params: { token: this.props.token }
+			})],
 		});
 		this.props.navigation.dispatch(resetAction);
 	}

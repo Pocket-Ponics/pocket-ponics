@@ -34,16 +34,20 @@ class QRScannerScreen extends React.Component {
 	cancel() {
 		const resetAction = StackActions.reset({
 			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'Greenhouse' })],
+			actions: [NavigationActions.navigate({ routeName: 'Auth' })],
 		});
 		this.props.navigation.dispatch(resetAction);
 	}
 
 	handleBarCodeScanned = ({ type, data }) => {
-		console.log(`Bar code with type ${type} and data ${data} has been scanned!`)
+		const token = this.props.navigation.getParam('token', "")
+		console.log('qrscanner', token)
 		const resetAction = StackActions.reset({
 			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'Wifi' })],
+			actions: [NavigationActions.navigate({ 
+				routeName: 'Wifi',
+				params: { token } 
+			})],
 		});
 		this.props.navigation.dispatch(resetAction);
 	}
@@ -53,10 +57,10 @@ class QRScannerScreen extends React.Component {
 			<SafeAreaView style={{flex: 1}}>
 				<View style={styles.background}>
 					<Text style={styles.heading}>Scan the QR Code</Text>
-					<Text style={styles.text}>Scan the QR code on the side of the greenhouse.</Text>
-					<BarCodeScanner
-						onBarCodeScanned={this.handleBarCodeScanned.bind(this)}
-						style={styles.scanner}/>
+					<Text style={styles.text}>Go to Settings > WIFI on your phone and connect to the PONICS network.</Text>
+					<TouchableOpacity style={styles.button} onPress={this.handleBarCodeScanned.bind(this)}>
+						<Text style={styles.buttonText}>Continue Setup</Text>
+					</TouchableOpacity>
 					<TouchableOpacity style={styles.cancelButton} onPress={this.cancel.bind(this)}>
 						<Text style={styles.cancelButtonText}>Cancel Setup</Text>
 					</TouchableOpacity>

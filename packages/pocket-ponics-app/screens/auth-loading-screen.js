@@ -2,51 +2,54 @@ import React from 'react'
 import { Text,View, SafeAreaView, Image, TouchableOpacity, AlertIOS, AsyncStorage, StyleSheet } from 'react-native'
 import { StackActions, NavigationActions } from 'react-navigation'
 import base64 from 'base-64'
+import APIUtil from '../util/api-util'
 
 const iconImage = require('../assets/pocket-ponics.png')
 
-const getAuthToken = async() => {
+const getAuthToken = async(navigation) => {
+	// Retrieve username and password from storage
+	const username = await AsyncStorage.getItem('username')
+	const password = await AsyncStorage.getItem('password')
+	console.log(username, password)
 
-	var requestOptions = {
-	  method: 'GET',
-	  headers: new Headers({
-	  	'Authorization': 'Bearer ' + 'lc9Bev3Bl5poBbDGZnb1cSGTZ75w/eBO0bB/5phTx4U=',
-	  	'Content-Type': 'application/x-www-form-urlencoded'
-	  }),
-	  redirect: 'follow'
+	// If the user is logged out, direct them to the login
+	if(!username || !password) {
+		navigation.navigate('Login')
+		return
 	}
 
-	// get a token
-	// var requestOptions = {
-	//   method: 'GET',
-	//   headers: new Headers({
-	//   	'Authorization': 'Basic ' + base64.encode('test3@gmail.com:passwordtest3'),
-	//   	'Content-Type': 'application/x-www-form-urlencoded'
-	//   }),
-	//   redirect: 'follow'
-	// }
+	let token
 
-	// // create a user
-	// var myHeaders = new Headers();
-	// myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+	APIUtil.getAuthToken('test3@gmail.com', 'passwordtest3')
+		.then(response => {
+			token = response.token
+			console.log(token)
 
-	// var urlencoded = new URLSearchParams();
-	// urlencoded.append("email", "test3@gmail.com");
-	// urlencoded.append("password", "passwordtest3");
+			return APIUtil.getGreenhouses(token)
+		})
+		.then(response => {
+			const greenhouses = response.greenhouses
+			console.log('greenhouses', greenhouses)
 
-	// console.log(urlencoded)
-
-	// var requestOptions = {
-	//   method: 'POST',
-	//   headers: myHeaders,
-	//   body: "email=test3@gmail.com&password=passwordtest3",
-	//   redirect: 'follow'
-	// }
-
-	fetch("http://10.171.204.187:8080/mobileapp/greenhouses/", requestOptions)
-		.then(response => response.text())
-		.then(result => console.log(result))
-		.catch(error => console.log('error', error));
+			return Promise.all(greenhouses.map(
+				greenhouse => APIUtil.getGreenhouse(token, greenhouse)
+			))
+		})
+		.then(responses => {
+			navigation.navigate('Greenhouse', { retrievedData: { 
+				token, 
+				greenhouses: [
+					...responses, 
+					{
+						type: 'add-page',
+						name: "Setup",
+					}
+				] 
+			}})
+		})
+		.catch(error => {
+			console.log('error', error)
+		})
 }
 
 class AuthLoadingScreen extends React.Component {
@@ -60,17 +63,7 @@ class AuthLoadingScreen extends React.Component {
 	}
 
 	componentDidMount() {
-		getAuthToken()
-		// (async () => {
-		// 	try {
-		// 		const username = await AsyncStorage.getItem('username')
-		// 		const password = await AsyncStorage.getItem('password')
-		// 		console.log(username, password)
-		// 		this.props.navigation.navigate(username && password ? 'App' : 'Login');
-		// 	} catch(e) {
-		// 		console.log(e)
-		// 	}
-		// })()
+		getAuthToken(this.props.navigation)
 	}
 
 	render() {

@@ -4,7 +4,7 @@ import { StackActions, NavigationActions } from 'react-navigation';
 
 import styles from './setup-styles'
 
-const plugin = require('../assets/plug.jpg')
+const greenhouseLights = require('../assets/greenhouse-lights.png')
 
 class PurpleLightScreen extends React.Component {
 	static navigationOptions = {
@@ -12,9 +12,13 @@ class PurpleLightScreen extends React.Component {
 	}
 
 	goToNext() {
+		const token = this.props.navigation.getParam('token', "")
 		const resetAction = StackActions.reset({
 			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'QRScanner' })],
+			actions: [NavigationActions.navigate({ 
+				routeName: 'QRScanner',
+				params: { token }
+			})],
 		});
 		this.props.navigation.dispatch(resetAction);
 	}
@@ -22,7 +26,7 @@ class PurpleLightScreen extends React.Component {
 	cancel() {
 		const resetAction = StackActions.reset({
 			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'Greenhouse' })],
+			actions: [NavigationActions.navigate({ routeName: 'Auth' })],
 		});
 		this.props.navigation.dispatch(resetAction);
 	}
@@ -33,7 +37,7 @@ class PurpleLightScreen extends React.Component {
 				<View style={styles.background}>
 					<Text style={styles.heading}>Wait for the purple light</Text>
 					<Text style={styles.text}>Once your greenhouse is plugged in, give it a minute to start up. When the lights on the greenhouse pulse purple, click the button to continue the setup.</Text>
-					<Image source={plugin} style={styles.image}/>
+					<Image source={greenhouseLights} style={styles.image}/>
 					<TouchableOpacity style={styles.button} onPress={this.goToNext.bind(this)}>
 						<Text style={styles.buttonText}>Continue Setup</Text>
 					</TouchableOpacity>

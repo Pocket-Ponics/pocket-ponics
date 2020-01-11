@@ -12,10 +12,10 @@ const turnipImage = require('../../assets/turnip.png')
 const seedlingImage = require('../../assets/seedling.png')
 
 const displayTopTier = (tier) => {
-	if(!tier || !tier.name) return null
+	if(!tier || !tier['plant_id']) return null
 
-	switch(tier.name) {
-		case 'tomato': 
+	switch(tier['plant_id']) {
+		case 1: 
 			return (
 				<Image source={tomatoImage} style={styles.topImage} />
 			)
@@ -53,21 +53,23 @@ const displayTier = (tier) => {
 const GreenhouseDisplay = props => {
 	const { navigate } = props.navigation
 
+	console.log(props.tiers)
+
 	return (
 		<View style={styles.background}>
 			<TouchableOpacity style={styles.topButton} onPress={() => navigate('Tier', { plant: props.tiers[0], index: 0 })}>
 				<ImageBackground source={toptierImage} style={styles.toptier} imageStyle={styles.backgroundImg}>
-					{displayTopTier(props.tiers[0])}
+					{displayTopTier(props.tiers[0] || {})}
 				</ImageBackground>
 			</TouchableOpacity>
 			<TouchableOpacity style={styles.button} onPress={() => navigate('Tier', { plant: props.tiers[1], index: 1 })}>
-				{displayTier(props.tiers[1])}
+				{displayTier(props.tiers[1]) || {}}
 			</TouchableOpacity>
 			<TouchableOpacity style={styles.button} onPress={() => navigate('Tier', { plant: props.tiers[2], index: 2 })}>
-				{displayTier(props.tiers[2])}
+				{displayTier(props.tiers[2]) || {}}
 			</TouchableOpacity>
 			<TouchableOpacity style={styles.button} onPress={() => navigate('Tier', { plant: props.tiers[3], index: 3 })}>
-				{displayTier(props.tiers[3])}
+				{displayTier(props.tiers[3]) || {}}
 			</TouchableOpacity>
 			<TouchableOpacity style={styles.button} onPress={() => navigate('Seedlings', { seedlings: props.seedlings, index: 1 })}>
 				<ImageBackground source={tierImage} style={styles.tier} imageStyle={styles.backgroundImg}>

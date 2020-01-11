@@ -53,7 +53,7 @@ class LoginScreen extends React.Component {
 					console.log(e)
 				}
 			})()
-			return this.props.navigation.navigate('App')
+			return this.props.navigation.navigate('Greenhouse', { token, greenhouses: [] })
 		}
 
 		Alert.alert('Invalid username or password')
