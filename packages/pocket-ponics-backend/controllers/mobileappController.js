@@ -48,7 +48,6 @@ exports.updateTier = (req, res) => {
     var tier = req.params.tier
 
     //Store tier information provided
-    var growth_stage = req.body.growth_stage
     var plant_id = req.body.plant_id
     var cycle_time = req.body.cycle_time
     var num_plants = req.body.num_plants
@@ -61,13 +60,13 @@ exports.updateTier = (req, res) => {
         }
         else if(rec != undefined)
         {    
-            if(growth_stage == undefined || plant_id == undefined || cycle_time == undefined || num_plants == undefined)
+            if(plant_id == undefined || cycle_time == undefined || num_plants == undefined)
             {
                 res.json({202: "Error: Missing data for update"})
             }
             else 
             {
-                mySQL.updateTierForGreenhouse(rec.user_id, greenhouse_id, tier, plant_id, growth_stage, cycle_time, num_plants, function(err, record) {
+                mySQL.updateTierForGreenhouse(rec.user_id, greenhouse_id, tier, plant_id, cycle_time, num_plants, function(err, record) {
                     if(!err)
                     {
                         res.json({200: "Updated Tier"})
@@ -107,7 +106,7 @@ exports.getTier = (req, res) => {
             mySQL.getTierForGreenhouse(greenhouse_id, tier, rec.user_id, function(err, record) {
                 if(!err)
                 {
-                    res.json( {plant_id: record.plant_id, growth_stage: record.growth_stage, water_level: record.water_level, cycle_time: record.cycle_time, pH_level: record.pH_level, elec_cond: record.ec_level, num_plants: record.num_plants})
+                    res.json( {plant_id: record.plant_id, water_level: record.water_level, cycle_time: record.cycle_time, pH_level: record.pH_level, elec_cond: record.ec_level, num_plants: record.num_plants})
                 }
                 else
                 {
@@ -148,8 +147,10 @@ exports.createGreenhouse = (req, res) => {
             mySQL.createGreenhouseForUser(greenhouse_name, rec.user_id, function(err, record) {
                 if(!err)
                 {
+                    // var newGreenhouseID = record.greenhouse_id
                     var newGreenhouseID = record["LAST_INSERT_ID()"]
-                    
+                    console.log(record)
+
                     // Insert new values into tier table for given greenhouse_name
                     mySQL.createEmptyTiersAndGridForNewGreenhouse(newGreenhouseID, rec.user_id, serial_no, grid_hash, function(err, record){
                         if(!err)
@@ -162,9 +163,13 @@ exports.createGreenhouse = (req, res) => {
                                 if(err)
                                 {
                                     console.log("Error in rollback of greenhouse creation")
+                                    res.json({202: "Error in rollback of greenhouse creation"})
+                                } 
+                                else 
+                                {
+                                    res.json({201: "Error creating greenhouse tiers/sensor grid registration"}) 
                                 }
                             })
-                            res.json({201: "Error creating greenhouse tiers/sensor grid registration"}) 
                         }
                     })
                 }

@@ -52,6 +52,7 @@ exports.createGreenhouseForUser = (name, user_id, callback) => {
         if(!err)
         {
             sqlController.execute(`SELECT LAST_INSERT_ID()`, function(err, result){
+            // sqlController.execute(`SELECT * from greenhouse where user_id = "${user_id}" and name = "${name}" order by greenhouse_id DESC`, function(err, result){
                 if(err)
                 {
                     console.log(result)
@@ -138,8 +139,8 @@ exports.getUserForToken = (token, callback) => {
     })
 }
 
-exports.updateTierForGreenhouse = (user_id, greenhouse_id, tier, plant_id, growth_stage, cycle_time, num_plants, callback) => {
-    sqlController.execute(`UPDATE tiers SET plant_id = ${plant_id}, growth_stage = ${growth_stage}, cycle_time = "${cycle_time}", num_plants = ${num_plants} WHERE user_id = ${user_id} and tier = ${tier} and greenhouse_id = ${greenhouse_id}`, function(err, result) {
+exports.updateTierForGreenhouse = (user_id, greenhouse_id, tier, plant_id, cycle_time, num_plants, callback) => {
+    sqlController.execute(`UPDATE tiers SET plant_id = ${plant_id}, cycle_time = "${cycle_time}", num_plants = ${num_plants} WHERE user_id = ${user_id} and tier = ${tier} and greenhouse_id = ${greenhouse_id}`, function(err, result) {
         if(err || result.rows.affectedRows == 1)
         {
             callback(err, result)
@@ -343,7 +344,7 @@ exports.getAdjustmentsForGreenhouse = (user_id, greenhouse_id, callback) => {
 }
 
 exports.getTierForGreenhouse = (greenhouse_id, tier, user_id, callback) => {
-    sqlController.execute(`SELECT tier, growth_stage, plant_id, ph_level, ec_level, water_level, cycle_time, num_plants FROM tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id} and tier = ${tier}`, function(err, result) {
+    sqlController.execute(`SELECT tier, plant_id, ph_level, ec_level, water_level, cycle_time, num_plants FROM tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id} and tier = ${tier}`, function(err, result) {
         if(result.rows.length == 1)
         {
             callback(err, result.rows[0])
@@ -403,7 +404,7 @@ exports.getGreenhouseDetail = (user_id, greenhouse_id, callback) => {
         {
             var greenhouseData = result.rows[0]
 
-            sqlController.execute(`SELECT tier, growth_stage, plant_id, ph_level, ec_level, water_level, cycle_time, num_plants FROM tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id}`, function(err, result) {
+            sqlController.execute(`SELECT tier, plant_id, ph_level, ec_level, water_level, cycle_time, num_plants FROM tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id}`, function(err, result) {
                 if(result.rows.length == 4)
                 {
                     greenhouseData.tiers = result.rows
