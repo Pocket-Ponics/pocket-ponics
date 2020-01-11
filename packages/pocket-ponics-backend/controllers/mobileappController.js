@@ -154,7 +154,7 @@ exports.createGreenhouse = (req, res) => {
                     mySQL.createEmptyTiersAndGridForNewGreenhouse(newGreenhouseID, rec.user_id, serial_no, grid_hash, function(err, record){
                         if(!err)
                         {
-                            res.json({200: "Greenhouse Created"})                                                
+                            res.json({200: "Greenhouse Created", id: newGreenhouseID})                                                
                         } 
                         else 
                         { 
