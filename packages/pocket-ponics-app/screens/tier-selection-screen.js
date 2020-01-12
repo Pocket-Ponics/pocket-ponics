@@ -5,6 +5,12 @@ import { StackActions, NavigationActions } from 'react-navigation'
 import styles from './setup-styles'
 
 import Display from '../components/greenhouse/display'
+import { 
+	TOMATO_VALUES,
+	GREENBEAN_VALUES,
+	SPINACH_VALUES,
+	TURNIP_VALUES
+} from '../util/constants'
 
 const tomatoImage = require('../assets/tomato.png')
 const greenbeanImage = require('../assets/greenbean.png')
@@ -12,25 +18,13 @@ const spinachImage = require('../assets/spinach.png')
 const turnipImage = require('../assets/turnip.png')
 
 const plants = [
-	{ img: greenbeanImage, display: 'Greenbean', data: {
-		'plant_id': 2,
-		'num_plants': 8
-	}},
-	{ img: spinachImage, display: 'Spinach', data: {
-		'plant_id': 3,
-		'num_plants': 18
-	}},
-	{ img: turnipImage, display: 'Turnip', data: {
-		'plant_id': 4,
-		'num_plants': 18
-	}},
+	{ img: greenbeanImage, display: 'Greenbean', data: GREENBEAN_VALUES },
+	{ img: spinachImage, display: 'Spinach', data: SPINACH_VALUES },
+	{ img: turnipImage, display: 'Turnip', data: TURNIP_VALUES },
 ]
 
 const topplants = [
-	{ img: tomatoImage, display: 'Tomato', data: {
-		'plant_id': 1,
-		'num_plants': 1
-	}},
+	{ img: tomatoImage, display: 'Tomato', data: TOMATO_VALUES },
 ]
 
 class TierSelectionScreen extends React.Component {

@@ -21,7 +21,6 @@ class GreenhouseSwipeable extends React.Component {
 	}
 
 	render() {
-
 		const { width } = Dimensions.get('window');
 		return (
 			<ScrollView style={{ width, backgroundColor: '#472600' }}>
@@ -29,7 +28,7 @@ class GreenhouseSwipeable extends React.Component {
 					<GreenhouseDisplay 
 						navigation={this.props.navigation} 
 						tiers={this.props.greenhouse.tiers} 
-						seedlings={this.props.greenhouse.seedlings}
+						seedlings={this.props.greenhouse['seedling_time']}
 						displaySeedlings/>
 				</View>
 				<GreenhouseStatsDisplay stats={this.getStats() || {}} navigation={this.props.navigation} />

@@ -7,6 +7,10 @@ import styles from './setup-styles'
 
 const plugin = require('../assets/plug.jpg')
 
+const seedsArray = [
+	...Array(2).fill()
+]
+
 class StartSeedlingsScreen extends React.Component {
 	static navigationOptions = {
 		title: 'Setup',
@@ -18,16 +22,17 @@ class StartSeedlingsScreen extends React.Component {
 		const password = this.props.navigation.getParam('password', "")
 		const token = this.props.navigation.getParam('token', "")
 		const tiers = this.props.navigation.getParam('tiers', [null, null, null, null])
+		console.log(tiers)
 
 		APIUtil.postGreenhouse(token, name)
 			.then(response => {
 				console.log('Greenhouse registration response: ', response)
 				console.log('Greenhouse: ', response.id)
 				return Promise.all([
-					APIUtil.postTier(token, response.id, 1, tiers[0]['plant_id'], tiers[0]['num_plants']),
-					APIUtil.postTier(token, response.id, 2, tiers[1]['plant_id'], tiers[1]['num_plants']),
-					APIUtil.postTier(token, response.id, 3, tiers[2]['plant_id'], tiers[2]['num_plants']),
-					APIUtil.postTier(token, response.id, 4, tiers[3]['plant_id'], tiers[3]['num_plants'])
+					APIUtil.postTier(token, response.id, 1, tiers[0].plant_id, tiers[0].num_plants, tiers[0].cycle_time),
+					APIUtil.postTier(token, response.id, 2, tiers[1].plant_id, tiers[1].num_plants, tiers[1].cycle_time),
+					APIUtil.postTier(token, response.id, 3, tiers[2].plant_id, tiers[2].num_plants, tiers[2].cycle_time),
+					APIUtil.postTier(token, response.id, 4, tiers[3].plant_id, tiers[3].num_plants, tiers[3].cycle_time)
 				])
 			})
 			.then(response => {

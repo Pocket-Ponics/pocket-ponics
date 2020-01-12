@@ -7,7 +7,11 @@ import {
 	Image,
 	Dimensions,
 	TouchableOpacity
-} from 'react-native';
+} from 'react-native'
+
+import { 
+	ONE_DAY
+} from '../util/constants'
 
 const tomatoImage = require('../assets/tomato.png')
 const greenbeanImage = require('../assets/greenbean.png')
@@ -18,8 +22,34 @@ const seedlingImage = require('../assets/seedling.png')
 const { width: WIDTH } = Dimensions.get('window')
 
 export default class SeedlingsScreen extends React.Component {
+	generateDateString(date) {
+		return `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()}`
+	}
+
 	render() {
-		const seedlings = this.props.navigation.getParam('seedlings')
+		const seedlings = this.props.navigation.getParam('seedlings', null)
+		if(seedlings === null) {
+			return (
+				<View style={styles.backgroundContainer}>
+					<Text style={styles.title}>No seedlings currently planted</Text>
+					<TouchableOpacity>
+						<Text style={styles.button}>Plant Seedlings</Text>
+					</TouchableOpacity>
+				</View>
+			)
+		}
+
+		const transplantDate = new Date(seedlings)
+		const transplantString = this.generateDateString(transplantDate)
+		const today = new Date(Date.now())
+
+		const timeTilTransplant = transplantDate.getTime() - Date.now()
+		const daysTilTransplant = Math.ceil(timeTilTransplant / (1000 * 3600 * 24))
+		const daysSincePlanted = 14 - daysTilTransplant
+		
+		const lastWater = new Date(today.getTime() - (ONE_DAY * (daysSincePlanted % 7)))
+		let nextWater = new Date(today.getTime() + (ONE_DAY * (daysTilTransplant % 7)))
+		
 		return (
 			<View style={styles.backgroundContainer}>
 				<Image source={seedlingImage} style={styles.plantImage}/>
@@ -27,22 +57,16 @@ export default class SeedlingsScreen extends React.Component {
 				<View style={styles.plantInfoContainer}>
 					<View style={styles.valuesContainer}>
 						<Text style={styles.value}>
-							<Text style={styles.valueName}>Last Watered:</Text> {seedlings.lastWater}
+							<Text style={styles.valueName}>Last Watered:</Text> {this.generateDateString(lastWater)}
 						</Text>
 						<Text style={styles.value}>
-							<Text style={styles.valueName}>Next Water:</Text> {seedlings.nextWater}
+							<Text style={styles.valueName}>Next Water:</Text> {this.generateDateString(nextWater)}
 						</Text>
 						<Text style={styles.value}>
-							<Text style={styles.valueName}>Planting date:</Text> {seedlings.plant}
+							<Text style={styles.valueName}>Transplant date:</Text> {transplantString}
 						</Text>
 					</View>
 				</View>
-				<TouchableOpacity>
-					<Text style={styles.button}>Water Seedlings</Text>
-				</TouchableOpacity>
-				<TouchableOpacity>
-					<Text style={styles.button}>Plant Seedlings</Text>
-				</TouchableOpacity>
 			</View>
 		)
 	}

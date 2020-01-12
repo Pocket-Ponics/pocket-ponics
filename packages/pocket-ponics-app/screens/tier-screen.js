@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { 
 	StyleSheet, 
 	Text, 
@@ -7,7 +7,19 @@ import {
 	Image,
 	Dimensions,
 	TouchableOpacity
-} from 'react-native';
+} from 'react-native'
+
+import { 
+	TOMATO_ID, 
+	GREENBEEN_ID, 
+	SPINACH_ID,
+	TURNIP_ID,
+	TOMATO_VALUES,
+	GREENBEAN_VALUES,
+	SPINACH_VALUES,
+	TURNIP_VALUES,
+	ONE_DAY
+} from '../util/constants'
 
 const tomatoImage = require('../assets/tomato.png')
 const greenbeanImage = require('../assets/greenbean.png')
@@ -19,53 +31,53 @@ const { width: WIDTH } = Dimensions.get('window')
 export default class Example extends React.Component {
 	getImage(id) {
 		switch(id) {
-			case 1:
+			case TOMATO_ID:
 				return tomatoImage
-			case 2:
+			case GREENBEEN_ID:
 				return greenbeanImage
-			case 3:
+			case SPINACH_ID:
 				return spinachImage
-			case 4:
+			case TURNIP_ID:
 				return turnipImage
 		}
 	}
 
 	getReadableName(id) {
 		switch(id) {
-			case 1:
+			case TOMATO_ID:
 				return 'Tomatoes'
-			case 2:
+			case GREENBEEN_ID:
 				return 'Green Beans'
-			case 3:
+			case SPINACH_ID:
 				return 'Spinach'
-			case 4:
+			case TURNIP_ID:
 				return 'Turnips'
 		}
 	}
 
 	isValidpH(id, pH) {
 		switch(id) {
-			case 1:
-				return pH >= 5.5 && pH <= 6.5
-			case 2:
-				return pH >= 6.0 && pH <= 6.5
-			case 3:
-				return pH >= 5.5 && pH <= 6.6
-			case 4:
-				return pH >= 6.0 && pH <= 6.5
+			case TOMATO_ID:
+				return pH >= TOMATO_VALUES.minPH && pH <= TOMATO_VALUES.maxPH
+			case GREENBEEN_ID:
+				return pH >= GREENBEAN_VALUES.minPH && pH <= GREENBEAN_VALUES.maxPH
+			case SPINACH_ID:
+				return pH >= SPINACH_VALUES.minPH && pH <= SPINACH_VALUES.maxPH
+			case TURNIP_ID:
+				return pH >= TURNIP_VALUES.minPH && pH <= TURNIP_VALUES.maxPH
 		}
 	}
 
 	isValidEC(id, ec) {
 		switch(id) {
-			case 1:
-				return ec >= 2.0 && ec <= 5.0
-			case 2:
-				return ec >= 2.0 && ec <= 4.0
-			case 3:
-				return ec >= 1.8 && ec <= 2.3
-			case 4:
-				return ec >= 1.8 && ec <= 2.4
+			case TOMATO_ID:
+				return ec >= TOMATO_VALUES.minEC && ec <= TOMATO_VALUES.maxEC
+			case GREENBEEN_ID:
+				return ec >= GREENBEAN_VALUES.minEC && ec <= GREENBEAN_VALUES.maxEC
+			case SPINACH_ID:
+				return ec >= SPINACH_VALUES.minEC && ec <= SPINACH_VALUES.maxEC
+			case TURNIP_ID:
+				return ec >= TURNIP_VALUES.minEC && ec <= TURNIP_VALUES.maxEC
 		}
 	}
 
@@ -77,22 +89,24 @@ export default class Example extends React.Component {
 
 	render() {
 		const plant = this.props.navigation.getParam('plant')
-		const isReadyToHarvest = plant['cycle_time'].split(':')[2] === '00'
-		console.log(plant)
+		const harvestDate = new Date(plant.cycle_time)
+		const harvestString = `${harvestDate.getMonth()+1}/${harvestDate.getDate()}/${harvestDate.getFullYear()}`
+		const isReadyToHarvest = harvestDate - Date.now() < ONE_DAY
+		
 		return (
 			<View style={styles.backgroundContainer}>
-				<Image source={this.getImage(plant['plant_id'])} style={styles.plantImage}/>
-				<Text style={styles.title}>{this.getReadableName(plant['plant_id'])}</Text>
+				<Image source={this.getImage(plant.plant_id)} style={styles.plantImage}/>
+				<Text style={styles.title}>{this.getReadableName(plant.plant_id)}</Text>
 				<View style={styles.plantInfoContainer}>
 					<View style={styles.valuesContainer}>
 						<Text style={styles.value}>
-							<Text style={styles.valueName}>pH:</Text> {plant['ph_level']}
+							<Text style={styles.valueName}>pH:</Text> {plant.ph_level}
 						</Text>
 						<Text style={styles.value}>
-							<Text style={styles.valueName}>Electrical Conductivity:</Text> {plant['ec_level']}
+							<Text style={styles.valueName}>Electrical Conductivity:</Text> {plant.ec_level}
 						</Text>
 						<Text style={styles.value}>
-							<Text style={styles.valueName}>Estimated Harvest:</Text> {plant['cycle_time']}
+							<Text style={styles.valueName}>Estimated Harvest:</Text> {harvestString}
 						</Text>
 					</View>
 					<View style={styles.statusesContainer}>

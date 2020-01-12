@@ -89,18 +89,25 @@ const APIUtil = {
 	},
 	postGreenhouse(token, name) {
 		const randomSerial = Math.floor(Math.random() * 899999 + 100000)
+		const seedlingHarvest = new Date(Date.now() + (24 * 3600 * 1000 * 14))
+		const dateString = seedlingHarvest.getFullYear() + '-' + (seedlingHarvest.getMonth()+1) + '-' + seedlingHarvest.getDate()
 		console.log('Serial number: ',randomSerial)
+		console.log('Date: ',dateString)
 		return APIUtil.post(`http://${host}:${port}/mobileapp/greenhouses/`, token, {
 			name,
 			'serial_no': randomSerial,
-			'grid_password': 'test'
+			'grid_password': 'test',
+			'seedling_time': dateString
 		})
 	},
-	postTier(token, greenhouse, tier, plant, numPlants) {
+	postTier(token, greenhouse, tier, plant, numPlants, cycleTime) {
+		const seedlingHarvest = new Date(Date.now() + (24 * 3600 * 1000 * cycleTime))
+		const dateString = seedlingHarvest.getFullYear() + '-' + (seedlingHarvest.getMonth()+1) + '-' + seedlingHarvest.getDate()
+		
 		return APIUtil.put(`http://${host}:${port}/mobileapp/tiers/${greenhouse}/${tier}`, token, {
 			'plant_id': plant,
 			'num_plants': numPlants,
-			'cycle_time': 16
+			'cycle_time': dateString
 		})
 	}
 }

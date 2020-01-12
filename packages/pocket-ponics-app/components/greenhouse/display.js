@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, TouchableOpacity, Image, ImageBackground } from 'react-native';
 
 import styles from './display-styles'
+import { TOMATO_ID, GREENBEAN_ID, SPINACH_ID, TURNIP_ID } from '../../util/constants'
 
 const tierImage = require('../../assets/tier.png')
 const toptierImage = require('../../assets/top-tier.png')
@@ -11,11 +12,12 @@ const spinachImage = require('../../assets/spinach.png')
 const turnipImage = require('../../assets/turnip.png')
 const seedlingImage = require('../../assets/seedling.png')
 
+
 const displayTopTier = (tier) => {
 	if(!tier || !tier['plant_id']) return null
 
 	switch(tier['plant_id']) {
-		case 1: 
+		case TOMATO_ID: 
 			return (
 				<Image source={tomatoImage} style={styles.topImage} />
 			)
@@ -30,13 +32,13 @@ const displayTier = (tier) => {
 
 	let imageSrc
 	switch(tier['plant_id']) {
-		case 2: 
+		case GREENBEAN_ID: 
 			imageSrc = greenbeanImage
 			break
-		case 3: 
+		case SPINACH_ID: 
 			imageSrc = spinachImage
 			break
-		case 4: 
+		case TURNIP_ID: 
 			imageSrc = turnipImage
 			break
 	}
