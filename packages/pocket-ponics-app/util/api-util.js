@@ -73,10 +73,11 @@ const APIUtil = {
 	getGreenhouse(token, greenhouse) {
 		return APIUtil.get(`http://${host}:${port}/mobileapp/greenhouses/detail/${greenhouse}`, token, {})
 	},
-	postGreenhouse(token) {
+	postGreenhouse(token, name) {
 		const randomSerial = Math.floor(Math.random() * 899999 + 100000)
+		console.log('Serial number: ',randomSerial)
 		return APIUtil.post(`http://${host}:${port}/mobileapp/greenhouses/`, token, {
-			name: 'SuperTest',
+			name,
 			'serial_no': randomSerial,
 			'grid_password': 'test'
 		})

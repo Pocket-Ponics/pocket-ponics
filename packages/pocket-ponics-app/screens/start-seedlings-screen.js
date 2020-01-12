@@ -18,30 +18,25 @@ class StartSeedlingsScreen extends React.Component {
 		const password = this.props.navigation.getParam('password', "")
 		const token = this.props.navigation.getParam('token', "")
 		const tiers = this.props.navigation.getParam('tiers', [null, null, null, null])
-		const randomSerial = Math.floor(Math.random() * 899999 + 100000)
 
-		APIUtil.postGreenhouse(token)
+		APIUtil.postGreenhouse(token, name)
 			.then(response => {
-				console.log('greenhouse response', response)
-				console.log('greenhouse:', response.id)
+				console.log('Greenhouse registration response: ', response)
+				console.log('Greenhouse: ', response.id)
 				return Promise.all([
-					APIUtil.postTier(token, response.id, 1, 1, 1),
-					APIUtil.postTier(token, response.id, 2, 4, 1),
-					APIUtil.postTier(token, response.id, 3, 4, 1),
-					APIUtil.postTier(token, response.id, 4, 4, 1)
+					APIUtil.postTier(token, response.id, 1, tiers[0]['plant_id'], tiers[0]['num_plants']),
+					APIUtil.postTier(token, response.id, 2, tiers[1]['plant_id'], tiers[1]['num_plants']),
+					APIUtil.postTier(token, response.id, 3, tiers[2]['plant_id'], tiers[2]['num_plants']),
+					APIUtil.postTier(token, response.id, 4, tiers[3]['plant_id'], tiers[3]['num_plants'])
 				])
 			})
-			.then(response => console.log('tier response', response))
+			.then(response => {
+				console.log('Tier registration response: ', response)
+				return this.props.navigation.navigate('Auth')
+			})
 			.catch(error => {
 				console.log('error', error)
 			})
-
-		// console.log('Registering greenhouse!')
-		// const resetAction = StackActions.reset({
-		// 	index: 0,
-		// 	actions: [NavigationActions.navigate({ routeName: 'Greenhouse' })],
-		// });
-		// this.props.navigation.dispatch(resetAction);
 	}
 
 	cancel() {

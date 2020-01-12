@@ -23,20 +23,20 @@ const displayTopTier = (tier) => {
 }
 
 const displayTier = (tier) => {
-	if(!tier || !tier.name) return (
+	if(!tier || !tier['plant_id']) return (
 		<ImageBackground source={tierImage} style={styles.tier} imageStyle={styles.backgroundImg}>
 		</ImageBackground>
 	)
 
 	let imageSrc
-	switch(tier.name) {
-		case 'greenbeans': 
+	switch(tier['plant_id']) {
+		case 2: 
 			imageSrc = greenbeanImage
 			break
-		case 'spinach': 
+		case 3: 
 			imageSrc = spinachImage
 			break
-		case 'turnip': 
+		case 4: 
 			imageSrc = turnipImage
 			break
 	}
@@ -52,8 +52,6 @@ const displayTier = (tier) => {
 
 const GreenhouseDisplay = props => {
 	const { navigate } = props.navigation
-
-	console.log(props.tiers)
 
 	return (
 		<View style={styles.background}>
@@ -71,15 +69,17 @@ const GreenhouseDisplay = props => {
 			<TouchableOpacity style={styles.button} onPress={() => navigate('Tier', { plant: props.tiers[3], index: 3 })}>
 				{displayTier(props.tiers[3]) || {}}
 			</TouchableOpacity>
-			<TouchableOpacity style={styles.button} onPress={() => navigate('Seedlings', { seedlings: props.seedlings, index: 1 })}>
-				<ImageBackground source={tierImage} style={styles.tier} imageStyle={styles.backgroundImg}>
-					<Image source={seedlingImage} style={styles.seedling}/>
-					<Image source={seedlingImage} style={styles.seedling}/>
-					<Image source={seedlingImage} style={styles.seedling}/>
-					<Image source={seedlingImage} style={styles.seedling}/>
-					<Image source={seedlingImage} style={styles.seedling}/>
-				</ImageBackground>
-			</TouchableOpacity>
+			{props.displaySeedlings ? (
+				<TouchableOpacity style={styles.button} onPress={() => navigate('Seedlings', { seedlings: props.seedlings, index: 1 })}>
+					<ImageBackground source={tierImage} style={styles.tier} imageStyle={styles.backgroundImg}>
+						<Image source={seedlingImage} style={styles.seedling}/>
+						<Image source={seedlingImage} style={styles.seedling}/>
+						<Image source={seedlingImage} style={styles.seedling}/>
+						<Image source={seedlingImage} style={styles.seedling}/>
+						<Image source={seedlingImage} style={styles.seedling}/>
+					</ImageBackground>
+				</TouchableOpacity>
+			) : null}
 		</View>
 	)
 }

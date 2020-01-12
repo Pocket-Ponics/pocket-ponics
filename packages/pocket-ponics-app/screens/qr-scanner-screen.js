@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Text,View, SafeAreaView, Image, TouchableOpacity } from 'react-native'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import * as Permissions from 'expo-permissions'
-import { StackActions, NavigationActions } from 'react-navigation';
+import { StackActions, NavigationActions } from 'react-navigation'
 
 import styles from './setup-styles'
 
-const plugin = require('../assets/plug.jpg')
+const plugin = require('../assets/settings-screen.png')
 
 // TODO - set up wifi QR codes to follow the 'WIFI:T:WPA;S:<your Wi-Fi network name>;P:<your Wi-Fi network password>;;' pattern
 
@@ -32,11 +32,7 @@ class QRScannerScreen extends React.Component {
 	}
 
 	cancel() {
-		const resetAction = StackActions.reset({
-			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'Auth' })],
-		});
-		this.props.navigation.dispatch(resetAction);
+		return this.props.navigation.navigate('Auth')
 	}
 
 	handleBarCodeScanned = ({ type, data }) => {
@@ -48,7 +44,7 @@ class QRScannerScreen extends React.Component {
 				routeName: 'Wifi',
 				params: { token } 
 			})],
-		});
+		})
 		this.props.navigation.dispatch(resetAction);
 	}
 
@@ -58,6 +54,7 @@ class QRScannerScreen extends React.Component {
 				<View style={styles.background}>
 					<Text style={styles.heading}>Scan the QR Code</Text>
 					<Text style={styles.text}>Go to Settings > WIFI on your phone and connect to the PONICS network.</Text>
+					<Image source={plugin} style={styles.image}/>
 					<TouchableOpacity style={styles.button} onPress={this.handleBarCodeScanned.bind(this)}>
 						<Text style={styles.buttonText}>Continue Setup</Text>
 					</TouchableOpacity>

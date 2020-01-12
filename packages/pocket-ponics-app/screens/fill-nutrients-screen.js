@@ -1,10 +1,10 @@
-import React from 'react';
-import { Text,View, SafeAreaView, Image, TouchableOpacity } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
+import React from 'react'
+import { Text,View, SafeAreaView, Image, TouchableOpacity } from 'react-native'
+import { StackActions, NavigationActions } from 'react-navigation'
 
 import styles from './setup-styles'
 
-const plugin = require('../assets/plug.jpg')
+const plugin = require('../assets/fill-nutrients.png')
 
 class FillNutrientsScreen extends React.Component {
 	static navigationOptions = {
@@ -14,22 +14,19 @@ class FillNutrientsScreen extends React.Component {
 	goToNext() {
 		const token = this.props.navigation.getParam('token', "")
 		const tiers = this.props.navigation.getParam('tiers', [null, null, null, null])
+		const name = this.props.navigation.getParam('name', '')
 		const resetAction = StackActions.reset({
 			index: 0,
 			actions: [NavigationActions.navigate({ 
 				routeName: 'SoakWool',
-				params: { token, tiers }
+				params: { token, tiers, name }
 			})],
-		});
-		this.props.navigation.dispatch(resetAction);
+		})
+		this.props.navigation.dispatch(resetAction)
 	}
 
 	cancel() {
-		const resetAction = StackActions.reset({
-			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'Auth' })],
-		});
-		this.props.navigation.dispatch(resetAction);
+		return this.props.navigation.navigate('Auth')
 	}
 
 	render() {

@@ -23,13 +23,12 @@ const getAuthToken = async(navigation) => {
 	APIUtil.getAuthToken('test3@gmail.com', 'passwordtest3')
 		.then(response => {
 			token = response.token
-			console.log(token)
+			console.log('Token: ', token)
 
 			return APIUtil.getGreenhouses(token)
 		})
 		.then(response => {
 			const greenhouses = response.greenhouses
-			console.log('greenhouses', greenhouses)
 
 			return Promise.all(greenhouses.map(
 				greenhouse => APIUtil.getGreenhouse(token, greenhouse)

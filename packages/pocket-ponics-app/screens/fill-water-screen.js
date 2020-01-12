@@ -4,7 +4,7 @@ import { StackActions, NavigationActions } from 'react-navigation';
 
 import styles from './setup-styles'
 
-const plugin = require('../assets/plug.jpg')
+const plugin = require('../assets/fill-water.png')
 
 class FillWaterScreen extends React.Component {
 	static navigationOptions = {
@@ -12,24 +12,21 @@ class FillWaterScreen extends React.Component {
 	}
 
 	goToNext() {
-		const token = this.props.navigation.getParam('token', "")
+		const token = this.props.navigation.getParam('token', '')
 		const tiers = this.props.navigation.getParam('tiers', [null, null, null, null])
+		const name = this.props.navigation.getParam('name', '')
 		const resetAction = StackActions.reset({
 			index: 0,
 			actions: [NavigationActions.navigate({ 
 				routeName: 'FillNutrients',
-				params: { token, tiers }
+				params: { token, tiers, name }
 			})],
-		});
+		})
 		this.props.navigation.dispatch(resetAction);
 	}
 
 	cancel() {
-		const resetAction = StackActions.reset({
-			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'Auth' })],
-		});
-		this.props.navigation.dispatch(resetAction);
+		return this.props.navigation.navigate('Auth')
 	}
 
 	render() {

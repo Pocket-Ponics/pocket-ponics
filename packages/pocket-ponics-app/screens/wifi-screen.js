@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, FlatList, View, SafeAreaView, Image, TouchableOpacity, AlertIOS } from 'react-native'
-import { FontAwesome } from '@expo/vector-icons';
-import { StackActions, NavigationActions } from 'react-navigation';
+import { FontAwesome } from '@expo/vector-icons'
+import { StackActions, NavigationActions } from 'react-navigation'
 
 import styles from './setup-styles'
 
@@ -71,16 +71,12 @@ class WifiScreen extends React.Component {
 				routeName: 'TierSelection',
 				params: { token }
 			})],
-		});
-		this.props.navigation.dispatch(resetAction);
+		})
+		this.props.navigation.dispatch(resetAction)
 	}
 
 	cancel() {
-		const resetAction = StackActions.reset({
-			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'Auth' })],
-		});
-		this.props.navigation.dispatch(resetAction);
+		return this.props.navigation.navigate('Auth')
 	}
 
 	getPassword(){

@@ -17,54 +17,54 @@ const turnipImage = require('../assets/turnip.png')
 const { width: WIDTH } = Dimensions.get('window')
 
 export default class Example extends React.Component {
-	getImage(name) {
-		switch(name) {
-			case 'tomato':
+	getImage(id) {
+		switch(id) {
+			case 1:
 				return tomatoImage
-			case 'greenbeans':
+			case 2:
 				return greenbeanImage
-			case 'spinach':
+			case 3:
 				return spinachImage
-			case 'turnip':
+			case 4:
 				return turnipImage
 		}
 	}
 
-	getReadableName(name) {
-		switch(name) {
-			case 'tomato':
+	getReadableName(id) {
+		switch(id) {
+			case 1:
 				return 'Tomatoes'
-			case 'greenbeans':
+			case 2:
 				return 'Green Beans'
-			case 'spinach':
+			case 3:
 				return 'Spinach'
-			case 'turnip':
+			case 4:
 				return 'Turnips'
 		}
 	}
 
-	isValidpH(name, pH) {
-		switch(name) {
-			case 'tomato':
+	isValidpH(id, pH) {
+		switch(id) {
+			case 1:
 				return pH >= 5.5 && pH <= 6.5
-			case 'greenbeans':
+			case 2:
 				return pH >= 6.0 && pH <= 6.5
-			case 'spinach':
+			case 3:
 				return pH >= 5.5 && pH <= 6.6
-			case 'turnip':
+			case 4:
 				return pH >= 6.0 && pH <= 6.5
 		}
 	}
 
-	isValidEC(name, ec) {
-		switch(name) {
-			case 'tomato':
+	isValidEC(id, ec) {
+		switch(id) {
+			case 1:
 				return ec >= 2.0 && ec <= 5.0
-			case 'greenbeans':
+			case 2:
 				return ec >= 2.0 && ec <= 4.0
-			case 'spinach':
+			case 3:
 				return ec >= 1.8 && ec <= 2.3
-			case 'turnip':
+			case 4:
 				return ec >= 1.8 && ec <= 2.4
 		}
 	}
@@ -77,37 +77,43 @@ export default class Example extends React.Component {
 
 	render() {
 		const plant = this.props.navigation.getParam('plant')
+		const isReadyToHarvest = plant['cycle_time'].split(':')[2] === '00'
+		console.log(plant)
 		return (
 			<View style={styles.backgroundContainer}>
-				<Image source={this.getImage(plant.name)} style={styles.plantImage}/>
-				<Text style={styles.title}>{this.getReadableName(plant.name)}</Text>
+				<Image source={this.getImage(plant['plant_id'])} style={styles.plantImage}/>
+				<Text style={styles.title}>{this.getReadableName(plant['plant_id'])}</Text>
 				<View style={styles.plantInfoContainer}>
 					<View style={styles.valuesContainer}>
 						<Text style={styles.value}>
-							<Text style={styles.valueName}>pH:</Text> {plant.pH}
+							<Text style={styles.valueName}>pH:</Text> {plant['ph_level']}
 						</Text>
 						<Text style={styles.value}>
-							<Text style={styles.valueName}>Electrical Conductivity:</Text> {plant.ec}
+							<Text style={styles.valueName}>Electrical Conductivity:</Text> {plant['ec_level']}
 						</Text>
 						<Text style={styles.value}>
-							<Text style={styles.valueName}>Estimated Harvest:</Text> 11/10
+							<Text style={styles.valueName}>Estimated Harvest:</Text> {plant['cycle_time']}
 						</Text>
 					</View>
 					<View style={styles.statusesContainer}>
 						<Text style={styles.value}>
-							{this.statusText(plant.name, plant.pH, this.isValidpH)}
+							{this.statusText(plant['plant_id'], plant['ph_level'], this.isValidpH)}
 						</Text>
 						<Text style={styles.value}>
-							{this.statusText(plant.name, plant.ec, this.isValidEC)}
+							{this.statusText(plant['plant_id'], plant['ec_level'], this.isValidEC)}
 						</Text>
 						<Text style={styles.value}>
-							Ready!
+							{isReadyToHarvest ? 'Ready!' : ''}
 						</Text>
 					</View>
 				</View>
-				<TouchableOpacity>
-					<Text style={styles.button}>Harvest {this.getReadableName(plant.name)}</Text>
-				</TouchableOpacity>
+				{
+					isReadyToHarvest ? (
+						<TouchableOpacity>
+							<Text style={styles.button}>Harvest {this.getReadableName(plant.name)}</Text>
+						</TouchableOpacity>) : null
+				}
+				
 			</View>
 		)
 	}

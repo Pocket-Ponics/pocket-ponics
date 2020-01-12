@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
+const { width: WIDTH } = Dimensions.get('window')
 
 // Contrast note: darkest brown, with darker green and lightest green meets WCAG standards
 export default StyleSheet.create({
@@ -79,4 +80,13 @@ export default StyleSheet.create({
 		fontSize: 22,
 		flex: 1
 	},
+	input: {
+		flex: 1,
+		height: 45,
+		borderRadius: 45,
+		fontSize: 18,
+		paddingLeft: 20,
+		backgroundColor: 'rgba(0, 0, 0, 0.35)',
+		color: '#FFFFFF',
+	}
 })

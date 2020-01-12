@@ -24,11 +24,7 @@ class PurpleLightScreen extends React.Component {
 	}
 
 	cancel() {
-		const resetAction = StackActions.reset({
-			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'Auth' })],
-		});
-		this.props.navigation.dispatch(resetAction);
+		return this.props.navigation.navigate('Auth')
 	}
 
 	render() {

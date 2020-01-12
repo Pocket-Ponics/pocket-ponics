@@ -1,6 +1,6 @@
-import React from 'react';
-import { Text,View, SafeAreaView, Image, TouchableOpacity, Modal, FlatList } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
+import React from 'react'
+import { Text,View, SafeAreaView, Image, TouchableOpacity, Modal, FlatList, TextInput } from 'react-native'
+import { StackActions, NavigationActions } from 'react-navigation'
 
 import styles from './setup-styles'
 
@@ -13,28 +13,23 @@ const turnipImage = require('../assets/turnip.png')
 
 const plants = [
 	{ img: greenbeanImage, display: 'Greenbean', data: {
-		name: 'greenbeans',
-		pH: 6.4,
-		ec: 3.9
+		'plant_id': 2,
+		'num_plants': 8
 	}},
 	{ img: spinachImage, display: 'Spinach', data: {
-		name: 'spinach',
-		pH: 6.1,
-		ec: 1.9,
+		'plant_id': 3,
+		'num_plants': 18
 	}},
 	{ img: turnipImage, display: 'Turnip', data: {
-		name: 'turnip',
-		pH: 6.2,
-		ec: 2.0
+		'plant_id': 4,
+		'num_plants': 18
 	}},
 ]
 
 const topplants = [
 	{ img: tomatoImage, display: 'Tomato', data: {
-		name: 'tomato',
-		pH: 6.3,
-		ec: 3.2,
-		'plant_id': 1
+		'plant_id': 1,
+		'num_plants': 1
 	}},
 ]
 
@@ -48,9 +43,12 @@ class TierSelectionScreen extends React.Component {
 
 		this.state = {
 			tiers: [null, null, null, null],
+			name: '',
 			modalVisible: false,
 			currIndex: 0
 		}
+
+		this.onChangeName = this.onChangeName.bind(this)
 	}
 
 	goToNext() {
@@ -61,19 +59,16 @@ class TierSelectionScreen extends React.Component {
 				routeName: 'FillWater',
 				params: {
 					token,
-					tiers: this.state.tiers
+					tiers: this.state.tiers,
+					name: this.state.name
 				}
 			})],
-		});
-		this.props.navigation.dispatch(resetAction);
+		})
+		this.props.navigation.dispatch(resetAction)
 	}
 
 	cancel() {
-		const resetAction = StackActions.reset({
-			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'Auth' })],
-		});
-		this.props.navigation.dispatch(resetAction);
+		return this.props.navigation.navigate('Auth')
 	}
 
 	setTier(data) {
@@ -85,6 +80,10 @@ class TierSelectionScreen extends React.Component {
 				return item
 			})
 		}))
+	}
+
+	onChangeName(name) {
+		this.setState({ name })
 	}
 
 	render() {
@@ -113,11 +112,26 @@ class TierSelectionScreen extends React.Component {
 						</View>
 			        </Modal>
 					<Text style={styles.heading}>Select plants</Text>
-					<Text style={styles.text}>Tap each tier of the greenhouse to assign plants</Text>
-					<View style={{ flex: 1 }}>
-						<Display tiers={this.state.tiers} navigation={{navigate: (name, data) => this.setState({ modalVisible: true, currIndex: data.index })}}/>
+					<Text style={styles.text}>Name the greenhouse, and then tap each tier of the greenhouse to assign plants</Text>
+					<View style={{ flexDirection: 'row', justifyContent: 'center', alignItem: 'center' }}>
+						<Text style={{...styles.text, lineHeight: 45, paddingRight: 10, fontWeight: 'bold' }}>Name:</Text>
+						<TextInput
+							style={styles.input}
+							placeholder={'Greenhouse Name'}
+							placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
+							value={this.state.name}
+							onChangeText={this.onChangeName}
+							autoCapitalize="words"/>
 					</View>
-					<TouchableOpacity style={styles.button} onPress={this.goToNext.bind(this)}>
+					<View style={{ flex: 1 }}>
+						<Display 
+							tiers={this.state.tiers} 
+							navigation={{navigate: (name, data) => this.setState({ modalVisible: true, currIndex: data.index })}}/>
+					</View>
+					<TouchableOpacity 
+						style={{...styles.button, opacity: this.state.name === '' ? 0.3 : 1}} 
+						onPress={this.goToNext.bind(this)} 
+						disabled={this.state.name === ''}>
 						<Text style={styles.buttonText}>Continue Setup</Text>
 					</TouchableOpacity>
 					<TouchableOpacity style={styles.cancelButton} onPress={this.cancel.bind(this)}>
