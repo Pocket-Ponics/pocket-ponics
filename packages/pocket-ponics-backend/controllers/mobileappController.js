@@ -181,8 +181,7 @@ exports.createGreenhouse = (req, res) => {
                 if(!err)
                 {
                     // var newGreenhouseID = record.greenhouse_id
-                    var newGreenhouseID = record["LAST_INSERT_ID()"]
-                    console.log(record)
+                    var newGreenhouseID = record
 
                     // Insert new values into tier table for given greenhouse_name
                     mySQL.createEmptyTiersAndGridForNewGreenhouse(newGreenhouseID, rec.user_id, serial_no, grid_hash, function(err, record){
@@ -195,7 +194,7 @@ exports.createGreenhouse = (req, res) => {
                             mySQL.deleteGreenhouseForUser(newGreenhouseID, rec.user_id, function(err, record) {
                                 if(err)
                                 {
-                                    console.log("Error in rollback of greenhouse creation")
+                                    console.log(err)
                                     res.json({202: "Error in rollback of greenhouse creation"})
                                 } 
                                 else 

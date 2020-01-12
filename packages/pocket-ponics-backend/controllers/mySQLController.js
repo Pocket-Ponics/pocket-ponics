@@ -51,16 +51,10 @@ exports.createGreenhouseForUser = (name, user_id, callback) => {
     sqlController.execute(`insert into greenhouse (name, user_id) values ("${name}", ${user_id});`, function(err, result) {
         if(!err)
         {
-            sqlController.execute(`SELECT LAST_INSERT_ID()`, function(err, result){
-            // sqlController.execute(`SELECT * from greenhouse where user_id = "${user_id}" and name = "${name}" order by greenhouse_id DESC`, function(err, result){
-                if(err)
-                {
-                    console.log(result)
-                }
-                callback(err, result.rows[0])
-            })
+            callback(err, result.rows.insertId)
         } 
         else {
+            console.log(result)
             callback(err, result)
         }
     })
