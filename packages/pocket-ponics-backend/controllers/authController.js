@@ -6,8 +6,6 @@ import mySQL from './mySQLController';
 
 // Create a schema for password validation
 var passVal = new passwordValidator();
-
-// Add properties to it
 passVal.is().min(8).is().max(100).has().not().spaces()
 
 //Get an authentication token for given user credentials
