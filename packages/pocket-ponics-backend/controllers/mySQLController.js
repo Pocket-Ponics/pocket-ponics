@@ -47,8 +47,8 @@ exports.getGreenhousesForUser = (user_id, callback) => {
     })
 }
 
-exports.createGreenhouseForUser = (name, user_id, callback) => {
-    sqlController.execute(`insert into greenhouse (name, user_id) values ("${name}", ${user_id});`, function(err, result) {
+exports.createGreenhouseForUser = (name, seedling_time, user_id, callback) => {
+    sqlController.execute(`insert into greenhouse (name, seedling_time, user_id) values ("${name}", "${seedling_time}", ${user_id});`, function(err, result) {
         if(!err)
         {
             callback(err, result.rows.insertId)

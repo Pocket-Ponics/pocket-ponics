@@ -172,12 +172,13 @@ exports.createGreenhouse = (req, res) => {
             var greenhouse_name = req.body.name
             var serial_no = req.body.serial_no
             var grid_password = req.body.grid_password
+            var seedling_time = req.body.seedling_time
 
             //Generate password hash for sensor grid
             var grid_hash = bcrypt.hashSync(grid_password, 10)
 
             //Insert new greenhouse
-            mySQL.createGreenhouseForUser(greenhouse_name, rec.user_id, function(err, record) {
+            mySQL.createGreenhouseForUser(greenhouse_name, seedling_time, rec.user_id, function(err, record) {
                 if(!err)
                 {
                     // var newGreenhouseID = record.greenhouse_id
