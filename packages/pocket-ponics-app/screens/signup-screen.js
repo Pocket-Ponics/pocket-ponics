@@ -21,19 +21,22 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import styles from './login-styles'
 
 const iconImage = require('../assets/pocket-ponics.png')
+const emailVerifier = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 
-class LoginScreen extends React.Component {
+class SignUpScreen extends React.Component {
 	constructor(props) {
-		super(props);
+		super(props)
 
 		this.state = {
 			username: "",
-			password: ""
+			password: "",
+			verifyPassword: ""
 		}
 
 		this.onChangeUsername = this.onChangeUsername.bind(this)
 		this.onChangePassword = this.onChangePassword.bind(this)
-		this.login = this.login.bind(this)
+		this.onChangeVerifyPassword = this.onChangeVerifyPassword.bind(this)
+		this.signUp = this.signUp.bind(this)
 	}
 
 	onChangeUsername(username) {
@@ -44,42 +47,52 @@ class LoginScreen extends React.Component {
 		this.setState({ password })
 	}
 
-	login() {
-		if(this.state.username === "" || this.state.password === ""){
-			Alert.alert('Invalid username or password')
+	onChangeVerifyPassword(verifyPassword) {
+		this.setState({ verifyPassword })
+	}
+
+	signUp() {
+		if(this.state.password.length < 8) {
+			Alert.alert('Passwords must be at least 8 characters')
 			return
 		}
 
-		let token
-		APIUtil.getAuthToken(this.state.username, this.state.password)
+		if(!emailVerifier.test(this.state.username)) {
+			Alert.alert('Please enter a valid email')
+			return
+		}
+
+		if(this.state.password !== this.state.verifyPassword) {
+			Alert.alert('Passwords must match')
+			return
+		}
+
+		console.log(this.state.username, this.state.password)
+		APIUtil.createUser(this.state.username, this.state.password)
 			.then(response => {
-				if(!response.token) {
-					Alert.alert('Invalid username or password')
-					return Promise.reject('Invalid username or password')
+				console.log(response)
+				if(response['202']) {
+					Alert.alert('Username already exists')
+					return Promise.reject('Username already exists')
 				}
 
-				token = response.token
-				console.log('Token: ', token)
+				if(!response['200']) {
+					Alert.alert('Error signing up')
+					return Promise.reject('Sign Up error: ' + JSON.stringify(response))
+				}
+
 				return Promise.all([
 					AsyncStorage.setItem('username', this.state.username),
 					AsyncStorage.setItem('password', this.state.password)
 				])
 			})
+			.then(response => APIUtil.getAuthToken(this.state.username, this.state.password))
 			.then(response => {
-				return APIUtil.getGreenhouses(token)
-			})
-			.then(response => {
-				const greenhouses = response.greenhouses
+				console.log('Token: ', response.token)
 
-				return Promise.all(greenhouses.map(
-					greenhouse => APIUtil.getGreenhouse(token, greenhouse)
-				))
-			})
-			.then(responses => {
-				this.props.navigation.navigate('Greenhouse', { retrievedData: { 
-					token, 
+				return this.props.navigation.navigate('Greenhouse', { retrievedData: { 
+					token: response.token, 
 					greenhouses: [
-						...responses, 
 						{
 							type: 'add-page',
 							name: "Setup",
@@ -90,8 +103,6 @@ class LoginScreen extends React.Component {
 			.catch(error => {
 				console.log('error', error)
 			})
-
-		
 	}
 
 	render() {
@@ -121,15 +132,31 @@ class LoginScreen extends React.Component {
 							value={this.state.password}
 							onChangeText={this.onChangePassword}
 							autoCapitalize="none"
-							textContentType="password"
-							secureTextEntry={true}
-							onSubmitEditing={this.login}/>
+							textContentType="newPassword"
+							secureTextEntry={true}/>
 					</View>
-					<TouchableOpacity onPress={this.login}>
-						<Text style={styles.button}>Log In</Text>
+					<View style={styles.inputContainer}>
+						<Icon name={'ios-lock'} size={28} color={TEXT_COLOR}
+							style={styles.inputIcon} />
+						<TextInput
+							style={styles.input}
+							placeholder={'Verify Password'}
+							placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
+							value={this.state.verifyPassword}
+							onChangeText={this.onChangeVerifyPassword}
+							autoCapitalize="none"
+							textContentType="newPassword"
+							secureTextEntry={true}
+							onSubmitEditing={this.signUp}/>
+					</View>
+					<TouchableOpacity 
+						onPress={this.signUp} 
+						style={{opacity: this.state.username === '' || this.state.password === '' ? 0.3 : 1}}
+						disabled={this.state.username === '' || this.state.password === ''}>
+						<Text style={styles.button}>Sign Up</Text>
 					</TouchableOpacity>
-					<TouchableOpacity onPress={() => this.props.navigation.navigate('SignUp')}>
-						<Text style={styles.signUp}>Sign Up</Text>
+					<TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
+						<Text style={styles.signUp}>Log In</Text>
 					</TouchableOpacity>
 				</View>
 			</KeyboardAvoidingView>
@@ -137,4 +164,4 @@ class LoginScreen extends React.Component {
 	}
 }
 
-export default LoginScreen
+export default SignUpScreen

@@ -15,13 +15,15 @@ import StartSeedlingsScreen from './screens/start-seedlings-screen'
 import ProfileScreen from './screens/profile-screen'
 import AuthLoadingScreen from './screens/auth-loading-screen'
 import LoginScreen from './screens/login-screen'
+import SignUpScreen from './screens/signup-screen'
 
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 const AuthStack = createSwitchNavigator({ 
 	AuthLoading: { screen: AuthLoadingScreen },
-	Login: { screen: LoginScreen } 
+	Login: { screen: LoginScreen },
+	SignUp: { screen: SignUpScreen } 
 })
 
 const AppStack = createStackNavigator({

@@ -26,6 +26,20 @@ const APIUtil = {
 			redirect: 'follow'
 		})
 		.then(response => response.text())
+		.then(result => { console.log(result); return JSON.parse(result)})
+	},
+	createUser(email, password) {
+		const encode = APIUtil.urlEncode({ email, password })
+		console.log(encode)
+		return fetch(`http://${host}:${port}/auth/create_user`, {
+			method: 'POST',
+			headers: new Headers({
+				'Content-Type': 'application/x-www-form-urlencoded'
+			}),
+			body: encode,
+			redirect: 'follow'
+		})
+		.then(response => response.text())
 		.then(result => JSON.parse(result))
 	},
 	get(endpoint, token, body) {
