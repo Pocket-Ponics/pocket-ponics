@@ -14,6 +14,7 @@ import {
 	Platform,
 	AsyncStorage
 } from 'react-native'
+import APIUtil from '../util/api-util'
 
 // import bgImage from './background.png'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -43,20 +44,48 @@ class LoginScreen extends React.Component {
 	}
 
 	login() {
-		if (this.state.username === "demouser" && this.state.password === "demopass") {
-			(async () => {
-				try {
-					const username = await AsyncStorage.setItem('username', this.state.username)
-					const password = await AsyncStorage.setItem('password', this.state.password)
-					this.setState({ username, password })
-				} catch(e) {
-					console.log(e)
+		let token
+		APIUtil.getAuthToken(this.state.username, this.state.password)
+			.then(response => {
+				if(!response.token) {
+					Alert.alert('Invalid username or password')
+					return Promise.reject('Invalid username or password')
 				}
-			})()
-			return this.props.navigation.navigate('Greenhouse', { token, greenhouses: [] })
-		}
 
-		Alert.alert('Invalid username or password')
+				token = response.token
+				console.log('Token: ', token)
+				return Promise.all([
+					AsyncStorage.setItem('username', this.state.username),
+					AsyncStorage.setItem('password', this.state.password)
+				])
+			})
+			.then(response => {
+				return APIUtil.getGreenhouses(token)
+			})
+			.then(response => {
+				const greenhouses = response.greenhouses
+
+				return Promise.all(greenhouses.map(
+					greenhouse => APIUtil.getGreenhouse(token, greenhouse)
+				))
+			})
+			.then(responses => {
+				this.props.navigation.navigate('Greenhouse', { retrievedData: { 
+					token, 
+					greenhouses: [
+						...responses, 
+						{
+							type: 'add-page',
+							name: "Setup",
+						}
+					] 
+				}})
+			})
+			.catch(error => {
+				console.log('error', error)
+			})
+
+		
 	}
 
 	render() {

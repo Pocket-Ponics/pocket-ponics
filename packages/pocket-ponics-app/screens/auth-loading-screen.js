@@ -20,7 +20,7 @@ const getAuthToken = async(navigation) => {
 
 	let token
 
-	APIUtil.getAuthToken('test3@gmail.com', 'passwordtest3')
+	APIUtil.getAuthToken(username, password)
 		.then(response => {
 			token = response.token
 			console.log('Token: ', token)
@@ -48,6 +48,63 @@ const getAuthToken = async(navigation) => {
 		})
 		.catch(error => {
 			console.log('error', error)
+			// TODO - Remove the dummy demo data when the server is hosted on AWS
+			navigation.navigate('Greenhouse', { retrievedData: { 
+				token: "mock-token", 
+				greenhouses: [
+					{
+						"name": "SuperTest",
+						"water_level": 78,
+						"nutrient_level": 91,
+						"battery": 83,
+						"light_level": 0,
+						"power_source": 0,
+						"seedling_time": null,
+						"tiers": [
+							{
+								"tier": 1,
+								"plant_id": 1,
+								"ph_level": 5.6,
+								"ec_level": 2.0,
+								"water_level": 0,
+								"cycle_time": "00:00:16",
+								"num_plants": 1
+							},
+							{
+								"tier": 2,
+								"plant_id": 3,
+								"ph_level": 6.0,
+								"ec_level": 1.5,
+								"water_level": 0,
+								"cycle_time": "00:00:16",
+								"num_plants": 18
+							},
+							{
+								"tier": 3,
+								"plant_id": 3,
+								"ph_level": 6.0,
+								"ec_level": 2.0,
+								"water_level": 0,
+								"cycle_time": "00:00:16",
+								"num_plants": 18
+							},
+							{
+								"tier": 4,
+								"plant_id": 3,
+								"ph_level": 6.0,
+								"ec_level": 2.0,
+								"water_level": 0,
+								"cycle_time": "00:00:00",
+								"num_plants": 18
+							}
+						]
+					}, 
+					{
+						type: 'add-page',
+						name: "Setup",
+					}
+				] 
+			}})
 		})
 }
 

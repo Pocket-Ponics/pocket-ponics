@@ -15,7 +15,7 @@ class GreenhouseSwipeable extends React.Component {
 	getStats() {
 		return {
 			battery: this.props.greenhouse.battery,
-			water: this.props.greenhouse.water,
+			water: this.props.greenhouse['water_level'],
 			nutrient: this.props.greenhouse['nutrient_level']
 		}
 	}
