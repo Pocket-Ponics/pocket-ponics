@@ -81,6 +81,13 @@ const APIUtil = {
 		.then(response => response.text())
 		.then(result => JSON.parse(result))
 	},
+	changePassword(token, email, old_password, new_password){
+		return APIUtil.post(`http://${host}:${port}/auth/change_password`, token, {
+			email,
+			old_password,
+			new_password
+		})
+	},
 	getGreenhouses(token) {
 		return APIUtil.get(`http://${host}:${port}/mobileapp/greenhouses/`, token, {})
 	},

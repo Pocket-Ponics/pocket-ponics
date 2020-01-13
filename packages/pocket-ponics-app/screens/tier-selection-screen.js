@@ -36,7 +36,7 @@ class TierSelectionScreen extends React.Component {
 		super(props)
 
 		this.state = {
-			tiers: [null, null, null, null],
+			tiers: [{}, {}, {}, {}],
 			name: '',
 			modalVisible: false,
 			currIndex: 0

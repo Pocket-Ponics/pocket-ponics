@@ -12,9 +12,20 @@ class ProfileScreen extends React.Component {
 	}
 
 	changePassword(){
-		AlertIOS.prompt(
-			'Enter your new password'
-		)
+		(async () => {
+			try {
+				const retrievedData = this.props.navigation.getParam('retrievedData', { greenhouses: [] })
+				const username = await AsyncStorage.getItem('username', '')
+				const password = await AsyncStorage.getItem('password', '')
+				console.log('here')
+				return this.props.navigation.navigate('ChangePassword', { 
+					username, 
+					password,
+					token: retrievedData.token })
+			} catch(e) {
+				console.log(e)
+			}
+		})()
 	}
 
 	logout() {
@@ -22,7 +33,6 @@ class ProfileScreen extends React.Component {
 			try {
 				const username = await AsyncStorage.setItem('username', '')
 				const password = await AsyncStorage.setItem('password', '')
-				this.setState({ username, password })
 				return this.props.navigation.navigate('Auth')
 			} catch(e) {
 				console.log(e)
@@ -31,12 +41,12 @@ class ProfileScreen extends React.Component {
 	}
 
 	render() {
+		const retrievedData = this.props.navigation.getParam('retrievedData', { greenhouses: [] })
 		return (
 			<SafeAreaView style={{flex: 1}}>
 				<View style={styles.background}>
 					<Text style={styles.text}>Username: demouser</Text>
-					<Text style={styles.text}>Greenhouses: 2</Text>
-					<Text style={styles.text}>Last login: 1/2/2020</Text>
+					<Text style={styles.text}>Greenhouses: {retrievedData.greenhouses.length - 1}</Text>
 					<TouchableOpacity style={styles.button} onPress={this.changePassword.bind(this)}>
 						<Text style={styles.buttonText}>Change password</Text>
 					</TouchableOpacity>

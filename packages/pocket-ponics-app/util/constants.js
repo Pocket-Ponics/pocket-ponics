@@ -14,7 +14,7 @@ export const TOMATO_VALUES = Object.freeze({
 })
 export const GREENBEAN_VALUES = Object.freeze({
 	plant_id: GREENBEAN_ID,
-	num_plants: 1,
+	num_plants: 8,
 	cycle_time: 65,
 	minPH: 6.0,
 	maxPH: 6.5,

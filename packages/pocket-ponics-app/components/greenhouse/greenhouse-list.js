@@ -8,7 +8,6 @@ import GreenhouseSwipeable from './swipeable'
 import NewGreenhouse from './new-greenhouse'
 
 class GreenhouseList extends React.Component {
-
 	constructor(props) {
 		super(props)
 

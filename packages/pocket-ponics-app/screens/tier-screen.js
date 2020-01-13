@@ -11,7 +11,7 @@ import {
 
 import { 
 	TOMATO_ID, 
-	GREENBEEN_ID, 
+	GREENBEAN_ID, 
 	SPINACH_ID,
 	TURNIP_ID,
 	TOMATO_VALUES,
@@ -33,7 +33,7 @@ export default class Example extends React.Component {
 		switch(id) {
 			case TOMATO_ID:
 				return tomatoImage
-			case GREENBEEN_ID:
+			case GREENBEAN_ID:
 				return greenbeanImage
 			case SPINACH_ID:
 				return spinachImage
@@ -46,7 +46,7 @@ export default class Example extends React.Component {
 		switch(id) {
 			case TOMATO_ID:
 				return 'Tomatoes'
-			case GREENBEEN_ID:
+			case GREENBEAN_ID:
 				return 'Green Beans'
 			case SPINACH_ID:
 				return 'Spinach'
@@ -59,7 +59,7 @@ export default class Example extends React.Component {
 		switch(id) {
 			case TOMATO_ID:
 				return pH >= TOMATO_VALUES.minPH && pH <= TOMATO_VALUES.maxPH
-			case GREENBEEN_ID:
+			case GREENBEAN_ID:
 				return pH >= GREENBEAN_VALUES.minPH && pH <= GREENBEAN_VALUES.maxPH
 			case SPINACH_ID:
 				return pH >= SPINACH_VALUES.minPH && pH <= SPINACH_VALUES.maxPH
@@ -72,7 +72,7 @@ export default class Example extends React.Component {
 		switch(id) {
 			case TOMATO_ID:
 				return ec >= TOMATO_VALUES.minEC && ec <= TOMATO_VALUES.maxEC
-			case GREENBEEN_ID:
+			case GREENBEAN_ID:
 				return ec >= GREENBEAN_VALUES.minEC && ec <= GREENBEAN_VALUES.maxEC
 			case SPINACH_ID:
 				return ec >= SPINACH_VALUES.minEC && ec <= SPINACH_VALUES.maxEC

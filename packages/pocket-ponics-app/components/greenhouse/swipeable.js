@@ -15,8 +15,8 @@ class GreenhouseSwipeable extends React.Component {
 	getStats() {
 		return {
 			battery: this.props.greenhouse.battery,
-			water: this.props.greenhouse['water_level'],
-			nutrient: this.props.greenhouse['nutrient_level']
+			water: this.props.greenhouse.water_level,
+			nutrient: this.props.greenhouse.nutrient_level
 		}
 	}
 
@@ -28,8 +28,8 @@ class GreenhouseSwipeable extends React.Component {
 					<GreenhouseDisplay 
 						navigation={this.props.navigation} 
 						tiers={this.props.greenhouse.tiers} 
-						seedlings={this.props.greenhouse['seedling_time']}
-						displaySeedlings/>
+						seedlings={this.props.greenhouse.seedling_time}
+						displaySeedlings={this.props.greenhouse.seedling_time}/>
 				</View>
 				<GreenhouseStatsDisplay stats={this.getStats() || {}} navigation={this.props.navigation} />
 				<GreenhouseHistoryDisplay navigation={this.props.navigation} />

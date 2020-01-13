@@ -88,5 +88,26 @@ export default StyleSheet.create({
 		paddingLeft: 20,
 		backgroundColor: 'rgba(0, 0, 0, 0.35)',
 		color: '#FFFFFF',
+	},
+	imageThumbnail: { 
+		height: 50, 
+		width: 50, 
+		resizeMode: 'contain' 
+	},
+	rockwool: { 
+		margin: 1, 
+		borderRadius: 10,
+		backgroundColor: '#472600',
+		height: 60, 
+		width: 60, 
+		alignItems: 'center', 
+		justifyContent: 'center' 
+	},
+	listBackground: { 
+		flex: 1,
+		margin: 5, 
+		alignItems: 'center', 
+		justifyContent: 'center', 
+		backgroundColor: '#FFFFFF'
 	}
 })

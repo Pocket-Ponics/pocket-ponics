@@ -10,12 +10,15 @@ class GreenhouseScreen extends React.Component {
 	static navigationOptions = ({ navigation }) => {
 		return {
 			title: navigation.getParam('title', ''),
-			headerRight: () => (
-				<Button
-					onPress={() => navigation.navigate('Profile')}
-					title="Profile"
-					color="#fff"/>
-			),
+			headerRight: () => {
+				const retrievedData = navigation.getParam('retrievedData', { greenhouses: [] })
+				return (
+					<Button
+						onPress={() => navigation.navigate('Profile', { retrievedData })}
+						title="Profile"
+						color="#fff"/>
+				)
+			},
 		}
 	}
 

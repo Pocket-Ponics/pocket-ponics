@@ -13,6 +13,7 @@ import FillNutrientsScreen from './screens/fill-nutrients-screen'
 import SoakWoolScreen from './screens/soak-wool-screen'
 import StartSeedlingsScreen from './screens/start-seedlings-screen'
 import ProfileScreen from './screens/profile-screen'
+import ChangePasswordScreen from './screens/change-password-screen'
 import AuthLoadingScreen from './screens/auth-loading-screen'
 import LoginScreen from './screens/login-screen'
 import SignUpScreen from './screens/signup-screen'
@@ -39,6 +40,7 @@ const AppStack = createStackNavigator({
 	SoakWool: { screen: SoakWoolScreen },
 	StartSeedlings: { screen: StartSeedlingsScreen },
 	Profile: { screen: ProfileScreen },
+	ChangePassword: { screen: ChangePasswordScreen }
 },{
 	defaultNavigationOptions: {
 		headerStyle: {

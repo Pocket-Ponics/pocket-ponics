@@ -46,7 +46,7 @@ export default class SeedlingsScreen extends React.Component {
 		const timeTilTransplant = transplantDate.getTime() - Date.now()
 		const daysTilTransplant = Math.ceil(timeTilTransplant / (1000 * 3600 * 24))
 		const daysSincePlanted = 14 - daysTilTransplant
-		
+
 		const lastWater = new Date(today.getTime() - (ONE_DAY * (daysSincePlanted % 7)))
 		let nextWater = new Date(today.getTime() + (ONE_DAY * (daysTilTransplant % 7)))
 		
@@ -67,6 +67,11 @@ export default class SeedlingsScreen extends React.Component {
 						</Text>
 					</View>
 				</View>
+				{daysTilTransplant === 0 ? (
+					<TouchableOpacity>
+						<Text style={styles.button}>Transplant Seedlings</Text>
+					</TouchableOpacity>
+				) : null }
 			</View>
 		)
 	}
