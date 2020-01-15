@@ -5,7 +5,7 @@ module.exports = function(app)
     app.route('/mobileapp/greenhouses')
         .get(mobileapp.getGreenhouses)
 
-    app.route('/mobileapp/devices/:devicekey')
+    app.route('/mobileapp/devices/')
         .post(mobileapp.addDeviceKey)
         .delete(mobileapp.deleteDeviceKey)
 

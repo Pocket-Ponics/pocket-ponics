@@ -53,3 +53,13 @@ insert into pocketponics.devices (user_id, device_key) values (6,'dalksjf234234a
 select * from pocketponics.devices;
 delete from pocketponics.devices where user_id = 6 and device_key = 'dalksjf234234asjldf';
 delete from pocketponics.devices where user_id = 6
+
+SELECT DISTINCT tiers.user_id, tiers.tier, tiers.greenhouse_id, devices.device_key 
+FROM pocketponics.tiers
+LEFT JOIN devices ON tiers.user_id=devices.user_id
+where cycle_time = CURDATE()
+
+SELECT DISTINCT greenhouse.user_id, greenhouse.greenhouse_id, devices.device_key 
+FROM pocketponics.greenhouse
+LEFT JOIN devices ON greenhouse.user_id=devices.user_id
+where seedling_time = CURDATE()

@@ -1,5 +1,17 @@
 import mySQL from './mySQLController';
+import { Expo } from 'expo-server-sdk';
 const bcrypt = require('bcrypt');
+
+var schedule = require('node-schedule');
+ 
+var rule = new schedule.RecurrenceRule();
+rule.hour = 8;
+rule.minute = 0;
+rule.second = 0;
+
+var n = schedule.scheduleJob(rule, function(){
+    sendNotifications()
+});
 
 //Retrieves all greenhouses for a specific user
 exports.getGreenhouses = (req, res) => {
@@ -38,12 +50,104 @@ exports.getGreenhouses = (req, res) => {
     })
 };
 
+function sendNotifications() {
+    //Find all users where greenhouse seedling_time == today 
+    mySQL.getReadySeedlings(function(err, rec) {
+        if(err)
+        {
+            console.log("Couldn't get ready seedlings")
+        } 
+        else {
+            // Create a new Expo SDK client
+            let expo = new Expo();
+
+            // Create the messages that you want to send to clents
+            var messages = [];
+
+            rec.rows.forEach(row => {
+                // Check that all your push tokens appear to be valid Expo push tokens
+                if (Expo.isExpoPushToken(row.device_key)) {
+                    messages.push({
+                        to: row.device_key,
+                        sound: 'default',
+                        body: 'Your Seedlings Are Ready',
+                        data: { greenhouse_id: row.greenhouse_id, user_id: row.user_id, type: 'seedling'},
+                    })
+                } 
+                else
+                {
+                    console.error(`Push token ${row.device_key} is not a valid Expo push token`);
+                }
+            });
+
+            let chunks = expo.chunkPushNotifications(messages);
+            let tickets = [];
+            (async () => {
+                for (let chunk of chunks) {
+                    try {
+                        let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+                        console.log(ticketChunk);
+                        tickets.push(...ticketChunk);
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+            })();
+        }
+    })
+
+    //Find all users where tier cycle_time == today 
+    mySQL.getReadyTiers(function(err, rec) {
+        if(err)
+        {
+            console.log("Couldn't get ready tiers")
+        } 
+        else {
+            // Create a new Expo SDK client
+            let expo = new Expo();
+
+            // Create the messages that you want to send to clents
+            var messages = [];
+
+            rec.rows.forEach(row => {
+                // Check that all your push tokens appear to be valid Expo push tokens
+                if (Expo.isExpoPushToken(row.device_key)) {
+                    messages.push({
+                        to: row.device_key,
+                        sound: 'default',
+                        body: 'Your Tier is Ready',
+                        data: { greenhouse_id: row.greenhouse_id, user_id: row.user_id, tier: row.tier, type: 'tier'},
+                    })
+                } 
+                else
+                {
+                    console.error(`Push token ${row.device_key} is not a valid Expo push token`);
+                }
+            });
+
+            let chunks = expo.chunkPushNotifications(messages);
+            let tickets = [];
+            (async () => {
+                for (let chunk of chunks) {
+                    try {
+                        let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+                        console.log(ticketChunk);
+                        tickets.push(...ticketChunk);
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+            })();
+        }
+    })
+}
+
 exports.addDeviceKey = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
 
     //Store device key provided
-    var deviceKey = req.params.devicekey
+    var deviceKey = req.body.devicekey
 
     //Retrieve user_id for given auth token
     mySQL.getUserForToken(cred, function(err, rec) {
@@ -53,19 +157,26 @@ exports.addDeviceKey = (req, res) => {
         }
         else if(rec != undefined)
         {    
-            mySQL.addDeviceKeyForUser(rec.user_id, deviceKey, function(err, record) {
-                if(!err)
-                {
-                    res.json({200: "Added device key for user"})
-                }
-                else if(record.code == 'ER_DUP_ENTRY')
-                {
-                    res.json({203: "Device key already exists"})
-                } 
-                else {
-                    res.json({201: "Unable to add device key"})
-                }
-            })
+            if(deviceKey == undefined)
+            {
+                res.json({205: "Error: Missing Device Key"})
+            }
+            else 
+            {
+                mySQL.addDeviceKeyForUser(rec.user_id, deviceKey, function(err, record) {
+                    if(!err)
+                    {
+                        res.json({200: "Added device key for user"})
+                    }
+                    else if(record.code == 'ER_DUP_ENTRY')
+                    {
+                        res.json({203: "Device key already exists"})
+                    } 
+                    else {
+                        res.json({201: "Unable to add device key"})
+                    }
+                })
+            }
         }
         else 
         {
@@ -79,7 +190,7 @@ exports.deleteDeviceKey = (req, res) => {
     let cred = req.headers.authorization.split(" ")[1]
 
     //Store device key provided
-    var deviceKey = req.params.devicekey
+    var deviceKey = req.body.devicekey
 
     //Retrieve user_id for given auth token
     mySQL.getUserForToken(cred, function(err, rec) {
@@ -89,16 +200,24 @@ exports.deleteDeviceKey = (req, res) => {
         }
         else if(rec != undefined)
         {   
-            mySQL.deleteDeviceKeyForUser(rec.user_id, deviceKey, function(err, record) {
-                if(!err)
-                {
-                    res.json({200: "Deleted device key for user"})
-                }
-                else
-                {
-                    res.json({201: "Unable to delete device key"})
-                }
-            })
+            if(deviceKey == undefined)
+            {
+                res.json({205: "Error: Missing Device Key"})
+            }
+            else
+            {
+                mySQL.deleteDeviceKeyForUser(rec.user_id, deviceKey, function(err, record) {
+                    if(!err)
+                    {
+                        res.json({200: "Deleted device key for user"})
+                    }
+                    else
+                    {
+                        res.json({201: "Unable to delete device key"})
+                    }
+                })
+            }
+            
         }
         else 
         {

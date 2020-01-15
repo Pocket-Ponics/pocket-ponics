@@ -404,6 +404,29 @@ exports.revokeDeviceKeys = (user_id, callback) => {
     })
 }
 
+exports.getReadySeedlings = (callback) => {
+    sqlController.execute(`SELECT DISTINCT greenhouse.user_id, greenhouse.greenhouse_id, devices.device_key FROM pocketponics.greenhouse LEFT JOIN devices ON greenhouse.user_id=devices.user_id where seedling_time = CURDATE()`, function(err, result) {
+        if(err)
+        {
+            console.log(result)
+        }
+        callback(err, result)
+    })
+}
+
+exports.getReadyTiers = (callback) => {
+    sqlController.execute(`SELECT DISTINCT tiers.user_id, tiers.tier, tiers.greenhouse_id, devices.device_key FROM pocketponics.tiers LEFT JOIN devices ON tiers.user_id=devices.user_id where cycle_time = CURDATE()`, function(err, result) {
+        if(err)
+        {
+            console.log(result)
+        }
+        callback(err, result)
+    })
+}
+
+exports.getDevicesForUser = (user_id, callback) => {
+    
+}
 
 exports.revokeTokensAndDeviceKeys = (user_id, callback) => {
     var devicekeyQuery = `DELETE FROM devices WHERE user_id = ${user_id};`
