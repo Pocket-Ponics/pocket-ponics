@@ -145,11 +145,11 @@ exports.changePassword = (req, res) => {
                             {
                                 console.log("Update operation successful")
                                 
-                                //Revoke tokens for user's old active sessions
-                                mySQL.revokeTokens(record.user_id, function(err, result) {
+                                //Revoke tokens for user's old active sessions and device keys for notifications
+                                mySQL.revokeTokensAndDeviceKeys(record.user_id, function(err, result) {
                                     if(!err)
                                     {
-                                        console.log("Tokens revoked successfully")
+                                        console.log("Tokens and device keys revoked successfully")
                                         res.json({200: "User Password Changed"})
                                     }
                                     else

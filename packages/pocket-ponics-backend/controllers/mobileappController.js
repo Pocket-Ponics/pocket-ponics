@@ -38,6 +38,75 @@ exports.getGreenhouses = (req, res) => {
     })
 };
 
+exports.addDeviceKey = (req, res) => {
+    //Get auth token
+    let cred = req.headers.authorization.split(" ")[1]
+
+    //Store device key provided
+    var deviceKey = req.params.devicekey
+
+    //Retrieve user_id for given auth token
+    mySQL.getUserForToken(cred, function(err, rec) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(rec != undefined)
+        {    
+            mySQL.addDeviceKeyForUser(rec.user_id, deviceKey, function(err, record) {
+                if(!err)
+                {
+                    res.json({200: "Added device key for user"})
+                }
+                else if(record.code == 'ER_DUP_ENTRY')
+                {
+                    res.json({203: "Device key already exists"})
+                } 
+                else {
+                    res.json({201: "Unable to add device key"})
+                }
+            })
+        }
+        else 
+        {
+            res.json({401: "Unauthorized"})
+        }
+    })
+}
+
+exports.deleteDeviceKey = (req, res) => {
+    //Get auth token
+    let cred = req.headers.authorization.split(" ")[1]
+
+    //Store device key provided
+    var deviceKey = req.params.devicekey
+
+    //Retrieve user_id for given auth token
+    mySQL.getUserForToken(cred, function(err, rec) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(rec != undefined)
+        {   
+            mySQL.deleteDeviceKeyForUser(rec.user_id, deviceKey, function(err, record) {
+                if(!err)
+                {
+                    res.json({200: "Deleted device key for user"})
+                }
+                else
+                {
+                    res.json({201: "Unable to delete device key"})
+                }
+            })
+        }
+        else 
+        {
+            res.json({401: "Unauthorized"})
+        }
+    })
+}
+
 //Update a specified tier of the greenhouse with provided values
 exports.updateTier = (req, res) => {
     //Get auth token

@@ -48,3 +48,8 @@ CREATE EVENT deleteexpiredtokens
     DO 
       delete from active_sessions
 		where expiration_date < NOW()
+
+insert into pocketponics.devices (user_id, device_key) values (6,'dalksjf234234asjldf');
+select * from pocketponics.devices;
+delete from pocketponics.devices where user_id = 6 and device_key = 'dalksjf234234asjldf';
+delete from pocketponics.devices where user_id = 6

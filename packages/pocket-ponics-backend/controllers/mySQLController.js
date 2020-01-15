@@ -47,6 +47,26 @@ exports.getGreenhousesForUser = (user_id, callback) => {
     })
 }
 
+exports.addDeviceKeyForUser = (user_id, deviceKey, callback) => {
+    sqlController.execute(`insert into devices (user_id, device_key) values (${user_id},'${deviceKey}');`, function(err, result) {
+        if(err)
+        {
+            console.log(result)
+        }
+        callback(err, result)
+    })
+}
+
+exports.deleteDeviceKeyForUser = (user_id, deviceKey, callback) => {
+    sqlController.execute(`delete from devices where user_id = ${user_id} and device_key = '${deviceKey}';`, function(err, result) {
+        if(err)
+        {
+            console.log(result)
+        }
+        callback(err, result)
+    })
+}
+
 exports.createGreenhouseForUser = (name, seedling_time, user_id, callback) => {
     sqlController.execute(`insert into greenhouse (name, seedling_time, user_id) values ("${name}", "${seedling_time}", ${user_id});`, function(err, result) {
         if(!err)
@@ -366,6 +386,30 @@ exports.createUser = (email, password_hash, callback) => {
 
 exports.revokeTokens = (user_id, callback) => {
     sqlController.execute(`DELETE FROM active_sessions WHERE (user_id = ${user_id})`, function(err, result) {
+        if(err)
+        {
+            console.log(result)
+        }
+        callback(err, result)
+    })
+}
+
+exports.revokeDeviceKeys = (user_id, callback) => {
+    sqlController.execute(`DELETE FROM devices WHERE user_id = ${user_id}`, function(err, result) {
+        if(err)
+        {
+            console.log(result)
+        }
+        callback(err, result)
+    })
+}
+
+
+exports.revokeTokensAndDeviceKeys = (user_id, callback) => {
+    var devicekeyQuery = `DELETE FROM devices WHERE user_id = ${user_id};`
+    var tokenQuery = `DELETE FROM active_sessions WHERE (user_id = ${user_id});`
+
+    sqlController.executeTransaction([devicekeyQuery, tokenQuery], function(err, result) {
         if(err)
         {
             console.log(result)

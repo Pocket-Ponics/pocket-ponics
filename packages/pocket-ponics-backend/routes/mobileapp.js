@@ -5,6 +5,10 @@ module.exports = function(app)
     app.route('/mobileapp/greenhouses')
         .get(mobileapp.getGreenhouses)
 
+    app.route('/mobileapp/devices/:devicekey')
+        .post(mobileapp.addDeviceKey)
+        .delete(mobileapp.deleteDeviceKey)
+
     app.route('/mobileapp/tiers/:greenhouse_id/:tier')
         .put(mobileapp.updateTier)
         .get(mobileapp.getTier)
