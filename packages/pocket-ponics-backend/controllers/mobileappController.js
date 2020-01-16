@@ -239,6 +239,7 @@ exports.updateTier = (req, res) => {
     var plant_id = req.body.plant_id
     var cycle_time = req.body.cycle_time
     var num_plants = req.body.num_plants
+    var light_time = req.body.light_time
 
     //Retrieve user_id for given auth token
     mySQL.getUserForToken(cred, function(err, rec) {
@@ -248,13 +249,13 @@ exports.updateTier = (req, res) => {
         }
         else if(rec != undefined)
         {    
-            if(plant_id == undefined || cycle_time == undefined || num_plants == undefined)
+            if(plant_id == undefined || cycle_time == undefined || num_plants == undefined || light_time == undefined)
             {
                 res.json({202: "Error: Missing data for update"})
             }
             else 
             {
-                mySQL.updateTierForGreenhouse(rec.user_id, greenhouse_id, tier, plant_id, cycle_time, num_plants, function(err, record) {
+                mySQL.updateTierForGreenhouse(rec.user_id, greenhouse_id, tier, plant_id, cycle_time, num_plants, light_time, function(err, record) {
                     if(!err)
                     {
                         res.json({200: "Updated Tier"})
@@ -294,7 +295,7 @@ exports.getTier = (req, res) => {
             mySQL.getTierForGreenhouse(greenhouse_id, tier, rec.user_id, function(err, record) {
                 if(!err)
                 {
-                    res.json( {plant_id: record.plant_id, water_level: record.water_level, cycle_time: record.cycle_time, pH_level: record.pH_level, elec_cond: record.ec_level, num_plants: record.num_plants})
+                    res.json(record)
                 }
                 else
                 {
@@ -545,50 +546,6 @@ exports.deleteGreenhouse = (req, res) => {
                     res.json({201: "Error deleting greenhouse"}) 
                 }
             })
-        }
-        else 
-        {
-            res.json({401: "Unauthorized"})
-        }
-    })
-};
-
-//Adjust the water level, nutrient level or light level for specific tier in greenhouse
-exports.makeAdjustments = (req, res) => {
-    //Get auth token
-    let cred = req.headers.authorization.split(" ")[1]
-
-    //Store greenhouse information provided
-    var adjustment_type = req.body.adjustment_type
-    var amount = req.body.amount
-
-    //Store greenhouse_id and tier provided
-    var greenhouse_id = req.params.greenhouse_id
-    var tier = req.params.tier
-
-    //Retrieve user_id for given auth token
-    mySQL.getUserForToken(cred, function(err, rec) {
-        if(err)
-        {
-            res.json({403: "Authentication Error"})
-        }
-        else if(rec != undefined)
-        {    
-            //Add adjustment to queue
-            if(adjustment_type >= 0 && adjustment_type <= 2)
-            {
-                mySQL.createAdjustmentForGreenhouse(rec.user_id, greenhouse_id, adjustment_type, amount, tier, function(err, record) {
-                    if(!err)
-                    {
-                        res.json({200: "Adjustment Queued"})
-                    }
-                    else {
-                        res.json({201: "Error adding adjustment to queue"})
-                    }
-                })
-            } else {
-                res.json({201: "Error adding adjustment to queue"})
-            }
         }
         else 
         {

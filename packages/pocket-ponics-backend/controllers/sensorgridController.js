@@ -296,8 +296,8 @@ exports.updateBackupBatteryLevel = (req, res) => {
     })
 };
 
-//Get any pending adjustment commands from backend
-exports.getAdjustments = (req, res) => {
+//Get the current light schedule for each tier from backend
+exports.getLightSchedule = (req, res) => {
     //convert base64 credentials to ascii
     let basicAuth = req.headers.authorization.split(" ")[1]
     let buff = new Buffer(basicAuth, 'base64');
@@ -324,13 +324,60 @@ exports.getAdjustments = (req, res) => {
                 if(result)
                 {
                     //Update greenhouse record
-                    mySQL.getAdjustmentsForGreenhouse(record.user_id, record.greenhouse_id, function(err, record) {
+                    mySQL.getLightScheduleForTiers(record.user_id, record.greenhouse_id, function(err, record) {
                         if(!err)
                         {
-                            res.json({adjustments: record})
+                            res.json({light_schedule: record.rows})
                         }
                         else {
-                            res.json({201: "Error retrieving adjustments"})
+                            res.json({201: "Error retrieving light schedule"})
+                        }
+                    })
+                }
+                else {
+                    res.json({401: "Unauthorized"})
+                }        
+            })
+        }
+    })
+};
+
+
+//Get the current light schedule for each tier from backend
+exports.getTiersAndIdealValues = (req, res) => {
+    //convert base64 credentials to ascii
+    let basicAuth = req.headers.authorization.split(" ")[1]
+    let buff = new Buffer(basicAuth, 'base64');
+    let credentials = buff.toString('ascii').split(":");
+
+    //Store username and password provided
+    var serial_no = credentials[0];
+    var password = credentials[1];
+    
+    //Retrieve password hash from database for given serial number
+    mySQL.getHashForSensorGrid(serial_no, function(err, record) {
+        if(err)
+        {
+            res.json({403: "Authentication Error"})
+        }
+        else if(record == undefined)
+        {
+            res.json({402: "Sensor Grid Not Found"})
+        } 
+        else 
+        {
+            //Calculate password hash and compare to retrieved hash
+            bcrypt.compare(password, record.password_hash, (err, result) => {
+                if(result)
+                {
+                    //Update greenhouse record
+                    mySQL.getTiersAndIdeal(record.user_id, record.greenhouse_id, function(err, record) {
+                        if(!err)
+                        {
+                            res.json({tiers: record.rows})
+                        }
+                        else {
+                            res.json({201: "Error retrieving tier data"})
                         }
                     })
                 }

@@ -63,3 +63,11 @@ SELECT DISTINCT greenhouse.user_id, greenhouse.greenhouse_id, devices.device_key
 FROM pocketponics.greenhouse
 LEFT JOIN devices ON greenhouse.user_id=devices.user_id
 where seedling_time = CURDATE()
+
+select tier, light_time from tiers where greenhouse_id = 6 and user_id = 10
+
+SELECT tiers.user_id, tiers.tier, tiers.greenhouse_id, tiers.plant_id, plant_ideal.water_level_high, plant_ideal.water_level_low, plant_ideal.ph_level_high, plant_ideal.ph_level_low, plant_ideal.ec_level_high, plant_ideal.ec_level_low 
+FROM pocketponics.tiers
+LEFT JOIN plant_ideal ON tiers.plant_id=plant_ideal.plant_id
+where user_id = 10 and greenhouse_id = 6
+

@@ -24,9 +24,6 @@ module.exports = function(app)
     app.route('/mobileapp/greenhouses/detail/:greenhouse_id')
         .get(mobileapp.getGreenhouseAndTiers)
 
-    app.route('/mobileapp/adjustments/:greenhouse_id/:tier')
-        .post(mobileapp.makeAdjustments)
-
     app.route('/mobileapp/sensor/:greenhouse_id/:tier/:sensor_type')
         .get(mobileapp.getReadingsSingle)
 
