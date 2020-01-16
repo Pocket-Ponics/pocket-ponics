@@ -71,7 +71,7 @@ function sendNotifications() {
                         to: row.device_key,
                         sound: 'default',
                         body: 'Your Seedlings Are Ready',
-                        data: { greenhouse_id: row.greenhouse_id, user_id: row.user_id, type: 'seedling'},
+                        data: { greenhouse_id: row.greenhouse_id, user_id: row.user_id, type: 'seedling', body: 'Your Seedlings Are Ready'},
                     })
                 } 
                 else
@@ -116,7 +116,7 @@ function sendNotifications() {
                         to: row.device_key,
                         sound: 'default',
                         body: 'Your Tier is Ready',
-                        data: { greenhouse_id: row.greenhouse_id, user_id: row.user_id, tier: row.tier, type: 'tier'},
+                        data: { greenhouse_id: row.greenhouse_id, user_id: row.user_id, tier: row.tier, type: 'tier', body: 'Your Tier is Ready'},
                     })
                 } 
                 else
