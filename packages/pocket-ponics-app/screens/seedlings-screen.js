@@ -1,11 +1,8 @@
-import React from 'react';
+import React from 'react'
 import { 
-	StyleSheet, 
 	Text, 
 	View, 
-	ImageBackground,
 	Image,
-	Dimensions,
 	TouchableOpacity,
 	AsyncStorage, 
 } from 'react-native'
@@ -13,14 +10,9 @@ import {
 import { 
 	ONE_DAY
 } from '../util/constants'
+import styles from './seedlings-screen-styles'
 
-const tomatoImage = require('../assets/tomato.png')
-const greenbeanImage = require('../assets/greenbean.png')
-const spinachImage = require('../assets/spinach.png')
-const turnipImage = require('../assets/turnip.png')
 const seedlingImage = require('../assets/seedling.png')
-
-const { width: WIDTH } = Dimensions.get('window')
 
 export default class SeedlingsScreen extends React.Component {
 	constructor(props) {
@@ -43,8 +35,7 @@ export default class SeedlingsScreen extends React.Component {
 		const greenhouseId = this.props.navigation.getParam('greenhouseId', 0) 
 
 		if(greenhouseId !== 0) {
-			const greenhouse = greenhouses.filter(greenhouse => true)[0]
-			const seedlings = greenhouses.filter(greenhouse => true)[0].seedling_time
+			const seedlings = greenhouses.filter(() => true)[0].seedling_time
 
 			this.setState({ seedlings })
 		}
@@ -108,55 +99,3 @@ export default class SeedlingsScreen extends React.Component {
 		)
 	}
 }
-
-const styles = StyleSheet.create({
-	backgroundContainer: {
-		flex: 1,
-		width: null,
-		height: null,
-		alignItems: 'center',
-		backgroundColor: '#472600'
-	},
-	plantImage: {
-		width: 250,
-		height: 175,
-		marginTop: 30,
-		marginBottom: 30,
-		resizeMode: 'contain',
-	},
-	title: {
-		fontSize: 36,
-		fontWeight: 'bold',
-		marginBottom: 20,
-		color: '#FFFFFF'
-	},
-	plantInfoContainer: {
-		flexDirection: 'row'
-	},
-	valuesContainer: {
-		alignItems: 'flex-start',
-	},
-	value: {
-		fontSize: 18,
-		paddingTop: 10,
-		color: '#FFFFFF'
-	},
-	valueName: {
-		fontWeight: 'bold'
-	},
-	statusesContainer: {
-		paddingLeft: 20,
-	},
-	button: {
-		backgroundColor: '#638E4E',
-		width: WIDTH - 55,
-		borderRadius: 22,
-		fontSize: 16,
-		color: 'white',
-		fontWeight: 'bold',
-		overflow: 'hidden',
-		padding: 12,
-		textAlign:'center',
-		marginTop: 30
-	}
-})

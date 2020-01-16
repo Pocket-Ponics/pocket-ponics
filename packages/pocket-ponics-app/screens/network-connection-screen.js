@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Text,View, SafeAreaView, Image, TouchableOpacity } from 'react-native'
+import React from 'react'
+import { Text,View, Image, TouchableOpacity } from 'react-native'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import * as Permissions from 'expo-permissions'
 import { StackActions, NavigationActions } from 'react-navigation'
@@ -24,8 +24,8 @@ class NetworkConnectionScreen extends React.Component {
 	onMount() {
 		(async () => {
 			BarCodeScanner.req
-			const { status } = await Permissions.askAsync(Permissions.CAMERA);
-			this.setState({ hasPermission: status === 'granted'});
+			const { status } = await Permissions.askAsync(Permissions.CAMERA)
+			this.setState({ hasPermission: status === 'granted'})
 		})()
 	}
 
@@ -33,8 +33,8 @@ class NetworkConnectionScreen extends React.Component {
 		return this.props.navigation.navigate('Auth')
 	}
 
-	handleBarCodeScanned = ({ type, data }) => {
-		const token = this.props.navigation.getParam('token', "")
+	goToNext() {
+		const token = this.props.navigation.getParam('token', '')
 		console.log('qrscanner', token)
 		const resetAction = StackActions.reset({
 			index: 0,
@@ -43,17 +43,17 @@ class NetworkConnectionScreen extends React.Component {
 				params: { token } 
 			})],
 		})
-		this.props.navigation.dispatch(resetAction);
+		this.props.navigation.dispatch(resetAction)
 	}
 
 	render(){
 		return (
-			<View style={{flex: 1}}>
+			<View style={styles.container}>
 				<View style={styles.background}>
 					<Text style={styles.heading}>Connect to the Greenhouse Network</Text>
-					<Text style={styles.text}>Go to Settings > WIFI on your phone and connect to the PONICS network.</Text>
+					<Text style={styles.text}>Go to Settings &gt WIFI on your phone and connect to the PONICS network.</Text>
 					<Image source={plugin} style={styles.image}/>
-					<TouchableOpacity style={styles.button} onPress={this.handleBarCodeScanned.bind(this)}>
+					<TouchableOpacity style={styles.button} onPress={this.goToNext.bind(this)}>
 						<Text style={styles.buttonText}>Continue Setup</Text>
 					</TouchableOpacity>
 					<TouchableOpacity style={styles.cancelButton} onPress={this.cancel.bind(this)}>

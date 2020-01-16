@@ -1,5 +1,7 @@
 import React from 'react'
-import { StyleSheet, Text, View, SafeAreaView, Modal, TouchableOpacity } from 'react-native'
+import { Text, View, Modal, TouchableOpacity } from 'react-native'
+
+import styles from './app-styles'
 
 import GreenhouseScreen from './screens/greenhouse-screen'
 import TierScreen from './screens/tier-screen'
@@ -19,7 +21,6 @@ import LoginScreen from './screens/login-screen'
 import SignUpScreen from './screens/signup-screen'
 
 import AuthUtil from './util/auth-util'
-import { BACKGROUND_COLOR, TEXT_COLOR, ACTION_COLOR, PLANT_COLOR } from './util/constants'
 
 import { createAppContainer, createSwitchNavigator, NavigationActions } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
@@ -109,8 +110,8 @@ class App extends React.Component {
 	goToNotification(notification) {
 		this.clearNotification()
 		return AuthUtil.getAuthToken(
-				this.navigateToLogin.bind(this), 
-				this.navigateToItem.bind(this, notification.data))
+			this.navigateToLogin.bind(this), 
+			this.navigateToItem.bind(this, notification.data))
 	}
 
 	handleNotification(notification) {
@@ -120,7 +121,7 @@ class App extends React.Component {
 		}
 
 		this.setState({ notification, notificationText: notification.data.body })
-		setTimeout(this.clearNotification.bind(this),5000);
+		setTimeout(this.clearNotification.bind(this),5000)
 	}
 
 	clearNotification() {
@@ -130,31 +131,24 @@ class App extends React.Component {
 	render() {
 		console.log(this.state.notification)
 		return (
-			<View style={{flex: 1, backgroundColor: '#472600' }}>
+			<View style={styles.background}>
 				<Modal
 					animationType="fade"
 					transparent={true}
 					visible={this.state.notification !== null}>
 					<TouchableOpacity 
-						style={{ 
-							justifyContent: 'center', 
-							alignItems: 'center',
-							margin: 10,
-							marginTop: 30, 
-							height: 50, 
-							backgroundColor: PLANT_COLOR,
-							borderRadius: 10 }}
+						style={styles.notification}
 						onPress={() => this.goToNotification(this.state.notification)}>
-						<Text style={{ fontWeight: 'bold', fontSize: 20 }}>{this.state.notificationText}</Text>
+						<Text style={styles.notificationText}>{this.state.notificationText}</Text>
 					</TouchableOpacity>
-		        </Modal>
+				</Modal>
 				<AppContainer
 					ref={nav => {
-						this.navigator = nav;
+						this.navigator = nav
 					}}/>
 			</View>
 		)
 	}
 }
 
-export default App;
+export default App

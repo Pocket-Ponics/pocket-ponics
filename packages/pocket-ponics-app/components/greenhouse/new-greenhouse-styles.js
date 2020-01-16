@@ -1,15 +1,16 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native'
+import { TEXT_COLOR, BACKGROUD_COLOR , ACTION_COLOR, PLANT_COLOR } from '../../util/constants'
 
 export default StyleSheet.create({
 	background: {
-		backgroundColor: '#472600',
-		color: '#FFFFFF',
+		backgroundColor: BACKGROUD_COLOR,
+		color: TEXT_COLOR,
 		padding: 20,
 		flexDirection: 'column',
 		flex: 1
 	},
 	heading: {
-		color: '#FFFFFF',
+		color: TEXT_COLOR,
 		fontSize: 32,
 		marginBottom: 20,
 	},
@@ -20,26 +21,26 @@ export default StyleSheet.create({
 		marginBottom: 20
 	},
 	text: {
-		color: '#FFFFFF',
+		color: TEXT_COLOR,
 		fontSize: 18,
 		marginBottom: 20
 	},
 	button: {
-		backgroundColor: '#456E31',
+		backgroundColor: ACTION_COLOR,
 		borderRadius: 5,
 		padding: 10,
 		margin: 10,
 		alignItems: 'center'
 	},
 	buttonText: {
-		color: '#FFFFFF',
+		color: TEXT_COLOR,
 		fontSize: 22
 	},
 	cancelButton: {
 		alignItems: 'center'
 	},
 	cancelButtonText: {
-		color: '#472600',
+		color: PLANT_COLOR,
 		fontSize: 22
 	}
 })

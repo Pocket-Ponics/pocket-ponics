@@ -28,7 +28,11 @@
     "react-navigation-stack": "^1.10.0"
   },
   "devDependencies": {
-    "babel-preset-expo": "^7.0.0"
+    "babel-eslint": "^10.0.3",
+    "babel-preset-expo": "^7.0.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-react": "^7.18.0",
+    "eslint-plugin-react-native": "^3.8.1"
   },
   "private": true
 }

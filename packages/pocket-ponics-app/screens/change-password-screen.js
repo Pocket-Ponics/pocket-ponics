@@ -1,21 +1,17 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { 
-	StyleSheet, 
 	Text, 
 	View, 
-	ImageBackground,
 	Image,
 	TextInput,
-	Dimensions,
 	TouchableOpacity,
 	KeyboardAvoidingView,
 	Alert,
-	Button,
 	Platform,
 	AsyncStorage
 } from 'react-native'
 import APIUtil from '../util/api-util'
-import { BACKGROUND_COLOR, TEXT_COLOR, ACTION_COLOR, PLANT_COLOR } from '../util/constants'
+import { TEXT_COLOR } from '../util/constants'
 
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles from './login-styles'
@@ -27,9 +23,9 @@ class SignUpScreen extends React.Component {
 		super(props)
 
 		this.state = {
-			oldPassword: "",
-			password: "",
-			verifyPassword: ""
+			oldPassword: '',
+			password: '',
+			verifyPassword: ''
 		}
 
 		this.onChangeOldPassword = this.onChangeOldPassword.bind(this)
@@ -76,15 +72,17 @@ class SignUpScreen extends React.Component {
 					AsyncStorage.setItem('password', '')
 				])
 			})
-			.then(response => this.props.navigation.navigate('Auth'))
+			.then(() => this.props.navigation.navigate('Auth'))
 			.catch(error => {
 				console.log('error', error)
 			})
 	}
 
 	render() {
+		const disabledStyle = { opacity: this.state.password === '' ? 0.3 : 1 }
+
 		return (
-			<KeyboardAvoidingView style={styles.backgroundContainer} behavior={Platform.OS === "ios" ? "padding" : null}>
+			<KeyboardAvoidingView style={styles.backgroundContainer} behavior={Platform.OS === 'ios' ? 'padding' : null}>
 				<View style={styles.loginContainer}>
 					<Image source={iconImage} style={styles.icon}/>
 					<View style={styles.inputContainer}>
@@ -129,7 +127,7 @@ class SignUpScreen extends React.Component {
 					</View>
 					<TouchableOpacity 
 						onPress={this.changePassword} 
-						style={{opacity: this.state.password === '' ? 0.3 : 1}}
+						style={disabledStyle}
 						disabled={this.state.password === ''}>
 						<Text style={styles.button}>Change Password</Text>
 					</TouchableOpacity>

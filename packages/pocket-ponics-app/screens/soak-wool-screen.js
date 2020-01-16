@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text,View, SafeAreaView, Image, TouchableOpacity } from 'react-native'
+import { Text,View, Image, TouchableOpacity } from 'react-native'
 import { StackActions, NavigationActions } from 'react-navigation'
 
 import styles from './setup-styles'
@@ -18,7 +18,7 @@ class SoakWoolScreen extends React.Component {
 				routeName: 'StartSeedlings'
 			})],
 		})
-		this.props.navigation.dispatch(resetAction);
+		this.props.navigation.dispatch(resetAction)
 	}
 
 	cancel() {
@@ -27,7 +27,7 @@ class SoakWoolScreen extends React.Component {
 
 	render() {
 		return (
-			<View style={{flex: 1}}>
+			<View style={styles.container}>
 				<View style={styles.background}>
 					<Text style={styles.heading}>Soak the rockwool</Text>
 					<Text style={styles.text}>Soak the included rockwool in water for 5 minutes, and then remove the rockwool from the water.  Shake off excess water, and place the rockwool on the tray.</Text>

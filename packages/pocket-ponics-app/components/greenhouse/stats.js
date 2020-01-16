@@ -1,5 +1,5 @@
-import React from 'react';
-import { Text, View, TouchableOpacity, Image } from 'react-native';
+import React from 'react'
+import { Text, View, Image } from 'react-native'
 
 import styles from './stats-styles'
 
@@ -8,8 +8,6 @@ const waterImage = require('../../assets/water75.png')
 const nutrientImage = require('../../assets/nutrient25.png')
 
 const GreenhouseStatsDisplay = props => {
-	const { navigate } = props.navigation
-
 	return (
 		<View style={styles.background}>
 			<Text style={styles.title}>Current Stats</Text>

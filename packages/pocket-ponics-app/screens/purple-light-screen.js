@@ -1,6 +1,6 @@
-import React from 'react';
-import { Text,View, SafeAreaView, Image, TouchableOpacity } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
+import React from 'react'
+import { Text,View, Image, TouchableOpacity } from 'react-native'
+import { StackActions, NavigationActions } from 'react-navigation'
 
 import styles from './setup-styles'
 
@@ -17,8 +17,8 @@ class PurpleLightScreen extends React.Component {
 			actions: [NavigationActions.navigate({ 
 				routeName: 'NetworkConnection'
 			})],
-		});
-		this.props.navigation.dispatch(resetAction);
+		})
+		this.props.navigation.dispatch(resetAction)
 	}
 
 	cancel() {
@@ -27,7 +27,7 @@ class PurpleLightScreen extends React.Component {
 
 	render() {
 		return (
-			<View style={{flex: 1}}>
+			<View style={styles.container}>
 				<View style={styles.background}>
 					<Text style={styles.heading}>Wait for the purple light</Text>
 					<Text style={styles.text}>Once your greenhouse is plugged in, give it a minute to start up. When the lights on the greenhouse pulse purple, click the button to continue the setup.</Text>

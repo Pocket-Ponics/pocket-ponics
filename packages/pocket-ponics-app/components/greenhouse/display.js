@@ -1,5 +1,5 @@
-import React from 'react';
-import { Text, View, TouchableOpacity, Image, ImageBackground } from 'react-native';
+import React from 'react'
+import { View, TouchableOpacity, Image, ImageBackground } from 'react-native'
 
 import styles from './display-styles'
 import { TOMATO_ID, GREENBEAN_ID, SPINACH_ID, TURNIP_ID } from '../../util/constants'
@@ -17,10 +17,10 @@ const displayTopTier = (tier) => {
 	if(!tier || !tier['plant_id']) return null
 
 	switch(tier['plant_id']) {
-		case TOMATO_ID: 
-			return (
-				<Image source={tomatoImage} style={styles.topImage} />
-			)
+	case TOMATO_ID: 
+		return (
+			<Image source={tomatoImage} style={styles.topImage} />
+		)
 	}
 }
 
@@ -32,15 +32,15 @@ const displayTier = (tier) => {
 
 	let imageSrc
 	switch(tier['plant_id']) {
-		case GREENBEAN_ID: 
-			imageSrc = greenbeanImage
-			break
-		case SPINACH_ID: 
-			imageSrc = spinachImage
-			break
-		case TURNIP_ID: 
-			imageSrc = turnipImage
-			break
+	case GREENBEAN_ID: 
+		imageSrc = greenbeanImage
+		break
+	case SPINACH_ID: 
+		imageSrc = spinachImage
+		break
+	case TURNIP_ID: 
+		imageSrc = turnipImage
+		break
 	}
 
 	return (

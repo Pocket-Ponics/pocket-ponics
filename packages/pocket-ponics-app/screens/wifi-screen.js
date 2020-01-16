@@ -1,11 +1,9 @@
 import React from 'react'
-import { Text, FlatList, View, SafeAreaView, Image, TouchableOpacity, AlertIOS } from 'react-native'
+import { Text, FlatList, View, TouchableOpacity } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 import { StackActions, NavigationActions } from 'react-navigation'
 
 import styles from './setup-styles'
-
-const plugin = require('../assets/plug.jpg')
 
 const wifiList = [
 	{
@@ -77,17 +75,7 @@ class WifiScreen extends React.Component {
 		return this.props.navigation.navigate('Auth')
 	}
 
-	getPassword(){
-		AlertIOS.prompt(
-			'Enter the wifi password', 
-			null, 
-			text => this.goToNext()
-		)
-	}
-
-	setWifi(passwordNeeded) {
-		if(passwordNeeded) return this.getPassword()
-
+	setWifi() {
 		this.goToNext()
 	}
 
@@ -103,7 +91,7 @@ class WifiScreen extends React.Component {
 
 	render() {
 		return (
-			<View style={{flex: 1}}>
+			<View style={styles.container}>
 				<View style={styles.background}>
 					<Text style={styles.heading}>Select a WiFi network</Text>
 					<FlatList

@@ -1,6 +1,5 @@
 import React from 'react'
-import { AsyncStorage, Text, View, SafeAreaView, Image, TouchableOpacity, FlatList } from 'react-native'
-import { StackActions, NavigationActions } from 'react-navigation'
+import { AsyncStorage, Text, View, Image, TouchableOpacity, FlatList } from 'react-native'
 import APIUtil from '../util/api-util'
 
 import styles from './setup-styles'
@@ -10,25 +9,12 @@ import {
 	GREENBEAN_ID, 
 	SPINACH_ID,
 	TURNIP_ID,
-	TOMATO_VALUES,
-	GREENBEAN_VALUES,
-	SPINACH_VALUES,
-	TURNIP_VALUES,
-	ONE_DAY
 } from '../util/constants'
 
-const plugin = require('../assets/plug.jpg')
 const tomatoImage = require('../assets/tomato.png')
 const greenbeanImage = require('../assets/greenbean.png')
 const spinachImage = require('../assets/spinach.png')
 const turnipImage = require('../assets/turnip.png')
-
-const seedsArray = [
-	...(new Array(2)).fill(TOMATO_ID),
-	...(new Array(8)).fill(GREENBEAN_ID),
-	...(new Array(20)).fill(SPINACH_ID),
-	...(new Array(20)).fill(TURNIP_ID)
-]
 
 class StartSeedlingsScreen extends React.Component {
 	static navigationOptions = {
@@ -60,11 +46,10 @@ class StartSeedlingsScreen extends React.Component {
 
 	async goToNext() {
 		const name = await AsyncStorage.getItem('name')
-		const serialNo = await AsyncStorage.getItem('serialNo')
-		const password = await AsyncStorage.getItem('password')
+		// const serialNo = await AsyncStorage.getItem('serialNo')
+		// const password = await AsyncStorage.getItem('password')
 		const token = await AsyncStorage.getItem('token')
-		const tiers = await AsyncStorage.getItem('tiers')
-		console.log(tiers)
+		const tiers = JSON.parse(await AsyncStorage.getItem('tiers'))
 
 		APIUtil.postGreenhouse(token, name)
 			.then(response => {
@@ -92,14 +77,14 @@ class StartSeedlingsScreen extends React.Component {
 
 	getImage(id) {
 		switch(id) {
-			case TOMATO_ID:
-				return tomatoImage
-			case GREENBEAN_ID:
-				return greenbeanImage
-			case SPINACH_ID:
-				return spinachImage
-			case TURNIP_ID:
-				return turnipImage
+		case TOMATO_ID:
+			return tomatoImage
+		case GREENBEAN_ID:
+			return greenbeanImage
+		case SPINACH_ID:
+			return spinachImage
+		case TURNIP_ID:
+			return turnipImage
 		}
 	}
 
@@ -107,7 +92,7 @@ class StartSeedlingsScreen extends React.Component {
 		const seedsArray = this.state.tiers.flatMap(tier => (new Array(tier.num_plants)).fill(tier.plant_id))
 		
 		return (
-			<View style={{flex: 1}}>
+			<View style={styles.container}>
 				<View style={styles.background}>
 					<Text style={styles.heading}>Start the seedlings</Text>
 					<Text style={styles.text}>Open the seed packets, and place two seeds in each hole of the rockwool, following the layout below. Once all necessary seeds have been placed in the rockwool, slide the seedling tray into the bottom layer of the greenhouse.</Text>

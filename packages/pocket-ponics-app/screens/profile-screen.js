@@ -1,10 +1,7 @@
-import React from 'react';
-import { Text,View, SafeAreaView, Image, TouchableOpacity, AlertIOS, AsyncStorage } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
+import React from 'react'
+import { Text,View, TouchableOpacity, AsyncStorage } from 'react-native'
 
 import styles from './setup-styles'
-
-const plugin = require('../assets/plug.jpg')
 
 class ProfileScreen extends React.Component {
 	static navigationOptions = {
@@ -30,8 +27,8 @@ class ProfileScreen extends React.Component {
 	logout() {
 		(async () => {
 			try {
-				const username = await AsyncStorage.setItem('username', '')
-				const password = await AsyncStorage.setItem('password', '')
+				await AsyncStorage.setItem('username', '')
+				await AsyncStorage.setItem('password', '')
 				return this.props.navigation.navigate('Auth')
 			} catch(e) {
 				console.log(e)
@@ -44,7 +41,7 @@ class ProfileScreen extends React.Component {
 		const username = this.props.navigation.getParam('username', '')
 
 		return (
-			<View style={{flex: 1}}>
+			<View style={styles.container}>
 				<View style={styles.background}>
 					<Text style={styles.text}>Username: {username}</Text>
 					<Text style={styles.text}>Greenhouses: {greenhouses.length - 1}</Text>

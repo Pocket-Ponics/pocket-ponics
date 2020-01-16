@@ -1,9 +1,8 @@
 import React from 'react'
-import { Text,View, SafeAreaView, Image, TouchableOpacity, AlertIOS, AsyncStorage, StyleSheet } from 'react-native'
-import { StackActions, NavigationActions } from 'react-navigation'
-import base64 from 'base-64'
-import APIUtil from '../util/api-util'
+import { View, Image } from 'react-native'
 import AuthUtil from '../util/auth-util'
+
+import styles from './auth-loading-screen-styles'
 
 const iconImage = require('../assets/pocket-ponics.png')
 
@@ -23,7 +22,7 @@ class AuthLoadingScreen extends React.Component {
 
 	render() {
 		return (
-			<View style={{flex: 1}}>
+			<View style={styles.backgroundContainer}>
 				<View style={styles.loginContainer}>
 					<Image source={iconImage} style={styles.icon}/>
 				</View>
@@ -31,21 +30,5 @@ class AuthLoadingScreen extends React.Component {
 		)
 	}
 }
-
-const styles = StyleSheet.create({  
-	backgroundContainer: {
-		flex: 1
-	},
-	loginContainer: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-		paddingBottom: 100
-	},
-	icon: {
-		height: 200,
-		resizeMode: 'contain',
-	},
-})
 
 export default AuthLoadingScreen

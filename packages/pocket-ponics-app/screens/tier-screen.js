@@ -1,11 +1,8 @@
 import React from 'react'
 import { 
-	StyleSheet, 
 	Text, 
-	View, 
-	ImageBackground,
+	View,
 	Image,
-	Dimensions,
 	TouchableOpacity, 
 	AsyncStorage, 
 } from 'react-native'
@@ -22,12 +19,12 @@ import {
 	ONE_DAY
 } from '../util/constants'
 
+import styles from './tier-screen-styles'
+
 const tomatoImage = require('../assets/tomato.png')
 const greenbeanImage = require('../assets/greenbean.png')
 const spinachImage = require('../assets/spinach.png')
 const turnipImage = require('../assets/turnip.png')
-
-const { width: WIDTH } = Dimensions.get('window')
 
 export default class Example extends React.Component {
 	constructor(props) {
@@ -51,8 +48,7 @@ export default class Example extends React.Component {
 		const tierId = this.props.navigation.getParam('tierId', 0)
 
 		if(greenhouseId !== 0 && tierId !== 0) {
-			const greenhouse = greenhouses.filter(greenhouse => true)[0]
-			const plant = greenhouses.filter(greenhouse => true)[0].tiers[tierId-1]
+			const plant = greenhouses.filter(() => true)[0].tiers[tierId-1]
 
 			this.setState({ plant })
 		}
@@ -64,60 +60,60 @@ export default class Example extends React.Component {
 
 	getImage(id) {
 		switch(id) {
-			case TOMATO_ID:
-				return tomatoImage
-			case GREENBEAN_ID:
-				return greenbeanImage
-			case SPINACH_ID:
-				return spinachImage
-			case TURNIP_ID:
-				return turnipImage
+		case TOMATO_ID:
+			return tomatoImage
+		case GREENBEAN_ID:
+			return greenbeanImage
+		case SPINACH_ID:
+			return spinachImage
+		case TURNIP_ID:
+			return turnipImage
 		}
 	}
 
 	getReadableName(id) {
 		switch(id) {
-			case TOMATO_ID:
-				return 'Tomatoes'
-			case GREENBEAN_ID:
-				return 'Green Beans'
-			case SPINACH_ID:
-				return 'Spinach'
-			case TURNIP_ID:
-				return 'Turnips'
+		case TOMATO_ID:
+			return 'Tomatoes'
+		case GREENBEAN_ID:
+			return 'Green Beans'
+		case SPINACH_ID:
+			return 'Spinach'
+		case TURNIP_ID:
+			return 'Turnips'
 		}
 	}
 
 	isValidpH(id, pH) {
 		switch(id) {
-			case TOMATO_ID:
-				return pH >= TOMATO_VALUES.minPH && pH <= TOMATO_VALUES.maxPH
-			case GREENBEAN_ID:
-				return pH >= GREENBEAN_VALUES.minPH && pH <= GREENBEAN_VALUES.maxPH
-			case SPINACH_ID:
-				return pH >= SPINACH_VALUES.minPH && pH <= SPINACH_VALUES.maxPH
-			case TURNIP_ID:
-				return pH >= TURNIP_VALUES.minPH && pH <= TURNIP_VALUES.maxPH
+		case TOMATO_ID:
+			return pH >= TOMATO_VALUES.minPH && pH <= TOMATO_VALUES.maxPH
+		case GREENBEAN_ID:
+			return pH >= GREENBEAN_VALUES.minPH && pH <= GREENBEAN_VALUES.maxPH
+		case SPINACH_ID:
+			return pH >= SPINACH_VALUES.minPH && pH <= SPINACH_VALUES.maxPH
+		case TURNIP_ID:
+			return pH >= TURNIP_VALUES.minPH && pH <= TURNIP_VALUES.maxPH
 		}
 	}
 
 	isValidEC(id, ec) {
 		switch(id) {
-			case TOMATO_ID:
-				return ec >= TOMATO_VALUES.minEC && ec <= TOMATO_VALUES.maxEC
-			case GREENBEAN_ID:
-				return ec >= GREENBEAN_VALUES.minEC && ec <= GREENBEAN_VALUES.maxEC
-			case SPINACH_ID:
-				return ec >= SPINACH_VALUES.minEC && ec <= SPINACH_VALUES.maxEC
-			case TURNIP_ID:
-				return ec >= TURNIP_VALUES.minEC && ec <= TURNIP_VALUES.maxEC
+		case TOMATO_ID:
+			return ec >= TOMATO_VALUES.minEC && ec <= TOMATO_VALUES.maxEC
+		case GREENBEAN_ID:
+			return ec >= GREENBEAN_VALUES.minEC && ec <= GREENBEAN_VALUES.maxEC
+		case SPINACH_ID:
+			return ec >= SPINACH_VALUES.minEC && ec <= SPINACH_VALUES.maxEC
+		case TURNIP_ID:
+			return ec >= TURNIP_VALUES.minEC && ec <= TURNIP_VALUES.maxEC
 		}
 	}
 
 	statusText(name, value, checker) {
-		if(checker(name, value)) return "Good!"
+		if(checker(name, value)) return 'Good!'
 
-		return "Adjusting"
+		return 'Adjusting'
 	}
 
 	render() {
@@ -165,55 +161,3 @@ export default class Example extends React.Component {
 		)
 	}
 }
-
-const styles = StyleSheet.create({
-	backgroundContainer: {
-		flex: 1,
-		width: null,
-		height: null,
-		alignItems: 'center',
-		backgroundColor: '#472600'
-	},
-	plantImage: {
-		width: 250,
-		height: 175,
-		marginTop: 30,
-		marginBottom: 30,
-		resizeMode: 'contain',
-	},
-	title: {
-		fontSize: 36,
-		fontWeight: 'bold',
-		marginBottom: 20,
-		color: '#FFFFFF'
-	},
-	plantInfoContainer: {
-		flexDirection: 'row'
-	},
-	valuesContainer: {
-		alignItems: 'flex-start',
-	},
-	value: {
-		fontSize: 18,
-		paddingTop: 10,
-		color: '#FFFFFF'
-	},
-	valueName: {
-		fontWeight: 'bold'
-	},
-	statusesContainer: {
-		paddingLeft: 20,
-	},
-	button: {
-		backgroundColor: '#638E4E',
-		width: WIDTH - 55,
-		borderRadius: 22,
-		fontSize: 16,
-		color: 'white',
-		fontWeight: 'bold',
-		overflow: 'hidden',
-		padding: 12,
-		textAlign:'center',
-		marginTop: 30
-	}
-})

@@ -1,21 +1,17 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { 
-	StyleSheet, 
 	Text, 
 	View, 
-	ImageBackground,
 	Image,
 	TextInput,
-	Dimensions,
 	TouchableOpacity,
 	KeyboardAvoidingView,
 	Alert,
-	Button,
 	Platform,
 	AsyncStorage
 } from 'react-native'
 import APIUtil from '../util/api-util'
-import { BACKGROUND_COLOR, TEXT_COLOR, ACTION_COLOR, PLANT_COLOR } from '../util/constants'
+import { TEXT_COLOR } from '../util/constants'
 
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles from './login-styles'
@@ -28,9 +24,9 @@ class SignUpScreen extends React.Component {
 		super(props)
 
 		this.state = {
-			username: "",
-			password: "",
-			verifyPassword: ""
+			username: '',
+			password: '',
+			verifyPassword: ''
 		}
 
 		this.onChangeUsername = this.onChangeUsername.bind(this)
@@ -86,7 +82,7 @@ class SignUpScreen extends React.Component {
 					AsyncStorage.setItem('password', this.state.password)
 				])
 			})
-			.then(response => APIUtil.getAuthToken(this.state.username, this.state.password))
+			.then(() => APIUtil.getAuthToken(this.state.username, this.state.password))
 			.then(response => {
 				console.log('Token: ', response.token)
 
@@ -95,7 +91,7 @@ class SignUpScreen extends React.Component {
 					greenhouses: [
 						{
 							type: 'add-page',
-							name: "Setup",
+							name: 'Setup',
 						}
 					] 
 				}})
@@ -106,8 +102,10 @@ class SignUpScreen extends React.Component {
 	}
 
 	render() {
+		const disabledStyle = { opacity: this.state.username === '' || this.state.password === '' ? 0.3 : 1 }
+
 		return (
-			<KeyboardAvoidingView style={styles.backgroundContainer} behavior={Platform.OS === "ios" ? "padding" : null}>
+			<KeyboardAvoidingView style={styles.backgroundContainer} behavior={Platform.OS === 'ios' ? 'padding' : null}>
 				<View style={styles.loginContainer}>
 					<Image source={iconImage} style={styles.icon}/>
 					<View style={styles.inputContainer}>
@@ -151,7 +149,7 @@ class SignUpScreen extends React.Component {
 					</View>
 					<TouchableOpacity 
 						onPress={this.signUp} 
-						style={{opacity: this.state.username === '' || this.state.password === '' ? 0.3 : 1}}
+						style={disabledStyle}
 						disabled={this.state.username === '' || this.state.password === ''}>
 						<Text style={styles.button}>Sign Up</Text>
 					</TouchableOpacity>

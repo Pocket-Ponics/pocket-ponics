@@ -1,6 +1,6 @@
-import React from 'react';
-import { Text, View, ScrollView, FlatList, Animated, Dimensions } from 'react-native';
-import Carousel from 'react-native-snap-carousel';
+import React from 'react'
+import { Dimensions } from 'react-native'
+import Carousel from 'react-native-snap-carousel'
 
 import styles from './display-styles'
 
@@ -18,7 +18,6 @@ class GreenhouseList extends React.Component {
 
 	render() {
 		const { width } = Dimensions.get('window')
-		const contentOffset = (width - width) / 2
 
 		return (
 			<Carousel
@@ -36,7 +35,7 @@ class GreenhouseList extends React.Component {
 				}}
 				firstItem={this.props.current}
 				itemWidth={width}
-				style={{flex: 1}}
+				style={styles.container}
 				sliderWidth={width}
 				inactiveSlideScale={0.95}
 				inactiveSlideOpacity={1}

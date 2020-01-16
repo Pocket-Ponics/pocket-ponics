@@ -4,6 +4,8 @@ import {
 } from 'react-native'
 import { BACKGROUND_COLOR, TEXT_COLOR, ACTION_COLOR, PLANT_COLOR } from '../util/constants'
 
+const darkener = 'rgba(0, 0, 0, 0.35)'
+
 const { width: WIDTH } = Dimensions.get('window')
 
 const styles = StyleSheet.create({  
@@ -32,8 +34,8 @@ const styles = StyleSheet.create({
 		borderRadius: 45,
 		fontSize: 16,
 		paddingLeft: 45,
-		backgroundColor: 'rgba(0, 0, 0, 0.35)',
-		color: 'rgba(255, 255, 255, 0.7)',
+		backgroundColor: darkener,
+		color: TEXT_COLOR,
 		marginHorizontal: 30
 	},
 	inputIcon: {
@@ -46,7 +48,7 @@ const styles = StyleSheet.create({
 		width: WIDTH - 55,
 		borderRadius: 22,
 		fontSize: 22,
-		color: 'white',
+		color: TEXT_COLOR,
 		textAlign:'center',
 		overflow: 'hidden',
 		padding: 10,

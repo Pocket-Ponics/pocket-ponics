@@ -1,6 +1,6 @@
-import React from 'react';
-import { Text,View, SafeAreaView, Image, TouchableOpacity } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
+import React from 'react'
+import { Text,View, Image, TouchableOpacity } from 'react-native'
+import { StackActions, NavigationActions } from 'react-navigation'
 
 import styles from './setup-styles'
 
@@ -18,7 +18,7 @@ class FillWaterScreen extends React.Component {
 				routeName: 'FillNutrients',
 			})],
 		})
-		this.props.navigation.dispatch(resetAction);
+		this.props.navigation.dispatch(resetAction)
 	}
 
 	cancel() {
@@ -27,7 +27,7 @@ class FillWaterScreen extends React.Component {
 
 	render() {
 		return (
-			<View style={{flex: 1}}>
+			<View style={styles.container}>
 				<View style={styles.background}>
 					<Text style={styles.heading}>Fill the water tank</Text>
 					<Text style={styles.text}>Unscrew the cap on the front of the water tank and pour in two gallons of water.  The water should be at the full tank mark.</Text>

@@ -1,8 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native'
+import { BACKGROUND_COLOR } from '../../util/constants'
 
 export default StyleSheet.create({
+	container: {
+		flex: 1
+	},
 	background: {
-		color: '#FFFFFF',
+		color: BACKGROUND_COLOR,
 		alignItems: 'center',
 		justifyContent: 'center',
 		margin: 10,

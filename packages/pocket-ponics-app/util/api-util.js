@@ -13,9 +13,9 @@ const APIUtil = {
 		for (var property in object) {
 			var encodedKey = encodeURIComponent(property)
 			var encodedValue = encodeURIComponent(object[property])
-			url.push(encodedKey + "=" + encodedValue)
+			url.push(encodedKey + '=' + encodedValue)
 		}
-		return url.join("&");
+		return url.join('&')
 	},
 	getAuthToken(username, password) {
 		return fetch(`http://${host}:${port}/auth/get_token`, {
@@ -26,8 +26,8 @@ const APIUtil = {
 			}),
 			redirect: 'follow'
 		})
-		.then(response => response.text())
-		.then(result => SON.parse(result))
+			.then(response => response.text())
+			.then(result => JSON.parse(result))
 	},
 	createUser(email, password) {
 		const encode = APIUtil.urlEncode({ email, password })
@@ -39,8 +39,8 @@ const APIUtil = {
 			body: encode,
 			redirect: 'follow'
 		})
-		.then(response => response.text())
-		.then(result => JSON.parse(result))
+			.then(response => response.text())
+			.then(result => JSON.parse(result))
 	},
 	get(endpoint, token, body) {
 		return fetch(endpoint, {
@@ -52,8 +52,8 @@ const APIUtil = {
 			body: APIUtil.urlEncode(body),
 			redirect: 'follow'
 		})
-		.then(response => response.text())
-		.then(result => JSON.parse(result))
+			.then(response => response.text())
+			.then(result => JSON.parse(result))
 	},
 	post(endpoint, token, body) {
 		return fetch(endpoint, {
@@ -65,8 +65,8 @@ const APIUtil = {
 			body: APIUtil.urlEncode(body),
 			redirect: 'follow'
 		})
-		.then(response => response.text())
-		.then(result => JSON.parse(result))
+			.then(response => response.text())
+			.then(result => JSON.parse(result))
 	},
 	put(endpoint, token, body) {
 		return fetch(endpoint, {
@@ -78,16 +78,16 @@ const APIUtil = {
 			body: APIUtil.urlEncode(body),
 			redirect: 'follow'
 		})
-		.then(response => response.text())
-		.then(result => JSON.parse(result))
+			.then(response => response.text())
+			.then(result => JSON.parse(result))
 	},
 	setDeviceKey(token) {
 		return Notifications.getExpoPushTokenAsync()
-		.then(device_key => {
-			APIUtil.post(`http://${host}:${port}/mobileapp/devices`, token, {
-				device_key
+			.then(device_key => {
+				APIUtil.post(`http://${host}:${port}/mobileapp/devices`, token, {
+					device_key
+				})
 			})
-		})
 	},
 	changePassword(token, email, old_password, new_password) {
 		return APIUtil.post(`http://${host}:${port}/auth/change_password`, token, {
@@ -115,8 +115,8 @@ const APIUtil = {
 		})
 	},
 	postTier(token, greenhouse, tier, plant, numPlants, cycleTime) {
-		const seedlingHarvest = new Date(Date.now() + (24 * 3600 * 1000 * cycleTime))
-		const dateString = seedlingHarvest.getFullYear() + '-' + (seedlingHarvest.getMonth()+1) + '-' + seedlingHarvest.getDate()
+		const plantHarvest = new Date(Date.now() + (24 * 3600 * 1000 * cycleTime))
+		const dateString = plantHarvest.getFullYear() + '-' + (plantHarvest.getMonth()+1) + '-' + plantHarvest.getDate()
 		
 		return APIUtil.put(`http://${host}:${port}/mobileapp/tiers/${greenhouse}/${tier}`, token, {
 			'plant_id': plant,

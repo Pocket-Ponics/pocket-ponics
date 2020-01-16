@@ -1,5 +1,7 @@
-import React from 'react';
-import { Text, View, ScrollView, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import React from 'react'
+import { Text, View, ScrollView } from 'react-native'
+
+import styles from './swipeable-styles'
 
 import GreenhouseDisplay from './display'
 import GreenhouseStatsDisplay from './stats'
@@ -9,7 +11,7 @@ class GreenhouseSwipeable extends React.Component {
 	constructor(props) {
 		super(props)
 
-		this.swipeable = React.createRef();
+		this.swipeable = React.createRef()
 	}
 
 	getStats() {
@@ -21,10 +23,10 @@ class GreenhouseSwipeable extends React.Component {
 	}
 
 	render() {
-		const { width } = Dimensions.get('window');
 		return (
-			<ScrollView style={{ width, backgroundColor: '#472600' }}>
-				<View style={{ height: 600 }}>
+			<ScrollView style={styles.scroller}>
+				<View style={styles.greenhouseBackground}>
+					<Text style={styles.greenhouseTitle}>{this.props.greenhouse.name}</Text>
 					<GreenhouseDisplay 
 						navigation={this.props.navigation} 
 						tiers={this.props.greenhouse.tiers} 

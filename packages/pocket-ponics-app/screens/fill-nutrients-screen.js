@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text,View, SafeAreaView, Image, TouchableOpacity } from 'react-native'
+import { Text,View, Image, TouchableOpacity } from 'react-native'
 import { StackActions, NavigationActions } from 'react-navigation'
 
 import styles from './setup-styles'
@@ -27,7 +27,7 @@ class FillNutrientsScreen extends React.Component {
 
 	render() {
 		return (
-			<View style={{flex: 1}}>
+			<View style={styles.container}>
 				<View style={styles.background}>
 					<Text style={styles.heading}>Fill the nutrient tank</Text>
 					<Text style={styles.text}>Unscrew the cap on the front of the nutrient tank and pour in the nutrient solution that came with the greenhouse (About 1 liter of nutrients)</Text>

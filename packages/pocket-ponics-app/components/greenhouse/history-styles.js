@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native'
+import { TEXT_COLOR } from '../../util/constants'
 
 export default StyleSheet.create({
 	background:{
@@ -8,7 +9,7 @@ export default StyleSheet.create({
 		marginTop: 20,
 	},
 	text: {
-		color: '#FFFFFF',
+		color: TEXT_COLOR,
 		fontSize: 40
 	},
 })

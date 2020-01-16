@@ -1,25 +1,20 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { 
-	StyleSheet, 
 	Text, 
 	View, 
-	ImageBackground,
 	Image,
 	TextInput,
-	Dimensions,
 	TouchableOpacity,
 	KeyboardAvoidingView,
 	Alert,
-	Button,
 	Platform,
 	AsyncStorage
 } from 'react-native'
 
-import { Notifications } from 'expo'
 import * as Permissions from 'expo-permissions'
 
 import APIUtil from '../util/api-util'
-import { BACKGROUND_COLOR, TEXT_COLOR, ACTION_COLOR, PLANT_COLOR } from '../util/constants'
+import { TEXT_COLOR } from '../util/constants'
 
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles from './login-styles'
@@ -28,11 +23,11 @@ const iconImage = require('../assets/pocket-ponics.png')
 
 class LoginScreen extends React.Component {
 	constructor(props) {
-		super(props);
+		super(props)
 
 		this.state = {
-			username: "",
-			password: ""
+			username: '',
+			password: ''
 		}
 
 		this.onChangeUsername = this.onChangeUsername.bind(this)
@@ -49,7 +44,7 @@ class LoginScreen extends React.Component {
 	}
 
 	login() {
-		if(this.state.username === "" || this.state.password === ""){
+		if(this.state.username === '' || this.state.password === ''){
 			Alert.alert('Invalid username or password')
 			return
 		}
@@ -69,7 +64,7 @@ class LoginScreen extends React.Component {
 					AsyncStorage.setItem('password', this.state.password)
 				])
 			})
-			.then(response => Permissions.getAsync( Permissions.NOTIFICATIONS ))
+			.then(() => Permissions.getAsync( Permissions.NOTIFICATIONS ))
 			.then(response => {
 
 				// Only ask if permissions have not already been determined, because
@@ -77,7 +72,7 @@ class LoginScreen extends React.Component {
 				if (response.status !== 'granted') {
 					// Android remote notification permissions are granted during the app
 					// install, so this will only ask on iOS
-					return Permissions.askAsync(Permissions.NOTIFICATIONS);
+					return Permissions.askAsync(Permissions.NOTIFICATIONS)
 				}
 
 				return response
@@ -105,7 +100,7 @@ class LoginScreen extends React.Component {
 						...responses, 
 						{
 							type: 'add-page',
-							name: "Setup",
+							name: 'Setup',
 						}
 					] 
 				}})
@@ -117,7 +112,7 @@ class LoginScreen extends React.Component {
 
 	render() {
 		return (
-			<KeyboardAvoidingView style={styles.backgroundContainer} behavior={Platform.OS === "ios" ? "padding" : null}>
+			<KeyboardAvoidingView style={styles.backgroundContainer} behavior={Platform.OS === 'ios' ? 'padding' : null}>
 				<View style={styles.loginContainer}>
 					<Image source={iconImage} style={styles.icon}/>
 					<View style={styles.inputContainer}>
@@ -126,7 +121,7 @@ class LoginScreen extends React.Component {
 						<TextInput
 							style={styles.input}
 							placeholder={'Email Address'}
-							placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
+							placeholderTextColor={TEXT_COLOR}
 							value={this.state.username}
 							onChangeText={this.onChangeUsername}
 							autoCapitalize="none"
@@ -138,7 +133,7 @@ class LoginScreen extends React.Component {
 						<TextInput
 							style={styles.input}
 							placeholder={'Password'}
-							placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
+							placeholderTextColor={TEXT_COLOR}
 							value={this.state.password}
 							onChangeText={this.onChangePassword}
 							autoCapitalize="none"
