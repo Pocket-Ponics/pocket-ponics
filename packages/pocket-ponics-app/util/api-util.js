@@ -1,4 +1,5 @@
 import base64 from 'base-64'
+import { Notifications } from 'expo'
 
 const host = '10.171.204.187'
 const port = '8080'
@@ -26,11 +27,10 @@ const APIUtil = {
 			redirect: 'follow'
 		})
 		.then(response => response.text())
-		.then(result => { console.log(result); return JSON.parse(result)})
+		.then(result => SON.parse(result))
 	},
 	createUser(email, password) {
 		const encode = APIUtil.urlEncode({ email, password })
-		console.log(encode)
 		return fetch(`http://${host}:${port}/auth/create_user`, {
 			method: 'POST',
 			headers: new Headers({
@@ -81,7 +81,15 @@ const APIUtil = {
 		.then(response => response.text())
 		.then(result => JSON.parse(result))
 	},
-	changePassword(token, email, old_password, new_password){
+	setDeviceKey(token) {
+		return Notifications.getExpoPushTokenAsync()
+		.then(device_key => {
+			APIUtil.post(`http://${host}:${port}/mobileapp/devices`, token, {
+				device_key
+			})
+		})
+	},
+	changePassword(token, email, old_password, new_password) {
 		return APIUtil.post(`http://${host}:${port}/auth/change_password`, token, {
 			email,
 			old_password,
@@ -98,8 +106,7 @@ const APIUtil = {
 		const randomSerial = Math.floor(Math.random() * 899999 + 100000)
 		const seedlingHarvest = new Date(Date.now() + (24 * 3600 * 1000 * 14))
 		const dateString = seedlingHarvest.getFullYear() + '-' + (seedlingHarvest.getMonth()+1) + '-' + seedlingHarvest.getDate()
-		console.log('Serial number: ',randomSerial)
-		console.log('Date: ',dateString)
+		
 		return APIUtil.post(`http://${host}:${port}/mobileapp/greenhouses/`, token, {
 			name,
 			'serial_no': randomSerial,

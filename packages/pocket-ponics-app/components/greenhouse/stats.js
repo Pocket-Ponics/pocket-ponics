@@ -7,10 +7,6 @@ const batteryImage = require('../../assets/battery75.png')
 const waterImage = require('../../assets/water75.png')
 const nutrientImage = require('../../assets/nutrient25.png')
 
-const onPress = event => {
-	console.log(event)
-}
-
 const GreenhouseStatsDisplay = props => {
 	const { navigate } = props.navigation
 

@@ -12,12 +12,10 @@ class PurpleLightScreen extends React.Component {
 	}
 
 	goToNext() {
-		const token = this.props.navigation.getParam('token', "")
 		const resetAction = StackActions.reset({
 			index: 0,
 			actions: [NavigationActions.navigate({ 
-				routeName: 'QRScanner',
-				params: { token }
+				routeName: 'NetworkConnection'
 			})],
 		});
 		this.props.navigation.dispatch(resetAction);
@@ -29,7 +27,7 @@ class PurpleLightScreen extends React.Component {
 
 	render() {
 		return (
-			<SafeAreaView style={{flex: 1}}>
+			<View style={{flex: 1}}>
 				<View style={styles.background}>
 					<Text style={styles.heading}>Wait for the purple light</Text>
 					<Text style={styles.text}>Once your greenhouse is plugged in, give it a minute to start up. When the lights on the greenhouse pulse purple, click the button to continue the setup.</Text>
@@ -41,7 +39,7 @@ class PurpleLightScreen extends React.Component {
 						<Text style={styles.cancelButtonText}>Cancel Setup</Text>
 					</TouchableOpacity>
 				</View>
-			</SafeAreaView>
+			</View>
 		)
 	}
 }

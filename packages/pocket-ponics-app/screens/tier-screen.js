@@ -6,7 +6,8 @@ import {
 	ImageBackground,
 	Image,
 	Dimensions,
-	TouchableOpacity
+	TouchableOpacity, 
+	AsyncStorage, 
 } from 'react-native'
 
 import { 
@@ -29,6 +30,38 @@ const turnipImage = require('../assets/turnip.png')
 const { width: WIDTH } = Dimensions.get('window')
 
 export default class Example extends React.Component {
+	constructor(props) {
+		super(props)
+
+		this.state = {
+			plant: this.props.navigation.getParam('plant', {}),
+		}
+	}
+
+	async getPlant() {
+		const greenhouseString = await AsyncStorage.getItem('greenhouses')
+
+		if(greenhouseString === null) {
+			console.log('Error retrieving from storage')
+			return
+		}
+
+		const greenhouses = JSON.parse(greenhouseString)
+		const greenhouseId = this.props.navigation.getParam('greenhouseId', 0)
+		const tierId = this.props.navigation.getParam('tierId', 0)
+
+		if(greenhouseId !== 0 && tierId !== 0) {
+			const greenhouse = greenhouses.filter(greenhouse => true)[0]
+			const plant = greenhouses.filter(greenhouse => true)[0].tiers[tierId-1]
+
+			this.setState({ plant })
+		}
+	}
+
+	componentDidMount() {
+		this.getPlant()
+	}
+
 	getImage(id) {
 		switch(id) {
 			case TOMATO_ID:
@@ -88,7 +121,7 @@ export default class Example extends React.Component {
 	}
 
 	render() {
-		const plant = this.props.navigation.getParam('plant')
+		const plant = this.state.plant
 		const harvestDate = new Date(plant.cycle_time)
 		const harvestString = `${harvestDate.getMonth()+1}/${harvestDate.getDate()}/${harvestDate.getFullYear()}`
 		const isReadyToHarvest = harvestDate - Date.now() < ONE_DAY

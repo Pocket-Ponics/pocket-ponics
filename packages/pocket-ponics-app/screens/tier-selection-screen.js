@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text,View, SafeAreaView, Image, TouchableOpacity, Modal, FlatList, TextInput } from 'react-native'
+import { AsyncStorage, Text, View, SafeAreaView, Image, TouchableOpacity, Modal, FlatList, TextInput } from 'react-native'
 import { StackActions, NavigationActions } from 'react-navigation'
 
 import styles from './setup-styles'
@@ -46,19 +46,16 @@ class TierSelectionScreen extends React.Component {
 	}
 
 	goToNext() {
-		const token = this.props.navigation.getParam('token', "")
-		const resetAction = StackActions.reset({
-			index: 0,
-			actions: [NavigationActions.navigate({ 
-				routeName: 'FillWater',
-				params: {
-					token,
-					tiers: this.state.tiers,
-					name: this.state.name
-				}
-			})],
-		})
-		this.props.navigation.dispatch(resetAction)
+		AsyncStorage.setItem('tiers', JSON.stringify(this.state.tiers))
+			.then(response => {
+				const resetAction = StackActions.reset({
+					index: 0,
+					actions: [NavigationActions.navigate({ 
+						routeName: 'FillWater'
+					})],
+				})
+				this.props.navigation.dispatch(resetAction)
+			})
 	}
 
 	cancel() {
@@ -82,7 +79,7 @@ class TierSelectionScreen extends React.Component {
 
 	render() {
 		return (
-			<SafeAreaView style={{flex: 1}}>
+			<View style={{flex: 1}}>
 				<View style={styles.background}>
 					<Modal
 						animationType="slide"
@@ -132,7 +129,7 @@ class TierSelectionScreen extends React.Component {
 						<Text style={styles.cancelButtonText}>Cancel Setup</Text>
 					</TouchableOpacity>
 				</View>
-			</SafeAreaView>
+			</View>
 		)
 	}
 }

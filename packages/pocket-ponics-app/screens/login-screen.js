@@ -14,6 +14,10 @@ import {
 	Platform,
 	AsyncStorage
 } from 'react-native'
+
+import { Notifications } from 'expo'
+import * as Permissions from 'expo-permissions'
+
 import APIUtil from '../util/api-util'
 import { BACKGROUND_COLOR, TEXT_COLOR, ACTION_COLOR, PLANT_COLOR } from '../util/constants'
 
@@ -65,7 +69,26 @@ class LoginScreen extends React.Component {
 					AsyncStorage.setItem('password', this.state.password)
 				])
 			})
+			.then(response => Permissions.getAsync( Permissions.NOTIFICATIONS ))
 			.then(response => {
+
+				// Only ask if permissions have not already been determined, because
+				// iOS won't necessarily prompt the user a second time.
+				if (response.status !== 'granted') {
+					// Android remote notification permissions are granted during the app
+					// install, so this will only ask on iOS
+					return Permissions.askAsync(Permissions.NOTIFICATIONS);
+				}
+
+				return response
+			})
+			.then(response => {
+				if(response.status === 'granted') {
+					return APIUtil.setDeviceKey(token)
+				}
+			})
+			.then(response => {
+				console.log('key time', response)
 				return APIUtil.getGreenhouses(token)
 			})
 			.then(response => {
@@ -90,8 +113,6 @@ class LoginScreen extends React.Component {
 			.catch(error => {
 				console.log('error', error)
 			})
-
-		
 	}
 
 	render() {

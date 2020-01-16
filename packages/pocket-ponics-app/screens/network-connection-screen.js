@@ -8,9 +8,7 @@ import styles from './setup-styles'
 
 const plugin = require('../assets/settings-screen.png')
 
-// TODO - set up wifi QR codes to follow the 'WIFI:T:WPA;S:<your Wi-Fi network name>;P:<your Wi-Fi network password>;;' pattern
-
-class QRScannerScreen extends React.Component {
+class NetworkConnectionScreen extends React.Component {
 	static navigationOptions = {
 		title: 'Setup',
 	}
@@ -50,9 +48,9 @@ class QRScannerScreen extends React.Component {
 
 	render(){
 		return (
-			<SafeAreaView style={{flex: 1}}>
+			<View style={{flex: 1}}>
 				<View style={styles.background}>
-					<Text style={styles.heading}>Scan the QR Code</Text>
+					<Text style={styles.heading}>Connect to the Greenhouse Network</Text>
 					<Text style={styles.text}>Go to Settings > WIFI on your phone and connect to the PONICS network.</Text>
 					<Image source={plugin} style={styles.image}/>
 					<TouchableOpacity style={styles.button} onPress={this.handleBarCodeScanned.bind(this)}>
@@ -62,12 +60,9 @@ class QRScannerScreen extends React.Component {
 						<Text style={styles.cancelButtonText}>Cancel Setup</Text>
 					</TouchableOpacity>
 				</View>
-			</SafeAreaView>
+			</View>
 		)
 	}
-}
+}		
 
-
-				
-
-export default QRScannerScreen
+export default NetworkConnectionScreen

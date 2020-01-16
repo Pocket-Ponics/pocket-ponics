@@ -12,14 +12,10 @@ class SoakWoolScreen extends React.Component {
 	}
 
 	goToNext() {
-		const token = this.props.navigation.getParam('token', "")
-		const tiers = this.props.navigation.getParam('tiers', [null, null, null, null])
-		const name = this.props.navigation.getParam('name', '')
 		const resetAction = StackActions.reset({
 			index: 0,
 			actions: [NavigationActions.navigate({ 
-				routeName: 'StartSeedlings',
-				params: { token, tiers, name } 
+				routeName: 'StartSeedlings'
 			})],
 		})
 		this.props.navigation.dispatch(resetAction);
@@ -31,7 +27,7 @@ class SoakWoolScreen extends React.Component {
 
 	render() {
 		return (
-			<SafeAreaView style={{flex: 1}}>
+			<View style={{flex: 1}}>
 				<View style={styles.background}>
 					<Text style={styles.heading}>Soak the rockwool</Text>
 					<Text style={styles.text}>Soak the included rockwool in water for 5 minutes, and then remove the rockwool from the water.  Shake off excess water, and place the rockwool on the tray.</Text>
@@ -43,7 +39,7 @@ class SoakWoolScreen extends React.Component {
 						<Text style={styles.cancelButtonText}>Cancel Setup</Text>
 					</TouchableOpacity>
 				</View>
-			</SafeAreaView>
+			</View>
 		)
 	}
 }

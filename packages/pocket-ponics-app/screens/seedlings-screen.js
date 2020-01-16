@@ -6,7 +6,8 @@ import {
 	ImageBackground,
 	Image,
 	Dimensions,
-	TouchableOpacity
+	TouchableOpacity,
+	AsyncStorage, 
 } from 'react-native'
 
 import { 
@@ -22,12 +23,43 @@ const seedlingImage = require('../assets/seedling.png')
 const { width: WIDTH } = Dimensions.get('window')
 
 export default class SeedlingsScreen extends React.Component {
+	constructor(props) {
+		super(props)
+
+		this.state = {
+			seedlings: this.props.navigation.getParam('seedlings', null)
+		}
+	}
+
+	async getGreenhouses() {
+		const greenhouseString = await AsyncStorage.getItem('greenhouses')
+
+		if(greenhouseString === null) {
+			console.log('Error retrieving from storage')
+			return
+		}
+
+		const greenhouses = JSON.parse(greenhouseString)
+		const greenhouseId = this.props.navigation.getParam('greenhouseId', 0) 
+
+		if(greenhouseId !== 0) {
+			const greenhouse = greenhouses.filter(greenhouse => true)[0]
+			const seedlings = greenhouses.filter(greenhouse => true)[0].seedling_time
+
+			this.setState({ seedlings })
+		}
+	}
+
+	componentDidMount() {
+		this.getGreenhouses()
+	}
+
 	generateDateString(date) {
 		return `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()}`
 	}
 
 	render() {
-		const seedlings = this.props.navigation.getParam('seedlings', null)
+		const seedlings = this.state.seedlings
 		if(seedlings === null) {
 			return (
 				<View style={styles.backgroundContainer}>

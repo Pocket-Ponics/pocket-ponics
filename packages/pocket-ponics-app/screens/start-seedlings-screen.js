@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text,View, SafeAreaView, Image, TouchableOpacity, FlatList } from 'react-native'
+import { AsyncStorage, Text, View, SafeAreaView, Image, TouchableOpacity, FlatList } from 'react-native'
 import { StackActions, NavigationActions } from 'react-navigation'
 import APIUtil from '../util/api-util'
 
@@ -35,12 +35,35 @@ class StartSeedlingsScreen extends React.Component {
 		title: 'Setup',
 	}
 
+	constructor(props) {
+		super(props)
+
+		this.state = {
+			tiers: [{}, {}, {}, {}]
+		}
+	}
+
+	async getTiers() {
+		const tiers = await AsyncStorage.getItem('tiers')
+
+		if(tiers === null) {
+			console.log('Error retrieving from storage')
+			return
+		}
+
+		this.setState({ tiers: JSON.parse(tiers) })
+	}
+
+	componentDidMount() {
+		this.getTiers()
+	}
+
 	async goToNext() {
-		const name = this.props.navigation.getParam('name', "")
-		const serialNo = this.props.navigation.getParam('serialNo', "")
-		const password = this.props.navigation.getParam('password', "")
-		const token = this.props.navigation.getParam('token', "")
-		const tiers = this.props.navigation.getParam('tiers', [null, null, null, null])
+		const name = await AsyncStorage.getItem('name')
+		const serialNo = await AsyncStorage.getItem('serialNo')
+		const password = await AsyncStorage.getItem('password')
+		const token = await AsyncStorage.getItem('token')
+		const tiers = await AsyncStorage.getItem('tiers')
 		console.log(tiers)
 
 		APIUtil.postGreenhouse(token, name)
@@ -81,15 +104,10 @@ class StartSeedlingsScreen extends React.Component {
 	}
 
 	render() {
-		const tiers = this.props.navigation.getParam('tiers', [{}, {}, {}, {}])
-		const seedsArray = [
-			...(new Array(tiers[0].num_plants)).fill(tiers[0].plant_id),
-			...(new Array(tiers[1].num_plants)).fill(tiers[1].plant_id),
-			...(new Array(tiers[2].num_plants)).fill(tiers[2].plant_id),
-			...(new Array(tiers[3].num_plants)).fill(tiers[3].plant_id),
-		]
+		const seedsArray = this.state.tiers.flatMap(tier => (new Array(tier.num_plants)).fill(tier.plant_id))
+		
 		return (
-			<SafeAreaView style={{flex: 1}}>
+			<View style={{flex: 1}}>
 				<View style={styles.background}>
 					<Text style={styles.heading}>Start the seedlings</Text>
 					<Text style={styles.text}>Open the seed packets, and place two seeds in each hole of the rockwool, following the layout below. Once all necessary seeds have been placed in the rockwool, slide the seedling tray into the bottom layer of the greenhouse.</Text>
@@ -110,7 +128,7 @@ class StartSeedlingsScreen extends React.Component {
 						<Text style={styles.cancelButtonText}>Cancel Setup</Text>
 					</TouchableOpacity>
 				</View>
-			</SafeAreaView>
+			</View>
 		)
 	}
 }

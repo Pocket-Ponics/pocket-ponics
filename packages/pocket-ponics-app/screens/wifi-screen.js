@@ -64,12 +64,10 @@ class WifiScreen extends React.Component {
 	}
 
 	goToNext() {
-		const token = this.props.navigation.getParam('token', "")
 		const resetAction = StackActions.reset({
 			index: 0,
 			actions: [NavigationActions.navigate({ 
-				routeName: 'TierSelection',
-				params: { token }
+				routeName: 'TierSelection'
 			})],
 		})
 		this.props.navigation.dispatch(resetAction)
@@ -105,7 +103,7 @@ class WifiScreen extends React.Component {
 
 	render() {
 		return (
-			<SafeAreaView style={{flex: 1}}>
+			<View style={{flex: 1}}>
 				<View style={styles.background}>
 					<Text style={styles.heading}>Select a WiFi network</Text>
 					<FlatList
@@ -117,7 +115,7 @@ class WifiScreen extends React.Component {
 						<Text style={styles.cancelButtonText}>Cancel Setup</Text>
 					</TouchableOpacity>
 				</View>
-			</SafeAreaView>
+			</View>
 		)
 	}
 }

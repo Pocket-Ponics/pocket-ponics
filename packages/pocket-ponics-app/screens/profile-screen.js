@@ -14,14 +14,13 @@ class ProfileScreen extends React.Component {
 	changePassword(){
 		(async () => {
 			try {
-				const retrievedData = this.props.navigation.getParam('retrievedData', { greenhouses: [] })
 				const username = await AsyncStorage.getItem('username', '')
 				const password = await AsyncStorage.getItem('password', '')
-				console.log('here')
+				const token = await AsyncStorage.getItem('token', '')
 				return this.props.navigation.navigate('ChangePassword', { 
 					username, 
 					password,
-					token: retrievedData.token })
+					token })
 			} catch(e) {
 				console.log(e)
 			}
@@ -41,12 +40,14 @@ class ProfileScreen extends React.Component {
 	}
 
 	render() {
-		const retrievedData = this.props.navigation.getParam('retrievedData', { greenhouses: [] })
+		const greenhouses = this.props.navigation.getParam('greenhouses', [])
+		const username = this.props.navigation.getParam('username', '')
+
 		return (
-			<SafeAreaView style={{flex: 1}}>
+			<View style={{flex: 1}}>
 				<View style={styles.background}>
-					<Text style={styles.text}>Username: demouser</Text>
-					<Text style={styles.text}>Greenhouses: {retrievedData.greenhouses.length - 1}</Text>
+					<Text style={styles.text}>Username: {username}</Text>
+					<Text style={styles.text}>Greenhouses: {greenhouses.length - 1}</Text>
 					<TouchableOpacity style={styles.button} onPress={this.changePassword.bind(this)}>
 						<Text style={styles.buttonText}>Change password</Text>
 					</TouchableOpacity>
@@ -54,7 +55,7 @@ class ProfileScreen extends React.Component {
 						<Text style={styles.buttonText}>Logout</Text>
 					</TouchableOpacity>
 				</View>
-			</SafeAreaView>
+			</View>
 		)
 	}
 }

@@ -28,8 +28,7 @@ class GreenhouseList extends React.Component {
 						return (
 							<GreenhouseSwipeable
 								greenhouse={item}
-								navigation={this.props.navigation}
-								retrievedData={this.props.retrievedData}/>
+								navigation={this.props.navigation}/>
 						)
 					}
 

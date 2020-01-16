@@ -12,14 +12,10 @@ class FillNutrientsScreen extends React.Component {
 	}
 
 	goToNext() {
-		const token = this.props.navigation.getParam('token', "")
-		const tiers = this.props.navigation.getParam('tiers', [null, null, null, null])
-		const name = this.props.navigation.getParam('name', '')
 		const resetAction = StackActions.reset({
 			index: 0,
 			actions: [NavigationActions.navigate({ 
 				routeName: 'SoakWool',
-				params: { token, tiers, name }
 			})],
 		})
 		this.props.navigation.dispatch(resetAction)
@@ -31,7 +27,7 @@ class FillNutrientsScreen extends React.Component {
 
 	render() {
 		return (
-			<SafeAreaView style={{flex: 1}}>
+			<View style={{flex: 1}}>
 				<View style={styles.background}>
 					<Text style={styles.heading}>Fill the nutrient tank</Text>
 					<Text style={styles.text}>Unscrew the cap on the front of the nutrient tank and pour in the nutrient solution that came with the greenhouse (About 1 liter of nutrients)</Text>
@@ -43,7 +39,7 @@ class FillNutrientsScreen extends React.Component {
 						<Text style={styles.cancelButtonText}>Cancel Setup</Text>
 					</TouchableOpacity>
 				</View>
-			</SafeAreaView>
+			</View>
 		)
 	}
 }
