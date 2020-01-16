@@ -681,7 +681,7 @@ exports.getReadingsTier = (req, res) => {
     })
 };
 
-//Get greenhouse and teir data
+//Get greenhouse and tier data
 exports.getGreenhouseAndTiers = (req, res) => {
     //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
@@ -697,7 +697,6 @@ exports.getGreenhouseAndTiers = (req, res) => {
         }
         else if(rec != undefined)
         {    
-            //Get sensor readings
             mySQL.getGreenhouseDetail(rec.user_id, greenhouse_id, function(err, record) {
                 if(!err)
                 {
@@ -705,7 +704,7 @@ exports.getGreenhouseAndTiers = (req, res) => {
                 }
                 else {
                     console.log(err)
-                    res.json({201: "Error retrieving sensor readings"})
+                    res.json({201: "Error retrieving greenhouse and tier"})
                 }
             })
         }
