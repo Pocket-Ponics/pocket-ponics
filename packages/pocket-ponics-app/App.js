@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, SafeAreaView, Modal } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, Modal, TouchableOpacity } from 'react-native'
 
 import GreenhouseScreen from './screens/greenhouse-screen'
 import TierScreen from './screens/tier-screen'
@@ -19,6 +19,7 @@ import LoginScreen from './screens/login-screen'
 import SignUpScreen from './screens/signup-screen'
 
 import AuthUtil from './util/auth-util'
+import { BACKGROUND_COLOR, TEXT_COLOR, ACTION_COLOR, PLANT_COLOR } from './util/constants'
 
 import { createAppContainer, createSwitchNavigator, NavigationActions } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
@@ -99,20 +100,24 @@ class App extends React.Component {
 					params: {
 						greenhouseId: data.greenhouse_id,
 						tierId: data.tier,
-					}
+					},
+					key: data.greenhouseId + '/' + data.tier
 				})
 			)
+	}
+
+	goToNotification(notification) {
+		this.clearNotification()
+		return AuthUtil.getAuthToken(
+				this.navigateToLogin.bind(this), 
+				this.navigateToItem.bind(this, notification.data))
 	}
 
 	handleNotification(notification) {
 		console.log(notification)
 		if(notification.origin === 'selected') {
-			return AuthUtil.getAuthToken(
-				this.navigateToLogin.bind(this), 
-				this.navigateToItem.bind(this, notification.data))
+			return this.goToNotification(notification)
 		}
-
-		console.log('here')
 
 		this.setState({ notification, notificationText: notification.data.body })
 		setTimeout(this.clearNotification.bind(this),5000);
@@ -130,9 +135,18 @@ class App extends React.Component {
 					animationType="fade"
 					transparent={true}
 					visible={this.state.notification !== null}>
-					<View style={{ justifyContent: 'flex-end', marginTop: 30, height: 50, backgroundColor: '#FFFFFF'}}>
-						<Text>{this.state.notificationText}</Text>
-					</View>
+					<TouchableOpacity 
+						style={{ 
+							justifyContent: 'center', 
+							alignItems: 'center',
+							margin: 10,
+							marginTop: 30, 
+							height: 50, 
+							backgroundColor: PLANT_COLOR,
+							borderRadius: 10 }}
+						onPress={() => this.goToNotification(this.state.notification)}>
+						<Text style={{ fontWeight: 'bold', fontSize: 20 }}>{this.state.notificationText}</Text>
+					</TouchableOpacity>
 		        </Modal>
 				<AppContainer
 					ref={nav => {
