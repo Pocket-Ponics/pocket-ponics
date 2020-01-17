@@ -1,10 +1,10 @@
-CREATE DATABASE  IF NOT EXISTS `pocketponics` /*!40100 DEFAULT CHARACTER SET latin1 */;
+CREATE DATABASE  IF NOT EXISTS `pocketponics` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `pocketponics`;
 -- MySQL dump 10.13  Distrib 8.0.18, for macos10.14 (x86_64)
 --
 -- Host: localhost    Database: pocketponics
 -- ------------------------------------------------------
--- Server version	5.7.28-0ubuntu0.18.04.4
+-- Server version	8.0.18
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -32,17 +32,8 @@ CREATE TABLE `active_sessions` (
   UNIQUE KEY `token_UNIQUE` (`token`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `user_id_fkas` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `active_sessions`
---
-
-LOCK TABLES `active_sessions` WRITE;
-/*!40000 ALTER TABLE `active_sessions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `active_sessions` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `devices`
@@ -59,15 +50,6 @@ CREATE TABLE `devices` (
   CONSTRAINT `user_id_fkdv` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `devices`
---
-
-LOCK TABLES `devices` WRITE;
-/*!40000 ALTER TABLE `devices` DISABLE KEYS */;
-/*!40000 ALTER TABLE `devices` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `greenhouse`
@@ -90,17 +72,8 @@ CREATE TABLE `greenhouse` (
   UNIQUE KEY `greenhouse_id_UNIQUE` (`greenhouse_id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `user_id_fkgr` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `greenhouse`
---
-
-LOCK TABLES `greenhouse` WRITE;
-/*!40000 ALTER TABLE `greenhouse` DISABLE KEYS */;
-/*!40000 ALTER TABLE `greenhouse` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `historical_data`
@@ -123,17 +96,8 @@ CREATE TABLE `historical_data` (
   KEY `greenhouse_id` (`greenhouse_id`),
   CONSTRAINT `greenhouse_id_fkhd` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
   CONSTRAINT `user_id_fkhd` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `historical_data`
---
-
-LOCK TABLES `historical_data` WRITE;
-/*!40000 ALTER TABLE `historical_data` DISABLE KEYS */;
-/*!40000 ALTER TABLE `historical_data` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `plant_ideal`
@@ -146,30 +110,18 @@ CREATE TABLE `plant_ideal` (
   `plant_id` int(11) NOT NULL,
   `ph_level_low` decimal(5,2) DEFAULT NULL,
   `ec_level_low` decimal(5,2) DEFAULT NULL,
-  `water_level_low` decimal(5,2) DEFAULT NULL,
   `temp_low` decimal(5,2) DEFAULT NULL,
   `cycle_time` int(11) DEFAULT NULL,
   `ph_level_high` decimal(5,2) DEFAULT NULL,
   `ec_level_high` decimal(5,2) DEFAULT NULL,
-  `water_level_high` decimal(5,2) DEFAULT NULL,
   `temp_high` decimal(5,2) DEFAULT NULL,
   `name` varchar(45) NOT NULL,
   `light_time` int(11) DEFAULT NULL,
   PRIMARY KEY (`plant_id`),
   UNIQUE KEY `plant_id_UNIQUE` (`plant_id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `plant_ideal`
---
-
-LOCK TABLES `plant_ideal` WRITE;
-/*!40000 ALTER TABLE `plant_ideal` DISABLE KEYS */;
-INSERT INTO `plant_ideal` VALUES (0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'empty',NULL),(1,5.50,2.00,0.00,0.00,84,6.50,5.00,0.00,0.00,'tomato',10),(2,6.00,2.00,0.00,0.00,65,6.50,4.00,0.00,0.00,'greenbeans',12),(3,5.50,1.80,0.00,0.00,60,6.60,2.30,0.00,0.00,'spinach',10),(4,6.00,1.80,0.00,0.00,45,6.50,2.40,0.00,0.00,'turnip',12);
-/*!40000 ALTER TABLE `plant_ideal` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `sensor_grid`
@@ -191,17 +143,8 @@ CREATE TABLE `sensor_grid` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `greenhouse_id_fksg` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
   CONSTRAINT `user_id_fksg` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sensor_grid`
---
-
-LOCK TABLES `sensor_grid` WRITE;
-/*!40000 ALTER TABLE `sensor_grid` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sensor_grid` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `tiers`
@@ -217,7 +160,7 @@ CREATE TABLE `tiers` (
   `ec_level` decimal(5,2) DEFAULT '0.00',
   `water_level` decimal(5,2) DEFAULT '0.00',
   `cycle_time` date DEFAULT NULL,
-  `light_time` int(11) DEFAULT NULL,
+  `light_start` int(11) DEFAULT NULL,
   `num_plants` int(11) DEFAULT '0',
   `greenhouse_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -228,17 +171,8 @@ CREATE TABLE `tiers` (
   CONSTRAINT `greenhouse_id_fkt` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
   CONSTRAINT `plant_id_fkt` FOREIGN KEY (`plant_id`) REFERENCES `plant_ideal` (`plant_id`),
   CONSTRAINT `user_id_fkt` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tiers`
---
-
-LOCK TABLES `tiers` WRITE;
-/*!40000 ALTER TABLE `tiers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tiers` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `user`
@@ -255,17 +189,8 @@ CREATE TABLE `user` (
   UNIQUE KEY `user_id_UNIQUE` (`user_id`),
   UNIQUE KEY `email_UNIQUE` (`email`),
   UNIQUE KEY `password_hash_UNIQUE` (`password_hash`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -276,4 +201,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-16 19:06:19
+-- Dump completed on 2020-01-17 16:20:54

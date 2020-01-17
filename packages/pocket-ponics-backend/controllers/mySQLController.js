@@ -415,7 +415,7 @@ exports.getGreenhouseForUser = (user_id, greenhouse_id, callback) => {
 }
 
 exports.getPlantIdealData = (callback) => {
-    sqlController.execute('SELECT `cycle_time`, `light_time`, `ec_level_high`, `ec_level_low`, `name`, `ph_level_high`, `ph_level_low`, `plant_id`, `temp_high`, `temp_low`, `water_level_high`, `water_level_low` FROM `plant_ideal`', function(err, result) {
+    sqlController.execute('SELECT `cycle_time`, `light_time`, `ec_level_high`, `ec_level_low`, `name`, `ph_level_high`, `ph_level_low`, `plant_id`, `temp_high`, `temp_low` FROM `plant_ideal`', function(err, result) {
         if(!err)
         {
             callback(err, result)
@@ -432,7 +432,7 @@ exports.getPlantIdealData = (callback) => {
 }
 
 exports.getTiersAndIdeal = (user_id, greenhouse_id, callback) => {
-    sqlController.execute(`SELECT tiers.user_id, tiers.tier, tiers.greenhouse_id, tiers.plant_id, tiers.light_start, plant_ideal.water_level_high, plant_ideal.water_level_low, plant_ideal.ph_level_high, plant_ideal.ph_level_low, plant_ideal.ec_level_high, plant_ideal.ec_level_low, plant_ideal.light_time FROM pocketponics.tiers LEFT JOIN plant_ideal ON tiers.plant_id=plant_ideal.plant_id where greenhouse_id = ${greenhouse_id} and user_id = ${user_id}`, function(err, result) {
+    sqlController.execute(`SELECT tiers.user_id, tiers.tier, tiers.greenhouse_id, tiers.plant_id, tiers.light_start, plant_ideal.ph_level_high, plant_ideal.ph_level_low, plant_ideal.ec_level_high, plant_ideal.ec_level_low, plant_ideal.light_time FROM pocketponics.tiers LEFT JOIN plant_ideal ON tiers.plant_id=plant_ideal.plant_id where greenhouse_id = ${greenhouse_id} and user_id = ${user_id}`, function(err, result) {
         if(!err)
         {
             callback(err, result)
