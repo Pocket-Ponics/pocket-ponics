@@ -17,9 +17,6 @@ module.exports = function(app)
     app.route('/sensorgrid/backuplevel')
         .put(sensorgrid.updateBackupBatteryLevel)
 
-    app.route('/sensorgrid/adjustments')
-        .get(sensorgrid.getLightSchedule)
-
     app.route('/sensorgrid/adjustments/tierdata')
         .get(sensorgrid.getTiersAndIdealValues)
 }

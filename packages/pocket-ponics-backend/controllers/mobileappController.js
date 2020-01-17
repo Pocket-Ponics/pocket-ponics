@@ -239,7 +239,7 @@ exports.updateTier = (req, res) => {
     var plant_id = req.body.plant_id
     var cycle_time = req.body.cycle_time
     var num_plants = req.body.num_plants
-    var light_time = req.body.light_time
+    var light_start = req.body.light_start
 
     //Retrieve user_id for given auth token
     mySQL.getUserForToken(cred, function(err, rec) {
@@ -249,13 +249,13 @@ exports.updateTier = (req, res) => {
         }
         else if(rec != undefined)
         {    
-            if(plant_id == undefined || cycle_time == undefined || num_plants == undefined || light_time == undefined)
+            if(plant_id == undefined || cycle_time == undefined || num_plants == undefined || light_start == undefined)
             {
                 res.json({202: "Error: Missing data for update"})
             }
             else 
             {
-                mySQL.updateTierForGreenhouse(rec.user_id, greenhouse_id, tier, plant_id, cycle_time, num_plants, light_time, function(err, record) {
+                mySQL.updateTierForGreenhouse(rec.user_id, greenhouse_id, tier, plant_id, cycle_time, num_plants, light_start, function(err, record) {
                     if(!err)
                     {
                         res.json({200: "Updated Tier"})

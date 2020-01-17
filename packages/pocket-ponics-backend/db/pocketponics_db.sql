@@ -1,10 +1,10 @@
-CREATE DATABASE  IF NOT EXISTS `pocketponics` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE  IF NOT EXISTS `pocketponics` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `pocketponics`;
 -- MySQL dump 10.13  Distrib 8.0.18, for macos10.14 (x86_64)
 --
 -- Host: localhost    Database: pocketponics
 -- ------------------------------------------------------
--- Server version	8.0.18
+-- Server version	5.7.28-0ubuntu0.18.04.4
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -32,7 +32,7 @@ CREATE TABLE `active_sessions` (
   UNIQUE KEY `token_UNIQUE` (`token`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `user_id_fkas` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,6 @@ CREATE TABLE `active_sessions` (
 
 LOCK TABLES `active_sessions` WRITE;
 /*!40000 ALTER TABLE `active_sessions` DISABLE KEYS */;
-INSERT INTO `active_sessions` VALUES ('8RJOVrD7AMbpPbiuzEs6bFoD/cyngnDcR2RwKk56kHQ=','2020-01-13 21:53:29',15),('9MoqiSJlGHTcrWPBJ5aI2VvS+2bMv9D3VGJaJGAfrtg=','2020-01-13 21:57:03',8),('c169YFvH+TOQXTBO+/naJNJ2g+T7LSjdSje2yQTW0do=','2020-01-13 00:37:38',12),('g2PBIPP9iuNxE3MWu58HAOuyLcyB6fKpv7zNnI+y8vs=','2020-01-13 21:57:16',8),('KSWaPKBpQvgrbNjgoAn4jcEyf0OyVV/Bnc4VV8Jqz8M=','2020-01-15 21:47:52',10),('MniyKhZ1cto3DdWOx2zuqFyGED1LNmLF4yevmuY99dE=','2020-01-12 19:52:40',13),('mnovuafB32+BX8Kn/oyFLLT3H28mLsdEIcxuTxrHO1k=','2020-01-12 20:06:11',12),('t/wa7S8cCYvfg3At6O/dzRyfBUTVj6IDAsQ/MkFo/IM=','2020-01-13 21:52:00',15),('Vfs8Xrd0U80DErxO4aCNyyumpXnK/TeIG5b32JM4pYM=','2020-01-12 20:14:28',14),('viHIVoyKmdvh6Xn2gQ5bMjH55DWAtoWUJY1f+muUFFU=','2020-01-12 19:51:46',13),('vnHwVVkImjMmcUu/6O4ymBRW2BIq0SAxVk9zub19eLw=','2020-01-16 18:58:03',10);
 /*!40000 ALTER TABLE `active_sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -67,7 +66,6 @@ CREATE TABLE `devices` (
 
 LOCK TABLES `devices` WRITE;
 /*!40000 ALTER TABLE `devices` DISABLE KEYS */;
-INSERT INTO `devices` VALUES (8,'ExponentPushToken[g5paj4PLG4CBPLrBTCwEaz]');
 /*!40000 ALTER TABLE `devices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -92,7 +90,7 @@ CREATE TABLE `greenhouse` (
   UNIQUE KEY `greenhouse_id_UNIQUE` (`greenhouse_id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `user_id_fkgr` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,7 +99,6 @@ CREATE TABLE `greenhouse` (
 
 LOCK TABLES `greenhouse` WRITE;
 /*!40000 ALTER TABLE `greenhouse` DISABLE KEYS */;
-INSERT INTO `greenhouse` VALUES (2,'DateTest',0.00,0.00,0.00,'2020-01-26',0,0.00,7),(3,'CycleTimeTest',0.00,0.00,0.00,'2020-01-26',0,0.00,7),(4,'Name',0.00,0.00,0.00,'2020-01-27',0,0.00,15),(5,'herewbanana',0.00,0.00,0.00,'2020-01-15',0,0.00,8),(6,'Test Greenhouse',0.00,0.00,0.00,'2019-10-10',0,0.00,10);
 /*!40000 ALTER TABLE `greenhouse` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -126,7 +123,7 @@ CREATE TABLE `historical_data` (
   KEY `greenhouse_id` (`greenhouse_id`),
   CONSTRAINT `greenhouse_id_fkhd` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
   CONSTRAINT `user_id_fkhd` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -161,7 +158,7 @@ CREATE TABLE `plant_ideal` (
   PRIMARY KEY (`plant_id`),
   UNIQUE KEY `plant_id_UNIQUE` (`plant_id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -194,7 +191,7 @@ CREATE TABLE `sensor_grid` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `greenhouse_id_fksg` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
   CONSTRAINT `user_id_fksg` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -203,7 +200,6 @@ CREATE TABLE `sensor_grid` (
 
 LOCK TABLES `sensor_grid` WRITE;
 /*!40000 ALTER TABLE `sensor_grid` DISABLE KEYS */;
-INSERT INTO `sensor_grid` VALUES ('2123645825253182','$2b$10$2BfBqHXTSOFlc.PbMP4TX.5Oh64/EZ94I.ZIQE5KX2NSi0ihVpWsi',10,6),('428828','$2b$10$tYlOmk0FOCGdIXS0osb/SuFriItAZOczcsg8Cvz/lnd0OzzxQLD.6',15,4),('594517','$2b$10$LTb883kVMv/QlAx.dWFZI.UOeHVIt8Qtv.ivUTdgQvEYaYJNhJfiq',7,3),('650033','$2b$10$KzCDmIkOmkgWUQKfSoKwwuHQiYzYv8W.d/NbeeegNzZX6JxUcJTo2',7,2),('89898989879','$2b$10$DlL40aU9d6ZOXrW2n.H0COSMCvl/styWSxXCf/HoSzqZKw2ZENRLO',8,5);
 /*!40000 ALTER TABLE `sensor_grid` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -232,7 +228,7 @@ CREATE TABLE `tiers` (
   CONSTRAINT `greenhouse_id_fkt` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
   CONSTRAINT `plant_id_fkt` FOREIGN KEY (`plant_id`) REFERENCES `plant_ideal` (`plant_id`),
   CONSTRAINT `user_id_fkt` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -241,7 +237,6 @@ CREATE TABLE `tiers` (
 
 LOCK TABLES `tiers` WRITE;
 /*!40000 ALTER TABLE `tiers` DISABLE KEYS */;
-INSERT INTO `tiers` VALUES (1,1,0.00,0.00,0.00,'2020-01-28',10,1,2,7),(1,1,0.00,0.00,0.00,'2020-04-05',10,1,3,7),(1,1,0.00,0.00,0.00,'2020-04-06',10,1,4,15),(1,NULL,0.00,0.00,0.00,'2020-04-18',10,0,5,8),(1,NULL,0.00,0.00,0.00,NULL,10,0,6,10),(2,NULL,0.00,0.00,0.00,'2020-03-10',10,0,2,7),(2,2,0.00,0.00,0.00,'2020-03-17',10,1,3,7),(2,3,0.00,0.00,0.00,'2020-03-13',10,18,4,15),(2,NULL,0.00,0.00,0.00,'2020-04-18',10,0,5,8),(2,1,0.00,0.00,0.00,'2020-10-08',6,25,6,10),(3,NULL,0.00,0.00,0.00,'2020-03-10',10,0,2,7),(3,3,0.00,0.00,0.00,'2020-03-12',10,18,3,7),(3,4,0.00,0.00,0.00,'2020-02-27',10,18,4,15),(3,NULL,0.00,0.00,0.00,'2020-04-18',10,0,5,8),(3,NULL,0.00,0.00,0.00,NULL,10,0,6,10),(4,NULL,0.00,0.00,0.00,'2020-03-10',10,0,2,7),(4,4,0.00,0.00,0.00,'2020-02-26',10,18,3,7),(4,2,0.00,0.00,0.00,'2020-03-18',10,8,4,15),(4,NULL,0.00,0.00,0.00,'2020-01-15',10,0,5,8),(4,NULL,0.00,0.00,0.00,NULL,10,0,6,10);
 /*!40000 ALTER TABLE `tiers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -260,7 +255,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `user_id_UNIQUE` (`user_id`),
   UNIQUE KEY `email_UNIQUE` (`email`),
   UNIQUE KEY `password_hash_UNIQUE` (`password_hash`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -269,7 +264,6 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (6,'test1@gmail.com','$2b$10$sFxtWkUwfletCWSIT28QWe6/.5YL.XvbrZYL9yJVVyoUY8SR5Dd1e'),(7,'test3@gmail.com','$2b$10$RwyicNdHHhvfOfv3edzbh.vsDHWhHcMIAB.dQhuBnJPyEd8UTQC/e'),(8,'test4@gmail.com','$2b$10$8AmRyi12JCsSeBiT521kEOkcChvRfeWSvq2N8GGwNxymi4Rw39Ima'),(10,'demouser@gmail.com','$2b$10$8Ihq9ruTxbm5WCH1qKdf5OPwSD6GuEFdKIKCetH9VGG77sGSbf5w2'),(11,'undefined','$2b$10$4NdivfssgseKM99MCMxIv.UQe32XtNoQTlty546Os1m9cWVygQnl6'),(12,'demouser','$2b$10$t8X3vlSjEEKpt1CBJrk4A.mWx6gAtJFcZD4Isqw28YtmXrt3b6N66'),(13,'banana','$2b$10$pD/kxYoHZRram54wTWUSrOhdQKXcFU7Ov087AVyeUv2aXosSKc63.'),(14,'test5@gmail.com','$2b$10$2/UQgrax426gNVRCVWM0X.aUIeyn8ZfcTYEs4OsMPH8lrtjFphQ7.'),(15,'banana@gmail.com','$2b$10$0kfsnaWjqMzqiaKhb7eZxeoe/10qw0W6ACO/jZeaNSYw9OcEuMUzS');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -282,4 +276,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-16 18:56:40
+-- Dump completed on 2020-01-16 19:06:19
