@@ -23,10 +23,12 @@ exports.getToken = (req, res) => {
     mySQL.getHashForUser(email, function(err, record) {
         if(err)
         {
+            res.status(403)
             res.json({403: "Authentication Error"})
         }
         else if(record == undefined)
         {
+            res.status(402)
             res.json({402: "User Not Found"})
         } 
         else 
@@ -42,15 +44,18 @@ exports.getToken = (req, res) => {
                     mySQL.insertTokenForUser(token, record.user_id, mySQL.getExpirationDateString(), (err, result) => {
                         if(!err)
                         {
+                            res.status(200)
                             res.json({token: token})
                         } 
                         else 
                         {
+                            res.status(403)
                             res.json({403: "Error generating token"})
                         }
                     })
                 }
                 else {
+                    res.status(401)
                     res.json({401: "Unauthorized"})
                 }        
             })
@@ -64,6 +69,7 @@ exports.resetPassword = (req, res) => {
     
     //NOTE: REVOKE TOKENS FOR USER_ID!
 
+    res.status(200)
     res.json({200: "RESET PASSWORD"})
 };
 
@@ -80,6 +86,7 @@ exports.createUser = (req, res) => {
         mySQL.getHashForUser(email, function(err, record) {
             if(err)
             {
+                res.status(403)
                 res.json({403: "Authentication Error"})
             }
             else if(record == undefined)
@@ -91,24 +98,26 @@ exports.createUser = (req, res) => {
                 mySQL.createUser(email, password_hash, (err, result) => {
                     if(!err)
                     {
+                        res.status(200)
                         res.json({200: "User Created"})
-                        console.log("Insert operation successful")
                     } 
                     else 
                     {
+                        res.status(201)
                         res.json({201: "Unable to create user"})
-                        console.log("Unable to insert user in db")
                     }
                 })
             }
             else 
             {
+                res.status(202)
                 res.json({202: "User Already Exists"})
             }
         })
     }
     else
     {
+        res.status(203)
         res.json({203: "Invalid Username/Password Provided"})
     }
 };
@@ -126,10 +135,12 @@ exports.changePassword = (req, res) => {
         mySQL.getHashForUser(email, function(err, record) {
             if(err)
             {
+                res.status(403)
                 res.json({403:"Authentication Error"})
             }
             else if(record == undefined)
             {
+                res.status(402)
                 res.json({402: "User Not Found"})
             } 
             else 
@@ -149,25 +160,26 @@ exports.changePassword = (req, res) => {
                                 mySQL.revokeTokensAndDeviceKeys(record.user_id, function(err, result) {
                                     if(!err)
                                     {
-                                        console.log("Tokens and device keys revoked successfully")
+                                        res.status(200)
                                         res.json({200: "User Password Changed"})
                                     }
                                     else
                                     {
+                                        res.status(201)
                                         res.json({201: "Unable to change user password"})
-                                        console.log("Unable to delete record in db")
                                     }
                                 })
                             } 
                             else 
                             {
+                                res.status(201)
                                 res.json({201: "Unable to change user password"})
-                                console.log("Unable to update record in db")
                             }
                         })
                         
                     }
                     else {
+                        res.status(401)
                         res.json({401: "Unauthorized"})
                     }        
                 })
@@ -176,8 +188,7 @@ exports.changePassword = (req, res) => {
     }
     else
     {
+        res.status(202)
         res.json({202: "Invalid New Password Provided"})
     }
-
-    
 };

@@ -46,10 +46,12 @@ exports.postReadingsGreenhouse = (req, res) => {
     mySQL.getHashForSensorGrid(serial_no, function(err, record) {
         if(err)
         {
+            res.status(403)
             res.json({403: "Authentication Error"})
         }
         else if(record == undefined)
         {
+            res.status(402)
             res.json({402: "Sensor Grid Not Found"})
         } 
         else 
@@ -62,14 +64,17 @@ exports.postReadingsGreenhouse = (req, res) => {
                     mySQL.updateReadingsForGreenhouse(record.user_id, record.greenhouse_id, water_level, nutrient_level, backup_battery_level, power_supply, seedling_time, light_level, tier1, tier2, tier3, tier4, function(err, record) {
                         if(!err)
                         {
+                            res.status(200)
                             res.json({200: "Sensor Readings Recorded"})
                         }
                         else {
+                            res.status(201)
                             res.json({201: "Error recording greenhouse readings"})
                         }
                     })
                 }
                 else {
+                    res.status(401)
                     res.json({401: "Unauthorized"})
                 }        
             })
@@ -100,10 +105,12 @@ exports.postReadingsTier = (req, res) => {
     mySQL.getHashForSensorGrid(serial_no, function(err, record) {
         if(err)
         {
+            res.status(403)
             res.json({403: "Authentication Error"})
         }
         else if(record == undefined)
         {
+            res.status(402)
             res.json({402: "Sensor Grid Not Found"})
         } 
         else 
@@ -116,14 +123,17 @@ exports.postReadingsTier = (req, res) => {
                     mySQL.updateReadingsForGreenhouseTier(record.user_id, record.greenhouse_id, tier, water_level, ph_level, ec_level, function(err, record) {
                         if(!err)
                         {
+                            res.status(200)
                             res.json({200: "Sensor Readings Recorded"})
                         }
                         else {
+                            res.status(201)
                             res.json({201: "Error recording greenhouse tier readings"})
                         }
                     })
                 }
                 else {
+                    res.status(401)
                     res.json({401: "Unauthorized"})
                 }        
             })
@@ -167,10 +177,12 @@ exports.postReadingsSingle = (req, res) => {
     mySQL.getHashForSensorGrid(serial_no, function(err, record) {
         if(err)
         {
+            res.status(403)
             res.json({403: "Authentication Error"})
         }
         else if(record == undefined)
         {
+            res.status(402)
             res.json({402: "Sensor Grid Not Found"})
         } 
         else 
@@ -183,14 +195,17 @@ exports.postReadingsSingle = (req, res) => {
                     mySQL.updateReadingsForSensorType(record.user_id, record.greenhouse_id, tier, sensor_name, reading, function(err, record) {
                         if(!err)
                         {
+                            res.status(200)
                             res.json({200: "Sensor Reading Recorded"})
                         }
                         else {
+                            res.status(201)
                             res.json({201: "Error recording sensor reading"})
                         }
                     })
                 }
                 else {
+                    res.status(401)
                     res.json({401: "Unauthorized"})
                 }        
             })
@@ -216,10 +231,12 @@ exports.updatePowerSource = (req, res) => {
     mySQL.getHashForSensorGrid(serial_no, function(err, record) {
         if(err)
         {
+            res.status(403)
             res.json({403: "Authentication Error"})
         }
         else if(record == undefined)
         {
+            res.status(402)
             res.json({402: "Sensor Grid Not Found"})
         } 
         else 
@@ -232,14 +249,17 @@ exports.updatePowerSource = (req, res) => {
                     mySQL.updatePowerSourceForGreenhouse(record.user_id, record.greenhouse_id, power_source, function(err, record) {
                         if(!err)
                         {
+                            res.status(200)
                             res.json({200: "Power Source Reading Recorded"})
                         }
                         else {
+                            res.status(201)
                             res.json({201: "Error recording power source"})
                         }
                     })
                 }
                 else {
+                    res.status(401)
                     res.json({401: "Unauthorized"})
                 }        
             })
@@ -265,10 +285,12 @@ exports.updateBackupBatteryLevel = (req, res) => {
     mySQL.getHashForSensorGrid(serial_no, function(err, record) {
         if(err)
         {
+            res.status(403)
             res.json({403: "Authentication Error"})
         }
         else if(record == undefined)
         {
+            res.status(402)
             res.json({402: "Sensor Grid Not Found"})
         } 
         else 
@@ -281,14 +303,17 @@ exports.updateBackupBatteryLevel = (req, res) => {
                     mySQL.updateBatteryForGreenhouse(record.user_id, record.greenhouse_id, battery, function(err, record) {
                         if(!err)
                         {
+                            res.status(200)
                             res.json({200: "Battery Level Reading Recorded"})
                         }
                         else {
+                            res.status(201)
                             res.json({201: "Error recording battery level"})
                         }
                     })
                 }
                 else {
+                    res.status(401)
                     res.json({401: "Unauthorized"})
                 }        
             })
@@ -311,10 +336,12 @@ exports.getTiersAndIdealValues = (req, res) => {
     mySQL.getHashForSensorGrid(serial_no, function(err, record) {
         if(err)
         {
+            res.status(403)
             res.json({403: "Authentication Error"})
         }
         else if(record == undefined)
         {
+            res.status(402)
             res.json({402: "Sensor Grid Not Found"})
         } 
         else 
@@ -330,11 +357,13 @@ exports.getTiersAndIdealValues = (req, res) => {
                             res.json({tiers: record.rows})
                         }
                         else {
+                            res.status(201)
                             res.json({201: "Error retrieving tier data"})
                         }
                     })
                 }
                 else {
+                    res.status(401)
                     res.json({401: "Unauthorized"})
                 }        
             })
