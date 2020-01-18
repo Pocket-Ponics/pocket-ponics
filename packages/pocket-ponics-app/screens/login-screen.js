@@ -8,12 +8,14 @@ import {
 	KeyboardAvoidingView,
 	Alert,
 	Platform,
-	AsyncStorage
+	AsyncStorage,
+	ActivityIndicator
 } from 'react-native'
 
 import * as Permissions from 'expo-permissions'
 
 import APIUtil from '../util/api-util'
+import AuthUtil from '../util/auth-util'
 import { TEXT_COLOR } from '../util/constants'
 
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -27,7 +29,8 @@ class LoginScreen extends React.Component {
 
 		this.state = {
 			username: '',
-			password: ''
+			password: '',
+			loading: false
 		}
 
 		this.onChangeUsername = this.onChangeUsername.bind(this)
@@ -49,65 +52,9 @@ class LoginScreen extends React.Component {
 			return
 		}
 
-		let token
-		APIUtil.getAuthToken(this.state.username, this.state.password)
-			.then(response => {
-				if(!response.token) {
-					Alert.alert('Invalid username or password')
-					return Promise.reject('Invalid username or password')
-				}
+		this.setState({ loading: true })
 
-				token = response.token
-				console.log('Token: ', token)
-				return Promise.all([
-					AsyncStorage.setItem('username', this.state.username),
-					AsyncStorage.setItem('password', this.state.password)
-				])
-			})
-			.then(() => Permissions.getAsync( Permissions.NOTIFICATIONS ))
-			.then(response => {
-
-				// Only ask if permissions have not already been determined, because
-				// iOS won't necessarily prompt the user a second time.
-				if (response.status !== 'granted') {
-					// Android remote notification permissions are granted during the app
-					// install, so this will only ask on iOS
-					return Permissions.askAsync(Permissions.NOTIFICATIONS)
-				}
-
-				return response
-			})
-			.then(response => {
-				if(response.status === 'granted') {
-					return APIUtil.setDeviceKey(token)
-				}
-			})
-			.then(response => {
-				console.log('key time', response)
-				return APIUtil.getGreenhouses(token)
-			})
-			.then(response => {
-				const greenhouses = response.greenhouses
-
-				return Promise.all(greenhouses.map(
-					greenhouse => APIUtil.getGreenhouse(token, greenhouse)
-				))
-			})
-			.then(responses => {
-				this.props.navigation.navigate('Greenhouse', { retrievedData: { 
-					token, 
-					greenhouses: [
-						...responses, 
-						{
-							type: 'add-page',
-							name: 'Setup',
-						}
-					] 
-				}})
-			})
-			.catch(error => {
-				console.log('error', error)
-			})
+		return AuthUtil.login(this.state.username, this.state.password, () => this.props.navigation.navigate('Greenhouse'))
 	}
 
 	render() {
@@ -147,6 +94,7 @@ class LoginScreen extends React.Component {
 					<TouchableOpacity onPress={() => this.props.navigation.navigate('SignUp')}>
 						<Text style={styles.signUp}>Sign Up</Text>
 					</TouchableOpacity>
+					<ActivityIndicator color={TEXT_COLOR} animating={this.state.loading}/>
 				</View>
 			</KeyboardAvoidingView>
 		)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Image } from 'react-native'
+import { View, Image, ActivityIndicator } from 'react-native'
 import AuthUtil from '../util/auth-util'
 
 import styles from './auth-loading-screen-styles'
@@ -25,6 +25,7 @@ class AuthLoadingScreen extends React.Component {
 			<View style={styles.backgroundContainer}>
 				<View style={styles.loginContainer}>
 					<Image source={iconImage} style={styles.icon}/>
+					<ActivityIndicator color="#FFFFFF" />
 				</View>
 			</View>
 		)

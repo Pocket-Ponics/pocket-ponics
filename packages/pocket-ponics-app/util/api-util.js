@@ -17,33 +17,50 @@ const APIUtil = {
 		}
 		return url.join('&')
 	},
+	timeoutFetch(ms, promise) {
+		return new Promise((resolve, reject) => {
+			const timeoutId = setTimeout(() => {
+				reject(new Error('API timeout'))
+			}, ms)
+			promise.then(
+				(res) => {
+					clearTimeout(timeoutId)
+					resolve(res)
+				},
+				(err) => {
+					clearTimeout(timeoutId)
+					reject(err)
+				}
+			)
+		})
+	},
 	getAuthToken(username, password) {
-		return fetch(`http://${host}:${port}/auth/get_token`, {
+		return APIUtil.timeoutFetch(5000, fetch(`http://${host}:${port}/auth/get_token`, {
 			method: 'GET',
 			headers: new Headers({
 				'Authorization': 'Basic ' + base64.encode(`${username}:${password}`),
 				'Content-Type': 'application/x-www-form-urlencoded'
 			}),
 			redirect: 'follow'
-		})
+		}))
 			.then(response => response.text())
 			.then(result => JSON.parse(result))
 	},
 	createUser(email, password) {
 		const encode = APIUtil.urlEncode({ email, password })
-		return fetch(`http://${host}:${port}/auth/create_user`, {
+		return APIUtil.timeoutFetch(5000, fetch(`http://${host}:${port}/auth/create_user`, {
 			method: 'POST',
 			headers: new Headers({
 				'Content-Type': 'application/x-www-form-urlencoded'
 			}),
 			body: encode,
 			redirect: 'follow'
-		})
+		}))
 			.then(response => response.text())
-			.then(result => JSON.parse(result))
+			.then(result => {console.log(result); return JSON.parse(result)})
 	},
 	get(endpoint, token, body) {
-		return fetch(endpoint, {
+		return APIUtil.timeoutFetch(5000, fetch(endpoint, {
 			method: 'GET',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
@@ -51,12 +68,12 @@ const APIUtil = {
 			}),
 			body: APIUtil.urlEncode(body),
 			redirect: 'follow'
-		})
+		}))
 			.then(response => response.text())
 			.then(result => JSON.parse(result))
 	},
 	post(endpoint, token, body) {
-		return fetch(endpoint, {
+		return APIUtil.timeoutFetch(5000, fetch(endpoint, {
 			method: 'POST',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
@@ -64,12 +81,12 @@ const APIUtil = {
 			}),
 			body: APIUtil.urlEncode(body),
 			redirect: 'follow'
-		})
+		}))
 			.then(response => response.text())
 			.then(result => JSON.parse(result))
 	},
 	put(endpoint, token, body) {
-		return fetch(endpoint, {
+		return APIUtil.timeoutFetch(5000, fetch(endpoint, {
 			method: 'PUT',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
@@ -77,7 +94,7 @@ const APIUtil = {
 			}),
 			body: APIUtil.urlEncode(body),
 			redirect: 'follow'
-		})
+		}))
 			.then(response => response.text())
 			.then(result => JSON.parse(result))
 	},

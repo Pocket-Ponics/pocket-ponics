@@ -8,9 +8,12 @@ import {
 	KeyboardAvoidingView,
 	Alert,
 	Platform,
-	AsyncStorage
+	AsyncStorage,
+	ActivityIndicator
 } from 'react-native'
+
 import APIUtil from '../util/api-util'
+import AuthUtil from '../util/auth-util'
 import { TEXT_COLOR } from '../util/constants'
 
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -26,7 +29,8 @@ class SignUpScreen extends React.Component {
 		this.state = {
 			username: '',
 			password: '',
-			verifyPassword: ''
+			verifyPassword: '',
+			loading: false
 		}
 
 		this.onChangeUsername = this.onChangeUsername.bind(this)
@@ -63,7 +67,8 @@ class SignUpScreen extends React.Component {
 			return
 		}
 
-		console.log(this.state.username, this.state.password)
+		this.setState({ loading: true })
+
 		APIUtil.createUser(this.state.username, this.state.password)
 			.then(response => {
 				console.log(response)
@@ -82,22 +87,12 @@ class SignUpScreen extends React.Component {
 					AsyncStorage.setItem('password', this.state.password)
 				])
 			})
-			.then(() => APIUtil.getAuthToken(this.state.username, this.state.password))
-			.then(response => {
-				console.log('Token: ', response.token)
-
-				return this.props.navigation.navigate('Greenhouse', { retrievedData: { 
-					token: response.token, 
-					greenhouses: [
-						{
-							type: 'add-page',
-							name: 'Setup',
-						}
-					] 
-				}})
-			})
+			.then(() => AuthUtil.login(this.state.username, this.state.password, () => this.props.navigation.navigate('Greenhouse')))
 			.catch(error => {
 				console.log('error', error)
+				// TODO - remove after the backend is pushed to AWS
+				const successFn = () => this.props.navigation.navigate('Greenhouse')
+				return AuthUtil.runOfflineTestingCode(this.state.username, this.state.password, successFn)
 			})
 	}
 
@@ -156,6 +151,7 @@ class SignUpScreen extends React.Component {
 					<TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
 						<Text style={styles.signUp}>Log In</Text>
 					</TouchableOpacity>
+					<ActivityIndicator color={TEXT_COLOR} animating={this.state.loading}/>
 				</View>
 			</KeyboardAvoidingView>
 		)

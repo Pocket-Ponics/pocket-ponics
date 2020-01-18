@@ -68,6 +68,8 @@ class StartSeedlingsScreen extends React.Component {
 			})
 			.catch(error => {
 				console.log('error', error)
+				// TODO - remove after the backend is pushed to AWS
+				return this.props.navigation.navigate('Auth')
 			})
 	}
 
