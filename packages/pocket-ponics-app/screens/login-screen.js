@@ -8,13 +8,9 @@ import {
 	KeyboardAvoidingView,
 	Alert,
 	Platform,
-	AsyncStorage,
 	ActivityIndicator
 } from 'react-native'
 
-import * as Permissions from 'expo-permissions'
-
-import APIUtil from '../util/api-util'
 import AuthUtil from '../util/auth-util'
 import { TEXT_COLOR } from '../util/constants'
 
