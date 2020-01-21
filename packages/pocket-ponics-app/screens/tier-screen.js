@@ -1,4 +1,5 @@
 import React from 'react';
+import { StackActions, NavigationActions } from 'react-navigation';
 import { 
 	StyleSheet, 
 	Text, 
@@ -16,6 +17,14 @@ const turnipImage = require('../assets/turnip.png')
 
 const { width: WIDTH } = Dimensions.get('window')
 
+	class TierScreen extends React.Component 
+	{
+		static navigationOptions = 
+		{
+			title: 'Setup',
+		}
+	}
+
 export default class Example extends React.Component {
 	getImage(name) {
 		switch(name) {
@@ -30,8 +39,10 @@ export default class Example extends React.Component {
 		}
 	}
 
-	getReadableName(name) {
-		switch(name) {
+	getReadableName(name) 
+	{
+		switch(name) 
+		{
 			case 'tomato':
 				return 'Tomatoes'
 			case 'greenbeans':
@@ -75,6 +86,14 @@ export default class Example extends React.Component {
 		return "Adjusting"
 	}
 
+	harvestinstruction() {
+		const resetAction = StackActions.reset({
+			index: 0,
+			actions: [NavigationActions.navigate({ routeName: 'HarvestInstruction' })],
+		});
+		this.props.navigation.dispatch(resetAction);
+	}
+
 	render() {
 		const plant = this.props.navigation.getParam('plant')
 		return (
@@ -105,8 +124,8 @@ export default class Example extends React.Component {
 						</Text>
 					</View>
 				</View>
-				<TouchableOpacity>
-					<Text style={styles.button}>Harvest {this.getReadableName(plant.name)}</Text>
+				<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('HarvestInstruction')}>
+					<Text style={styles.buttonText}>Harvest {this.getReadableName(plant.name)}</Text>
 				</TouchableOpacity>
 			</View>
 		)

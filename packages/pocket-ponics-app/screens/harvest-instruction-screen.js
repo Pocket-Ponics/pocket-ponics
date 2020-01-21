@@ -43,8 +43,16 @@ export default class Example extends React.Component {
 		}
 	}
 
+	render() {
+		const plant = this.props.navigation.getParam('plant')
+		return (
+			<View style={styles.backgroundContainer}>
+			
+			</View>
+		)
+	}	
 
-
+}
 
 const styles = StyleSheet.create({
 	backgroundContainer: {
@@ -97,3 +105,4 @@ const styles = StyleSheet.create({
 		marginTop: 30
 	}
 })
+

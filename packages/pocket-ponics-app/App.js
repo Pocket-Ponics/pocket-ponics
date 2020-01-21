@@ -15,14 +15,15 @@ import StartSeedlingsScreen from './screens/start-seedlings-screen'
 import ProfileScreen from './screens/profile-screen'
 import AuthLoadingScreen from './screens/auth-loading-screen'
 import LoginScreen from './screens/login-screen'
+import HarvestInstructionScreen from './screens/harvest-instruction-screen'
 
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
-const AuthStack = createSwitchNavigator({ 
-	AuthLoading: { screen: AuthLoadingScreen },
-	Login: { screen: LoginScreen } 
-})
+ const AuthStack = createSwitchNavigator({ 
+ 	AuthLoading: { screen: AuthLoadingScreen },
+ 	Login: { screen: LoginScreen } 
+ })
 
 const AppStack = createStackNavigator({
 	Greenhouse: { screen: GreenhouseScreen },
@@ -37,6 +38,7 @@ const AppStack = createStackNavigator({
 	SoakWool: { screen: SoakWoolScreen },
 	StartSeedlings: { screen: StartSeedlingsScreen },
 	Profile: { screen: ProfileScreen },
+	HarvestInstruction: { screen: HarvestInstructionScreen },
 },{
 	defaultNavigationOptions: {
 		headerStyle: {
@@ -52,10 +54,10 @@ const AppStack = createStackNavigator({
 const App = createAppContainer(createSwitchNavigator(
 	{
 		App: AppStack,
-		Auth: AuthStack,
+		//Auth: AuthStack,
 	},
 	{
-		initialRouteName: 'Auth',
+		//initialRouteName: 'Auth',
 	}
  ))
 
