@@ -9,4 +9,6 @@ export default (app) => {
     //Authentication Endpoints
     require('./auth')(app)
 
+    //Admin Portal Endpoints
+    require('./adminportal')(app)
 };

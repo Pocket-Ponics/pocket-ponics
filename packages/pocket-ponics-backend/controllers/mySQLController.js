@@ -67,6 +67,16 @@ exports.deleteDeviceKeyForUser = (user_id, deviceKey, callback) => {
     })
 }
 
+exports.getAllPlantIdeals = (callback) => {
+    sqlController.execute("select * from plant_ideal", function(err, result) {
+        if(err)
+        {
+            console.log(result)
+        }
+        callback(err, result)
+    })
+}
+
 exports.createGreenhouseForUser = (name, seedling_time, user_id, callback) => {
     sqlController.execute(`insert into greenhouse (name, seedling_time, user_id) values ("${name}", "${seedling_time}", ${user_id});`, function(err, result) {
         if(!err)
@@ -137,6 +147,59 @@ exports.getGreenhouseHistoricalData = (user_id, greenhouse_id, lower_limit, uppe
 
 exports.getUserForToken = (token, callback) => {
     sqlController.execute(`select user_id from active_sessions where expiration_date > NOW() and token = "${token}";`, function(err, result) {
+        if(result.rows.length == 1)
+        {
+            callback(err, result.rows[0])
+        }
+        else if(result.rows.length > 1)
+        {
+            callback(true, undefined)
+        }
+        else
+        {
+            callback(err, undefined)
+        }
+    })
+}
+
+exports.createPlantIdeal = (ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, callback) => {
+    sqlController.execute(`insert into plant_ideal (ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time) values (${ph_level_low}, ${ec_level_low}, ${temp_low}, ${cycle_time}, ${ph_level_high}, ${ec_level_high}, ${temp_high}, "${name}", ${light_time});`, function(err, result) {
+        if(!err)
+        {
+            callback(err, result.rows.insertId)
+        } 
+        else {
+            console.log(result)
+            callback(err, result)
+        }
+    })
+}
+
+exports.updatePlantIdeal = (plant_id, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, callback) => {
+    sqlController.execute(`UPDATE plant_ideal SET ph_level_low = ${ph_level_low}, ec_level_low = ${ec_level_low}, temp_low = ${temp_low}, cycle_time = ${cycle_time}, ph_level_high = ${ph_level_high}, ec_level_high = ${ec_level_high}, temp_high = ${temp_high}, name = "${name}", light_time = ${light_time} where plant_id = ${plant_id}`, function(err, result) {        
+        if(err || result.rows.affectedRows == 1)
+        {
+            callback(err, result)
+        }
+        else
+        {
+            callback(true, result)
+        }
+    })
+}
+
+exports.deletePlantIdeal = (plant_id, callback) => {
+    sqlController.execute(`DELETE FROM plant_ideal WHERE (plant_id = ${plant_id})`, function(err, result) {
+        if(err)
+        {
+            console.log(result)
+        }
+        callback(err, result)
+    })
+}
+
+exports.getRoleForUser = (user_id, callback) => {
+    sqlController.execute(`select admin from user where user_id = ${user_id}`, function(err, result) {
         if(result.rows.length == 1)
         {
             callback(err, result.rows[0])
