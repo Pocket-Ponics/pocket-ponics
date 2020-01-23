@@ -1,5 +1,6 @@
 import React from 'react';
 import { StackActions, NavigationActions } from 'react-navigation';
+
 import { 
 	StyleSheet, 
 	Text, 
@@ -105,9 +106,11 @@ export default class Example extends React.Component {
 						<Text style={styles.value}>
 							<Text style={styles.valueName}>pH:</Text> {plant.pH}
 						</Text>
+
 						<Text style={styles.value}>
 							<Text style={styles.valueName}>Electrical Conductivity:</Text> {plant.ec}
 						</Text>
+						
 						<Text style={styles.value}>
 							<Text style={styles.valueName}>Estimated Harvest:</Text> 11/10
 						</Text>
@@ -124,7 +127,7 @@ export default class Example extends React.Component {
 						</Text>
 					</View>
 				</View>
-				<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('HarvestInstruction')}>
+				<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('HarvestInstruction', {name: this.getReadableName(plant.name), })}>
 					<Text style={styles.buttonText}>Harvest {this.getReadableName(plant.name)}</Text>
 				</TouchableOpacity>
 			</View>

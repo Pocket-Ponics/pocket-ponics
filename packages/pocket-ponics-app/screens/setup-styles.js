@@ -1,3 +1,7 @@
+
+
+
+
 import { StyleSheet, Text, View } from 'react-native';
 
 // Contrast note: darkest brown, with darker green and lightest green meets WCAG standards
