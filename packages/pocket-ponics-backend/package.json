@@ -8,7 +8,8 @@
     "release": "npm run clean && npm run build && npm run serve",
     "clean": "rm -rf dist && mkdir dist",
     "build": "babel . -s -D -d dist --presets env --ignore node_modules",
-    "serve": "node dist/server.js"
+    "serve": "node dist/server.js",
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -29,6 +30,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "jest": "^24.9.0",
     "nodemon": "^1.19.3"
   }
 }
