@@ -4,6 +4,9 @@ import { Notifications } from 'expo'
 const host = '10.171.204.187'
 const port = '8080'
 
+const greenhouse = '169.254.146.181'
+const greenPort = '80'
+
 const APIUtil = {
 	processTextResults(res) {
 		return Promise.resolve(res.text())
@@ -68,6 +71,31 @@ const APIUtil = {
 			}),
 			body: APIUtil.urlEncode(body),
 			redirect: 'follow'
+		}))
+			.then(response => response.text())
+			.then(result => JSON.parse(result))
+	},
+	getGreenhouseRegistration() {
+		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/registration/`, {
+			method: 'GET',
+		}))
+			.then(response => response.text())
+			.then(result => JSON.parse(result))
+	},
+	getGreenhouseWifis() {
+		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/wifi/`, {
+			method: 'GET',
+		}))
+			.then(response => response.text())
+			.then(result => JSON.parse(result))
+	},
+	sendWifiData(body) {
+		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/wifi/login`, {
+			method: 'POST',
+			headers: new Headers({
+				'Content-Type': 'application/json'
+			}),
+			body: JSON.stringify(body)
 		}))
 			.then(response => response.text())
 			.then(result => JSON.parse(result))
