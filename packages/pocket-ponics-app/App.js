@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, Modal, TouchableOpacity, Button } from 'react-native'
+import { Text, View, Modal, TouchableOpacity } from 'react-native'
 
 import styles from './app-styles'
 

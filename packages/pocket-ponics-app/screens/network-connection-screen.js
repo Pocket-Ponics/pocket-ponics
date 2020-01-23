@@ -1,7 +1,5 @@
 import React from 'react'
 import { Text,View, Image, TouchableOpacity, AsyncStorage } from 'react-native'
-import { BarCodeScanner } from 'expo-barcode-scanner'
-import * as Permissions from 'expo-permissions'
 import { StackActions, NavigationActions } from 'react-navigation'
 
 import APIUtil from '../util/api-util'
