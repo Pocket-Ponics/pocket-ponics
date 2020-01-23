@@ -39,7 +39,6 @@ exports.postReadingsGreenhouse = (req, res) => {
     
     var water_level = req.body.water_level
     var nutrient_level = req.body.nutrient_level
-    var seedling_time = req.body.seedling_time
     var light_level = req.body.light_level
 
     //Retrieve password hash from database for given serial number
@@ -61,7 +60,7 @@ exports.postReadingsGreenhouse = (req, res) => {
                 if(result)
                 {
                     //Update greenhouse record and tiers record
-                    mySQL.updateReadingsForGreenhouse(record.user_id, record.greenhouse_id, water_level, nutrient_level, backup_battery_level, power_supply, seedling_time, light_level, tier1, tier2, tier3, tier4, function(err, record) {
+                    mySQL.updateReadingsForGreenhouse(record.user_id, record.greenhouse_id, water_level, nutrient_level, backup_battery_level, power_supply, light_level, tier1, tier2, tier3, tier4, function(err, record) {
                         if(!err)
                         {
                             res.status(200)

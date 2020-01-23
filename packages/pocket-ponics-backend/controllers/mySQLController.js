@@ -178,9 +178,9 @@ exports.updateGreenhouseForUser = (user_id, greenhouse_id, name, seedling_time, 
     })
 }
 
-exports.updateReadingsForGreenhouse = (user_id, greenhouse_id, water_level, nutrient_level, battery, power_source, seedling_time, light_level, tier1, tier2, tier3, tier4, callback) => {
+exports.updateReadingsForGreenhouse = (user_id, greenhouse_id, water_level, nutrient_level, battery, power_source, light_level, tier1, tier2, tier3, tier4, callback) => {
 
-    var greenhouseUpdate = `UPDATE greenhouse SET water_level = ${water_level}, nutrient_level = ${nutrient_level}, battery = ${battery}, power_source = ${power_source}, seedling_time = ${seedling_time}, light_level = ${light_level} WHERE (user_id = ${user_id} and greenhouse_id = ${greenhouse_id});`
+    var greenhouseUpdate = `UPDATE greenhouse SET water_level = ${water_level}, nutrient_level = ${nutrient_level}, battery = ${battery}, power_source = ${power_source}, light_level = ${light_level} WHERE (user_id = ${user_id} and greenhouse_id = ${greenhouse_id});`
     var tier1Update = `UPDATE tiers SET water_level = ${tier1.water_level}, ph_level = ${tier1.ph_level}, ec_level = ${tier1.ec_level} where (user_id = ${user_id} and greenhouse_id = ${greenhouse_id} and tier = 1);`
     var tier2Update = `UPDATE tiers SET water_level = ${tier2.water_level}, ph_level = ${tier2.ph_level}, ec_level = ${tier2.ec_level} where (user_id = ${user_id} and greenhouse_id = ${greenhouse_id} and tier = 2);`
     var tier3Update = `UPDATE tiers SET water_level = ${tier3.water_level}, ph_level = ${tier3.ph_level}, ec_level = ${tier3.ec_level} where (user_id = ${user_id} and greenhouse_id = ${greenhouse_id} and tier = 3);`
