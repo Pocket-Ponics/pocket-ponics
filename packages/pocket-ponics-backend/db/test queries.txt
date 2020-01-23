@@ -42,3 +42,32 @@ insert into adjustments values (1,23,1,2,24)
 UPDATE pocketponics.greenhouse SET water_level = 0.00, nutrient_level = 0.00, battery = 0.00, power_source = 0, seedling_time = '2019-09-09 12:00:00', light_level = 0.00  WHERE (user_id = '1' and greenhouse_id = '1')
 
 select * from pocketponics.historical_data where greenhouse_id = 2 and user_id = 1 order by date DESC limit 1
+
+CREATE EVENT deleteexpiredtokens
+    ON SCHEDULE EVERY 24 HOUR
+    DO 
+      delete from active_sessions
+		where expiration_date < NOW()
+
+insert into pocketponics.devices (user_id, device_key) values (6,'dalksjf234234asjldf');
+select * from pocketponics.devices;
+delete from pocketponics.devices where user_id = 6 and device_key = 'dalksjf234234asjldf';
+delete from pocketponics.devices where user_id = 6
+
+SELECT DISTINCT tiers.user_id, tiers.tier, tiers.greenhouse_id, devices.device_key 
+FROM pocketponics.tiers
+LEFT JOIN devices ON tiers.user_id=devices.user_id
+where cycle_time = CURDATE()
+
+SELECT DISTINCT greenhouse.user_id, greenhouse.greenhouse_id, devices.device_key 
+FROM pocketponics.greenhouse
+LEFT JOIN devices ON greenhouse.user_id=devices.user_id
+where seedling_time = CURDATE()
+
+select tier, light_time from tiers where greenhouse_id = 6 and user_id = 10
+
+SELECT tiers.user_id, tiers.tier, tiers.greenhouse_id, tiers.plant_id, plant_ideal.water_level_high, plant_ideal.water_level_low, plant_ideal.ph_level_high, plant_ideal.ph_level_low, plant_ideal.ec_level_high, plant_ideal.ec_level_low 
+FROM pocketponics.tiers
+LEFT JOIN plant_ideal ON tiers.plant_id=plant_ideal.plant_id
+where user_id = 10 and greenhouse_id = 6
+

@@ -1,5 +1,17 @@
 import mySQL from './mySQLController';
+import { Expo } from 'expo-server-sdk';
 const bcrypt = require('bcrypt');
+
+var schedule = require('node-schedule');
+ 
+var rule = new schedule.RecurrenceRule();
+rule.hour = 8;
+rule.minute = 0;
+rule.second = 0;
+
+var n = schedule.scheduleJob(rule, function(){
+    sendNotifications()
+});
 
 //Retrieves all greenhouses for a specific user
 exports.getGreenhouses = (req, res) => {
@@ -10,6 +22,7 @@ exports.getGreenhouses = (req, res) => {
     mySQL.getUserForToken(cred, function(err, rec) {
         if(err)
         {
+            res.status(403)
             res.json({403: "Authentication Error"})
         }
         else if(rec != undefined)
@@ -22,21 +35,210 @@ exports.getGreenhouses = (req, res) => {
                     record.forEach(row => {
                         result.push(row.greenhouse_id)
                     });
-    
+                    res.status(200)
                     res.json({
                         greenhouses: result
                     })
                 } else {
+                    res.status(201)
                     res.json({201: "Unable to retrieve greenhouses"})
                 }
             })
         }
         else 
         {
+            res.status(401)
             res.json({401: "Unauthorized"})
         }
     })
 };
+
+function sendNotifications() {
+    //Find all users where greenhouse seedling_time == today 
+    mySQL.getReadySeedlings(function(err, rec) {
+        if(err)
+        {
+            console.log("Couldn't get ready seedlings")
+        } 
+        else {
+            // Create a new Expo SDK client
+            let expo = new Expo();
+
+            // Create the messages that you want to send to clents
+            var messages = [];
+
+            rec.rows.forEach(row => {
+                // Check that all your push tokens appear to be valid Expo push tokens
+                if (Expo.isExpoPushToken(row.device_key)) {
+                    messages.push({
+                        to: row.device_key,
+                        sound: 'default',
+                        body: 'Your Seedlings Are Ready',
+                        data: { greenhouse_id: row.greenhouse_id, user_id: row.user_id, type: 'seedling', body: 'Your Seedlings Are Ready'},
+                    })
+                } 
+                else
+                {
+                    console.error(`Push token ${row.device_key} is not a valid Expo push token`);
+                }
+            });
+
+            let chunks = expo.chunkPushNotifications(messages);
+            let tickets = [];
+            (async () => {
+                for (let chunk of chunks) {
+                    try {
+                        let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+                        console.log(ticketChunk);
+                        tickets.push(...ticketChunk);
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+            })();
+        }
+    })
+
+    //Find all users where tier cycle_time == today 
+    mySQL.getReadyTiers(function(err, rec) {
+        if(err)
+        {
+            console.log("Couldn't get ready tiers")
+        } 
+        else {
+            // Create a new Expo SDK client
+            let expo = new Expo();
+
+            // Create the messages that you want to send to clents
+            var messages = [];
+
+            rec.rows.forEach(row => {
+                // Check that all your push tokens appear to be valid Expo push tokens
+                if (Expo.isExpoPushToken(row.device_key)) {
+                    messages.push({
+                        to: row.device_key,
+                        sound: 'default',
+                        body: 'Your Tier is Ready',
+                        data: { greenhouse_id: row.greenhouse_id, user_id: row.user_id, tier: row.tier, type: 'tier', body: 'Your Tier is Ready'},
+                    })
+                } 
+                else
+                {
+                    console.error(`Push token ${row.device_key} is not a valid Expo push token`);
+                }
+            });
+
+            let chunks = expo.chunkPushNotifications(messages);
+            let tickets = [];
+            (async () => {
+                for (let chunk of chunks) {
+                    try {
+                        let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+                        console.log(ticketChunk);
+                        tickets.push(...ticketChunk);
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+            })();
+        }
+    })
+}
+
+exports.addDeviceKey = (req, res) => {
+    //Get auth token
+    let cred = req.headers.authorization.split(" ")[1]
+
+    //Store device key provided
+    var deviceKey = req.body.devicekey
+
+    //Retrieve user_id for given auth token
+    mySQL.getUserForToken(cred, function(err, rec) {
+        if(err)
+        {
+            res.status(403)
+            res.json({403: "Authentication Error"})
+        }
+        else if(rec != undefined)
+        {    
+            if(deviceKey == undefined)
+            {
+                res.status(205)
+                res.json({205: "Error: Missing Device Key"})
+            }
+            else 
+            {
+                mySQL.addDeviceKeyForUser(rec.user_id, deviceKey, function(err, record) {
+                    if(!err)
+                    {
+                        res.status(200)
+                        res.json({200: "Added device key for user"})
+                    }
+                    else if(record.code == 'ER_DUP_ENTRY')
+                    {
+                        res.status(203)
+                        res.json({203: "Device key already exists"})
+                    } 
+                    else {
+                        res.status(201)
+                        res.json({201: "Unable to add device key"})
+                    }
+                })
+            }
+        }
+        else 
+        {
+            res.status(401)
+            res.json({401: "Unauthorized"})
+        }
+    })
+}
+
+exports.deleteDeviceKey = (req, res) => {
+    //Get auth token
+    let cred = req.headers.authorization.split(" ")[1]
+
+    //Store device key provided
+    var deviceKey = req.body.devicekey
+
+    //Retrieve user_id for given auth token
+    mySQL.getUserForToken(cred, function(err, rec) {
+        if(err)
+        {
+            res.status(403)
+            res.json({403: "Authentication Error"})
+        }
+        else if(rec != undefined)
+        {   
+            if(deviceKey == undefined)
+            {
+                res.status(205)
+                res.json({205: "Error: Missing Device Key"})
+            }
+            else
+            {
+                mySQL.deleteDeviceKeyForUser(rec.user_id, deviceKey, function(err, record) {
+                    if(!err)
+                    {
+                        res.status(200)
+                        res.json({200: "Deleted device key for user"})
+                    }
+                    else
+                    {
+                        res.status(201)
+                        res.json({201: "Unable to delete device key"})
+                    }
+                })
+            }
+            
+        }
+        else 
+        {
+            res.status(401)
+            res.json({401: "Unauthorized"})
+        }
+    })
+}
 
 //Update a specified tier of the greenhouse with provided values
 exports.updateTier = (req, res) => {
@@ -48,32 +250,36 @@ exports.updateTier = (req, res) => {
     var tier = req.params.tier
 
     //Store tier information provided
-    var growth_stage = req.body.growth_stage
     var plant_id = req.body.plant_id
     var cycle_time = req.body.cycle_time
     var num_plants = req.body.num_plants
+    var light_start = req.body.light_start
 
     //Retrieve user_id for given auth token
     mySQL.getUserForToken(cred, function(err, rec) {
         if(err)
         {
+            res.status(403)
             res.json({403: "Authentication Error"})
         }
         else if(rec != undefined)
         {    
-            if(growth_stage == undefined || plant_id == undefined || cycle_time == undefined || num_plants == undefined)
+            if(plant_id == undefined || cycle_time == undefined || num_plants == undefined || light_start == undefined)
             {
+                res.status(202)
                 res.json({202: "Error: Missing data for update"})
             }
             else 
             {
-                mySQL.updateTierForGreenhouse(rec.user_id, greenhouse_id, tier, plant_id, growth_stage, cycle_time, num_plants, function(err, record) {
+                mySQL.updateTierForGreenhouse(rec.user_id, greenhouse_id, tier, plant_id, cycle_time, num_plants, light_start, function(err, record) {
                     if(!err)
                     {
+                        res.status(200)
                         res.json({200: "Updated Tier"})
                     }
                     else
                     {
+                        res.status(201)
                         res.json({201: "Unable to update tier"})
                     }
                 })
@@ -81,6 +287,7 @@ exports.updateTier = (req, res) => {
         }
         else 
         {
+            res.status(401)
             res.json({401: "Unauthorized"})
         }
     })
@@ -99,6 +306,7 @@ exports.getTier = (req, res) => {
     mySQL.getUserForToken(cred, function(err, rec) {
         if(err)
         {
+            res.status(403)
             res.json({403: "Authentication Error"})
         }
         else if(rec != undefined)
@@ -107,10 +315,12 @@ exports.getTier = (req, res) => {
             mySQL.getTierForGreenhouse(greenhouse_id, tier, rec.user_id, function(err, record) {
                 if(!err)
                 {
-                    res.json( {plant_id: record.plant_id, growth_stage: record.growth_stage, water_level: record.water_level, cycle_time: record.cycle_time, pH_level: record.pH_level, elec_cond: record.ec_level, num_plants: record.num_plants})
+                    res.status(200)
+                    res.json(record)
                 }
                 else
                 {
+                    res.status(201)
                     res.json({201: "Unable to retrieve tier"})
                 }
             })
@@ -118,6 +328,43 @@ exports.getTier = (req, res) => {
         }
         else 
         {
+            res.status(401)
+            res.json({401: "Unauthorized"})
+        }
+    })
+};
+
+//Get all plant ideal data values
+exports.getPlantData = (req, res) => {
+    //Get auth token
+    let cred = req.headers.authorization.split(" ")[1]
+
+    //Retrieve user_id for given auth token
+    mySQL.getUserForToken(cred, function(err, rec) {
+        if(err)
+        {
+            res.status(403)
+            res.json({403: "Authentication Error"})
+        }
+        else if(rec != undefined)
+        {    
+            //Retrieve values from plant_ideal table 
+            mySQL.getPlantIdealData(function(err, record) {
+                if(!err)
+                {
+                    res.status(200)
+                    res.json(record.rows)
+                }
+                else
+                {
+                    res.status(201)
+                    res.json({201: "Unable to retrieve plant ideal data"})
+                }
+            })
+        }
+        else 
+        {
+            res.status(401)
             res.json({401: "Unauthorized"})
         }
     })
@@ -132,6 +379,7 @@ exports.createGreenhouse = (req, res) => {
     mySQL.getUserForToken(cred, function(err, rec) {
         if(err)
         {
+            res.status(403)
             res.json({403: "Authentication Error"})
         }
         else if(rec != undefined)
@@ -140,41 +388,52 @@ exports.createGreenhouse = (req, res) => {
             var greenhouse_name = req.body.name
             var serial_no = req.body.serial_no
             var grid_password = req.body.grid_password
+            var seedling_time = req.body.seedling_time
 
             //Generate password hash for sensor grid
             var grid_hash = bcrypt.hashSync(grid_password, 10)
 
             //Insert new greenhouse
-            mySQL.createGreenhouseForUser(greenhouse_name, rec.user_id, function(err, record) {
+            mySQL.createGreenhouseForUser(greenhouse_name, seedling_time, rec.user_id, function(err, record) {
                 if(!err)
                 {
-                    var newGreenhouseID = record["LAST_INSERT_ID()"]
-                    
+                    // var newGreenhouseID = record.greenhouse_id
+                    var newGreenhouseID = record
+
                     // Insert new values into tier table for given greenhouse_name
                     mySQL.createEmptyTiersAndGridForNewGreenhouse(newGreenhouseID, rec.user_id, serial_no, grid_hash, function(err, record){
                         if(!err)
                         {
-                            res.json({200: "Greenhouse Created"})                                                
+                            res.status(200)
+                            res.json({200: "Greenhouse Created", id: newGreenhouseID})                                                
                         } 
                         else 
                         { 
                             mySQL.deleteGreenhouseForUser(newGreenhouseID, rec.user_id, function(err, record) {
                                 if(err)
                                 {
-                                    console.log("Error in rollback of greenhouse creation")
+                                    console.log(err)
+                                    res.status(202)
+                                    res.json({202: "Error in rollback of greenhouse creation"})
+                                } 
+                                else 
+                                {
+                                    res.status(201)
+                                    res.json({201: "Error creating greenhouse tiers/sensor grid registration"}) 
                                 }
                             })
-                            res.json({201: "Error creating greenhouse tiers/sensor grid registration"}) 
                         }
                     })
                 }
                 else {
+                    res.status(201)
                     res.json({201: "Error creating greenhouse"})
                 }
             })
         }
         else 
         {
+            res.status(401)
             res.json({401: "Unauthorized"})
         }
     })
@@ -192,6 +451,7 @@ exports.getGreenhouse = (req, res) => {
     mySQL.getUserForToken(cred, function(err, rec) {
         if(err)
         {
+            res.status(403)
             res.json({403: "Authentication Error"})
         }
         else if(rec != undefined)
@@ -199,15 +459,18 @@ exports.getGreenhouse = (req, res) => {
             mySQL.getGreenhouseForUser(rec.user_id, greenhouse_id, function(err, record) {
                 if(!err)
                 {
+                    res.status(200)
                     res.json({water_level: record.water_level, nutrient_level: record.nutrient_level, light_level: record.light_level, seedling_time: record.seedling_time, backup_batt_level: record.battery, power_source: record.power_source, greenhouse_name: record.name})
                 }
                 else {
+                    res.status(201)
                     res.json({201: "Error retrieving greenhouse"})
                 }
             })
         }
         else 
         {
+            res.status(401)
             res.json({401: "Unauthorized"})
         }
     })
@@ -227,6 +490,7 @@ exports.getGreenhouseReadings = (req, res) => {
     mySQL.getUserForToken(cred, function(err, rec) {
         if(err)
         {
+            res.status(403)
             res.json({403: "Authentication Error"})
         }
         else if(rec != undefined)
@@ -234,15 +498,18 @@ exports.getGreenhouseReadings = (req, res) => {
             mySQL.getGreenhouseHistoricalData(rec.user_id, greenhouse_id, start_date, end_date, function(err, record) {
                 if(!err)
                 {
+                    res.status(200)
                     res.json({history: record})
                 }
                 else {
+                    res.status(201)
                     res.json({201: "Error retrieving greenhouse historical data"})
                 }
             })
         }
         else 
         {
+            res.status(401)
             res.json({401: "Unauthorized"})
         }
     })
@@ -264,12 +531,14 @@ exports.updateGreenhouse = (req, res) => {
     mySQL.getUserForToken(cred, function(err, rec) {
         if(err)
         {
+            res.status(403)
             res.json({403: "Authentication Error"})
         }
         else if(rec != undefined)
         {    
             if(seedling_time == undefined || name == undefined)
             {
+                res.status(202)
                 res.json({202: "Error: Missing data for update"})
             }
             else 
@@ -277,10 +546,12 @@ exports.updateGreenhouse = (req, res) => {
                 mySQL.updateGreenhouseForUser(rec.user_id, greenhouse_id, name, seedling_time, function(err, record) {
                     if(!err)
                     {
+                        res.status(200)
                         res.json({200: "Updated Greenhouse"})
                     }
                     else
                     {
+                        res.status(201)
                         res.json({201: "Unable to update greenhouse"})
                     }
                 })
@@ -288,6 +559,7 @@ exports.updateGreenhouse = (req, res) => {
         }
         else 
         {
+            res.status(401)
             res.json({401: "Unauthorized"})
         }
     })
@@ -305,6 +577,7 @@ exports.deleteGreenhouse = (req, res) => {
     mySQL.getUserForToken(cred, function(err, rec) {
         if(err)
         {
+            res.status(403)
             res.json({403: "Authentication Error"})
         }
         else if(rec != undefined)
@@ -312,60 +585,19 @@ exports.deleteGreenhouse = (req, res) => {
             mySQL.deleteGreenhouseForUser(greenhouse_id, rec.user_id, function(err, record){
                 if(!err)
                 {
+                    res.status(200)
                     res.json({200: "Greenhouse Deleted"})
                 } 
                 else 
                 { 
+                    res.status(201)
                     res.json({201: "Error deleting greenhouse"}) 
                 }
             })
         }
         else 
         {
-            res.json({401: "Unauthorized"})
-        }
-    })
-};
-
-//Adjust the water level, nutrient level or light level for specific tier in greenhouse
-exports.makeAdjustments = (req, res) => {
-    //Get auth token
-    let cred = req.headers.authorization.split(" ")[1]
-
-    //Store greenhouse information provided
-    var adjustment_type = req.body.adjustment_type
-    var amount = req.body.amount
-
-    //Store greenhouse_id and tier provided
-    var greenhouse_id = req.params.greenhouse_id
-    var tier = req.params.tier
-
-    //Retrieve user_id for given auth token
-    mySQL.getUserForToken(cred, function(err, rec) {
-        if(err)
-        {
-            res.json({403: "Authentication Error"})
-        }
-        else if(rec != undefined)
-        {    
-            //Add adjustment to queue
-            if(adjustment_type >= 0 && adjustment_type <= 2)
-            {
-                mySQL.createAdjustmentForGreenhouse(rec.user_id, greenhouse_id, adjustment_type, amount, tier, function(err, record) {
-                    if(!err)
-                    {
-                        res.json({200: "Adjustment Queued"})
-                    }
-                    else {
-                        res.json({201: "Error adding adjustment to queue"})
-                    }
-                })
-            } else {
-                res.json({201: "Error adding adjustment to queue"})
-            }
-        }
-        else 
-        {
+            res.status(401)
             res.json({401: "Unauthorized"})
         }
     })
@@ -385,6 +617,7 @@ exports.getReadingsSingle = (req, res) => {
     mySQL.getUserForToken(cred, function(err, rec) {
         if(err)
         {
+            res.status(403)
             res.json({403: "Authentication Error"})
         }
         else if(rec != undefined)
@@ -406,15 +639,18 @@ exports.getReadingsSingle = (req, res) => {
                     {
                         value = record.ec_level
                     }
+                    res.status(200)
                     res.json({reading: value})
                 }
                 else {
+                    res.status(201)
                     res.json({201: "Error retrieving sensor reading"})
                 }
             })
         }
         else 
         {
+            res.status(401)
             res.json({401: "Unauthorized"})
         }
     })
@@ -433,6 +669,7 @@ exports.getReadingsTier = (req, res) => {
     mySQL.getUserForToken(cred, function(err, rec) {
         if(err)
         {
+            res.status(403)
             res.json({403: "Authentication Error"})
         }
         else if(rec != undefined)
@@ -441,23 +678,26 @@ exports.getReadingsTier = (req, res) => {
             mySQL.getReadingForSensors(rec.user_id, greenhouse_id, tier, function(err, record) {
                 if(!err)
                 {
+                    res.status(200)
                     res.json({water_level: record.water_level, ph_level: record.ph_level, ec_level: record.ec_level})
                 }
                 else {
+                    res.status(201)
                     res.json({201: "Error retrieving sensor readings"})
                 }
             })
         }
         else 
         {
+            res.status(401)
             res.json({401: "Unauthorized"})
         }
     })
 };
 
-//Get all sensor readings for all tiers of greenhouse
-exports.getReadingsGreenhouse = (req, res) => {
-     //Get auth token
+//Get greenhouse and tier data
+exports.getGreenhouseAndTiers = (req, res) => {
+    //Get auth token
     let cred = req.headers.authorization.split(" ")[1]
 
     //Store greenhouse_id provided
@@ -467,6 +707,45 @@ exports.getReadingsGreenhouse = (req, res) => {
     mySQL.getUserForToken(cred, function(err, rec) {
         if(err)
         {
+            res.status(403)
+            res.json({403: "Authentication Error"})
+        }
+        else if(rec != undefined)
+        {    
+            mySQL.getGreenhouseDetail(rec.user_id, greenhouse_id, function(err, record) {
+                if(!err)
+                {
+                    res.status(200)
+                    res.json(record)
+                }
+                else {
+                    console.log(err)
+                    res.status(201)
+                    res.json({201: "Error retrieving greenhouse and tier"})
+                }
+            })
+        }
+        else 
+        {
+            res.status(401)
+            res.json({401: "Unauthorized"})
+        }
+    })
+}
+
+//Get all sensor readings for all tiers of greenhouse
+exports.getReadingsGreenhouse = (req, res) => {
+    //Get auth token
+    let cred = req.headers.authorization.split(" ")[1]
+
+    //Store greenhouse_id provided
+    var greenhouse_id = req.params.greenhouse_id
+
+    //Retrieve user_id for given auth token
+    mySQL.getUserForToken(cred, function(err, rec) {
+        if(err)
+        {
+            res.status(403)
             res.json({403: "Authentication Error"})
         }
         else if(rec != undefined)
@@ -475,18 +754,19 @@ exports.getReadingsGreenhouse = (req, res) => {
             mySQL.getReadingsForGreenhouse(rec.user_id, greenhouse_id, function(err, record) {
                 if(!err)
                 {
+                    res.status(200)
                     res.json({readings: record})
                 }
                 else {
+                    res.status(201)
                     res.json({201: "Error retrieving sensor readings"})
                 }
             })
         }
         else 
         {
+            res.status(401)
             res.json({401: "Unauthorized"})
         }
     })
 };
-
-//TODO: Set greenhouse sensor grid values
