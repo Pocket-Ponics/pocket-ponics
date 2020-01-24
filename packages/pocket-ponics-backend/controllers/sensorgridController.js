@@ -446,7 +446,7 @@ function powerSourceNotification(user_id, greenhouse_id, power_supply)
     mySQL.getCurrentPowerSource(user_id, greenhouse_id, function(err, result){
         if(result.power_source != power_supply)
         {
-            notificationController.sendGreenhouseNotification(user_id, greenhouse_id, (power_supply == 0 ? "Power Source Interruption" : "Power Source Restored"), 'powersource')        
+            notificationController.sendGreenhouseNotification(user_id, greenhouse_id, (power_supply == 0 ? "Power Source Interruption" : "Power Source Restored"), 'Greenhouse')        
         }
     })
 }
@@ -455,12 +455,12 @@ function waterNutrientLevelNotification(user_id, greenhouse_id, water_level, nut
 {
     if(water_level < 20)
     {
-        notificationController.sendGreenhouseNotification(user_id, greenhouse_id, "Water Tank Level Low", 'watertank')        
+        notificationController.sendGreenhouseNotification(user_id, greenhouse_id, "Water Tank Level Low", 'Greenhouse')        
     }
 
     if(nutrient_level < 20)
     {
-        notificationController.sendGreenhouseNotification(user_id, greenhouse_id, "Nutrient Tank Level Low", 'nutrienttank')        
+        notificationController.sendGreenhouseNotification(user_id, greenhouse_id, "Nutrient Tank Level Low", 'Greenhouse')        
     }                    
 }
 
@@ -468,6 +468,6 @@ function backupBatteryNotification(user_id, greenhouse_id, backup_battery_level)
 {
     if(backup_battery_level < 10)
     {
-        notificationController.sendGreenhouseNotification(user_id, greenhouse_id, "Backup Battery Level Low", 'backupbattery')        
+        notificationController.sendGreenhouseNotification(user_id, greenhouse_id, "Backup Battery Level Low", 'Greenhouse')        
     }
 }
