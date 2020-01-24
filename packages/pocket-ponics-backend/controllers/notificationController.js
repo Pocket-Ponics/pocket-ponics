@@ -9,7 +9,7 @@ exports.sendSeedlingAndTierNotifications = () => {
             console.log("Couldn't get ready seedlings")
         } 
         else {
-            sendNotificationsToExpo(rec, "Your Seedlings Are Ready", 'seedling')
+            sendNotificationsToExpo(rec, "Your Seedlings Are Ready", 'Seedlings')
         }
     })
 
@@ -20,7 +20,7 @@ exports.sendSeedlingAndTierNotifications = () => {
             console.log("Couldn't get ready tiers")
         } 
         else {
-            sendNotificationsToExpo(rec, "Your Tier is Ready", 'tier')
+            sendNotificationsToExpo(rec, "Your Tier is Ready", 'Tier')
         }
     })
 }

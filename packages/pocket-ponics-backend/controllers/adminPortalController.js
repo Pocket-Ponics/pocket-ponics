@@ -15,7 +15,6 @@ exports.getPlantIdeals = (req, res) => {
         else if(rec != undefined)
         {    
             mySQL.getRoleForUser(rec.user_id, function(err, rec2){
-
                 if(err)
                 {
                     res.status(403)
@@ -141,7 +140,7 @@ exports.createPlantIdeal = (req, res) => {
                         if(!err)
                         {
                             res.status(200)
-                            res.json({200: "Created plant ideal"})
+                            res.json({200: "Created plant ideal", plant_id: record})
                         } else {
                             res.status(201)
                             res.json({201: "Unable to create plant ideal"})
