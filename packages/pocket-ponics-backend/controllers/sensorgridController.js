@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 import mySQL from './mySQLController';
+import notificationController from './notificationController'
 
 //Post all sensor readings for all tiers of greenhouse
 exports.postReadingsGreenhouse = (req, res) => {
@@ -59,6 +60,10 @@ exports.postReadingsGreenhouse = (req, res) => {
             bcrypt.compare(password, record.password_hash, (err, result) => {
                 if(result)
                 {
+                    powerSourceNotification(record.user_id, record.greenhouse_id, power_supply)
+                    backupBatteryNotification(record.user_id, record.greenhouse_id, backup_battery_level)
+                    waterNutrientLevelNotification(record.user_id, record.greenhouse_id, water_level, nutrient_level)
+
                     //Update greenhouse record and tiers record
                     mySQL.updateReadingsForGreenhouse(record.user_id, record.greenhouse_id, water_level, nutrient_level, backup_battery_level, power_supply, light_level, tier1, tier2, tier3, tier4, function(err, record) {
                         if(!err)
@@ -244,6 +249,8 @@ exports.updatePowerSource = (req, res) => {
             bcrypt.compare(password, record.password_hash, (err, result) => {
                 if(result)
                 {
+                    powerSourceNotification(record.user_id, record.greenhouse_id, power_source)
+
                     //Update greenhouse record
                     mySQL.updatePowerSourceForGreenhouse(record.user_id, record.greenhouse_id, power_source, function(err, record) {
                         if(!err)
@@ -298,6 +305,8 @@ exports.updateBackupBatteryLevel = (req, res) => {
             bcrypt.compare(password, record.password_hash, (err, result) => {
                 if(result)
                 {
+                    backupBatteryNotification(record.user_id, record.greenhouse_id, battery)
+
                     //Update greenhouse record
                     mySQL.updateBatteryForGreenhouse(record.user_id, record.greenhouse_id, battery, function(err, record) {
                         if(!err)
@@ -369,3 +378,34 @@ exports.getTiersAndIdealValues = (req, res) => {
         }
     })
 };
+
+function powerSourceNotification(user_id, greenhouse_id, power_supply)
+{
+    mySQL.getCurrentPowerSource(user_id, greenhouse_id, function(err, result){
+        if(result.power_source != power_supply)
+        {
+            notificationController.sendGreenhouseNotification(user_id, greenhouse_id, (power_supply == 0 ? "Power Source Interruption" : "Power Source Restored"), 'powersource')        
+        }
+    })
+}
+
+function waterNutrientLevelNotification(user_id, greenhouse_id, water_level, nutrient_level)
+{
+    if(water_level < 20)
+    {
+        notificationController.sendGreenhouseNotification(user_id, greenhouse_id, "Water Tank Level Low", 'watertank')        
+    }
+
+    if(nutrient_level < 20)
+    {
+        notificationController.sendGreenhouseNotification(user_id, greenhouse_id, "Nutrient Tank Level Low", 'nutrienttank')        
+    }                    
+}
+
+function backupBatteryNotification(user_id, greenhouse_id, backup_battery_level) 
+{
+    if(backup_battery_level < 10)
+    {
+        notificationController.sendGreenhouseNotification(user_id, greenhouse_id, "Backup Battery Level Low", 'backupbattery')        
+    }
+}

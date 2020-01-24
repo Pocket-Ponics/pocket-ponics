@@ -1,5 +1,5 @@
 import mySQL from './mySQLController';
-import { Expo } from 'expo-server-sdk';
+import notificationController from './notificationController';
 const bcrypt = require('bcrypt');
 
 var schedule = require('node-schedule');
@@ -10,7 +10,7 @@ rule.minute = 0;
 rule.second = 0;
 
 var n = schedule.scheduleJob(rule, function(){
-    sendNotifications()
+    notificationController.sendSeedlingAndTierNotifications()
 });
 
 //Retrieves all greenhouses for a specific user
@@ -52,98 +52,6 @@ exports.getGreenhouses = (req, res) => {
         }
     })
 };
-
-function sendNotifications() {
-    //Find all users where greenhouse seedling_time == today 
-    mySQL.getReadySeedlings(function(err, rec) {
-        if(err)
-        {
-            console.log("Couldn't get ready seedlings")
-        } 
-        else {
-            // Create a new Expo SDK client
-            let expo = new Expo();
-
-            // Create the messages that you want to send to clents
-            var messages = [];
-
-            rec.rows.forEach(row => {
-                // Check that all your push tokens appear to be valid Expo push tokens
-                if (Expo.isExpoPushToken(row.device_key)) {
-                    messages.push({
-                        to: row.device_key,
-                        sound: 'default',
-                        body: 'Your Seedlings Are Ready',
-                        data: { greenhouse_id: row.greenhouse_id, user_id: row.user_id, type: 'seedling', body: 'Your Seedlings Are Ready'},
-                    })
-                } 
-                else
-                {
-                    console.error(`Push token ${row.device_key} is not a valid Expo push token`);
-                }
-            });
-
-            let chunks = expo.chunkPushNotifications(messages);
-            let tickets = [];
-            (async () => {
-                for (let chunk of chunks) {
-                    try {
-                        let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-                        console.log(ticketChunk);
-                        tickets.push(...ticketChunk);
-                    } catch (error) {
-                        console.error(error);
-                    }
-                }
-            })();
-        }
-    })
-
-    //Find all users where tier cycle_time == today 
-    mySQL.getReadyTiers(function(err, rec) {
-        if(err)
-        {
-            console.log("Couldn't get ready tiers")
-        } 
-        else {
-            // Create a new Expo SDK client
-            let expo = new Expo();
-
-            // Create the messages that you want to send to clents
-            var messages = [];
-
-            rec.rows.forEach(row => {
-                // Check that all your push tokens appear to be valid Expo push tokens
-                if (Expo.isExpoPushToken(row.device_key)) {
-                    messages.push({
-                        to: row.device_key,
-                        sound: 'default',
-                        body: 'Your Tier is Ready',
-                        data: { greenhouse_id: row.greenhouse_id, user_id: row.user_id, tier: row.tier, type: 'tier', body: 'Your Tier is Ready'},
-                    })
-                } 
-                else
-                {
-                    console.error(`Push token ${row.device_key} is not a valid Expo push token`);
-                }
-            });
-
-            let chunks = expo.chunkPushNotifications(messages);
-            let tickets = [];
-            (async () => {
-                for (let chunk of chunks) {
-                    try {
-                        let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-                        console.log(ticketChunk);
-                        tickets.push(...ticketChunk);
-                    } catch (error) {
-                        console.error(error);
-                    }
-                }
-            })();
-        }
-    })
-}
 
 exports.addDeviceKey = (req, res) => {
     //Get auth token

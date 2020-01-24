@@ -1,5 +1,4 @@
 import mySQL from './mySQLController';
-const bcrypt = require('bcrypt');
 
 //Retrieves all plant ideals
 exports.getPlantIdeals = (req, res) => {

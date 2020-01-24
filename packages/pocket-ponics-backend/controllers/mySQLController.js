@@ -433,6 +433,33 @@ exports.getReadySeedlings = (callback) => {
     })
 }
 
+exports.getCurrentPowerSource = (user_id, greenhouse_id, callback) => {
+    sqlController.execute(`Select power_source from pocketponics.greenhouse where user_id = ${user_id} and greenhouse_id = ${greenhouse_id}`, function(err, result){
+        if(result.rows.length == 1)
+        {
+            callback(err, result.rows[0])
+        }
+        else
+        {
+            if(err)
+            {
+                console.log(err)
+            }
+            callback(true, undefined)
+        }
+    })
+}
+
+exports.getGreenhouseForNotification = (user_id, greenhouse_id, callback) => {
+    sqlController.execute(`SELECT DISTINCT greenhouse.user_id, greenhouse.greenhouse_id, devices.device_key FROM pocketponics.greenhouse LEFT JOIN devices ON greenhouse.user_id=devices.user_id where greenhouse.user_id = ${user_id} and greenhouse.greenhouse_id = ${greenhouse_id}`, function(err, result) {
+        if(err)
+        {
+            console.log(result)
+        }
+        callback(err, result)
+    })
+}
+
 exports.getReadyTiers = (callback) => {
     sqlController.execute(`SELECT DISTINCT tiers.user_id, tiers.tier, tiers.greenhouse_id, devices.device_key FROM pocketponics.tiers LEFT JOIN devices ON tiers.user_id=devices.user_id where cycle_time = CURDATE()`, function(err, result) {
         if(err)
@@ -444,7 +471,13 @@ exports.getReadyTiers = (callback) => {
 }
 
 exports.getDevicesForUser = (user_id, callback) => {
-    
+    sqlController.execute(`SELECT device_key FROM pocketponics.devices where user_id = ${user_id}`, function(err, result) {
+        if(err)
+        {
+            console.log(result)
+        }
+        callback(err, result)
+    })
 }
 
 exports.revokeTokensAndDeviceKeys = (user_id, callback) => {
