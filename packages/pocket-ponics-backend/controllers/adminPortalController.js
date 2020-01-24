@@ -190,7 +190,6 @@ exports.createPlantIdeal = (req, res) => {
 
 //Update existing plant ideal record
 exports.updatePlantIdeal = (req, res) => {
-
     if(req.headers.authorization == undefined)
     {
         res.status(210)
