@@ -19,17 +19,19 @@ import ChangePasswordScreen from './screens/change-password-screen'
 import AuthLoadingScreen from './screens/auth-loading-screen'
 import LoginScreen from './screens/login-screen'
 import SignUpScreen from './screens/signup-screen'
+import ResetScreen from './screens/reset-password-screen'
 
 import AuthUtil from './util/auth-util'
 
-import { createAppContainer, createSwitchNavigator, NavigationActions } from 'react-navigation'
+import { createAppContainer, createSwitchNavigator, NavigationActions, StackActions } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 import { Notifications } from 'expo'
 
 const AuthStack = createSwitchNavigator({ 
 	AuthLoading: { screen: AuthLoadingScreen },
 	Login: { screen: LoginScreen },
-	SignUp: { screen: SignUpScreen } 
+	SignUp: { screen: SignUpScreen },
+	Reset: { screen: ResetScreen }
 })
 
 const AppStack = createStackNavigator({
@@ -89,22 +91,32 @@ class App extends React.Component {
 			)
 	}
 
-	getRouteForType(type) {
-		return type.replace(/^\w/, c => c.toUpperCase())
-	}
-
 	navigateToItem(data) {
-		this.navigator &&
-			this.navigator.dispatch(
-				NavigationActions.navigate({ 
-					routeName: this.getRouteForType(data.type),
+		if(data.type === 'Greenhouse') {
+			this.navigator &&
+				this.navigator.dispatch(StackActions.reset({
+					index: 0,
+					actions: [NavigationActions.navigate({ 
+						routeName: data.type,
+						params: {
+							greenhouseId: data.payload.greenhouse_id,
+							tierId: data.payload.tier,
+						},
+						key: data.payload.greenhouse_id + '/' + data.payload.tier
+					})],
+				}))
+		} else {
+			this.navigator &&
+				this.navigator.dispatch(NavigationActions.navigate({ 
+					routeName: data.type,
 					params: {
-						greenhouseId: data.greenhouse_id,
-						tierId: data.tier,
+						greenhouseId: data.payload.greenhouse_id,
+						tierId: data.payload.tier,
 					},
-					key: data.greenhouseId + '/' + data.tier
-				})
-			)
+					key: data.payload.greenhouse_id + '/' + data.payload.tier
+				}))
+		}
+			
 	}
 
 	goToNotification(notification) {

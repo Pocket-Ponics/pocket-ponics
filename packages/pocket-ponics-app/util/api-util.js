@@ -38,7 +38,7 @@ const APIUtil = {
 		})
 	},
 	getAuthToken(username, password) {
-		return APIUtil.timeoutFetch(5000, fetch(`http://${host}:${port}/auth/get_token`, {
+		return APIUtil.timeoutFetch(10000, fetch(`http://${host}:${port}/auth/get_token`, {
 			method: 'GET',
 			headers: new Headers({
 				'Authorization': 'Basic ' + base64.encode(`${username}:${password}`),
@@ -51,7 +51,7 @@ const APIUtil = {
 	},
 	createUser(email, password) {
 		const encode = APIUtil.urlEncode({ email, password })
-		return APIUtil.timeoutFetch(5000, fetch(`http://${host}:${port}/auth/create_user`, {
+		return APIUtil.timeoutFetch(10000, fetch(`http://${host}:${port}/auth/create_user`, {
 			method: 'POST',
 			headers: new Headers({
 				'Content-Type': 'application/x-www-form-urlencoded'
@@ -63,7 +63,7 @@ const APIUtil = {
 			.then(result => {console.log(result); return JSON.parse(result)})
 	},
 	get(endpoint, token, body) {
-		return APIUtil.timeoutFetch(5000, fetch(endpoint, {
+		return APIUtil.timeoutFetch(10000, fetch(endpoint, {
 			method: 'GET',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
@@ -101,7 +101,7 @@ const APIUtil = {
 			.then(result => JSON.parse(result))
 	},
 	post(endpoint, token, body) {
-		return APIUtil.timeoutFetch(5000, fetch(endpoint, {
+		return APIUtil.timeoutFetch(10000, fetch(endpoint, {
 			method: 'POST',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
@@ -114,7 +114,7 @@ const APIUtil = {
 			.then(result => JSON.parse(result))
 	},
 	put(endpoint, token, body) {
-		return APIUtil.timeoutFetch(5000, fetch(endpoint, {
+		return APIUtil.timeoutFetch(10000, fetch(endpoint, {
 			method: 'PUT',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
