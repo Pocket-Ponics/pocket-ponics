@@ -476,7 +476,7 @@ exports.getGreenhouseReadings = (req, res) => {
             }
             else if(rec != undefined)
             {    
-                mySQL.getGreenhouseHistoricalData(rec.user_id, greenhouse_id, start_date, end_date, function(err, record) {
+                mySQL.getGreenhouseHistoricalData(rec.user_id, greenhouse_id, function(err, record) {
                     if(!err)
                     {
                         res.status(200)

@@ -153,8 +153,8 @@ exports.createEmptyTiersAndGridForNewGreenhouse = (greenhouse_id, user_id, seria
     })
 }
 
-exports.getGreenhouseHistoricalData = (user_id, greenhouse_id, lower_limit, upper_limit, callback) => {
-    sqlController.execute(`select * from historical_data where user_id = ${user_id} and greenhouse_id = ${greenhouse_id} and date >= '${lower_limit}' and date < '${upper_limit}'`, function(err, result) {
+exports.getGreenhouseHistoricalData = (user_id, greenhouse_id, callback) => {
+    sqlController.execute(`select hd1.* from pocketponics.historical_data hd1, (select date(date), max(date) as max_date from pocketponics.historical_data group by date(date) ) hd2 where hd1.date = hd2.max_date and greenhouse_id = ${greenhouse_id} and user_id = ${user_id} and date BETWEEN DATE_SUB(NOW(), INTERVAL 30 DAY) AND NOW()`, function(err, result) {
         if(err)
         {
             console.log(result)
