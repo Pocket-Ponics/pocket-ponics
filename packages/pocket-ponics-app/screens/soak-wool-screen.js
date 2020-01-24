@@ -1,10 +1,10 @@
-import React from 'react';
-import { Text,View, SafeAreaView, Image, TouchableOpacity } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
+import React from 'react'
+import { Text,View, Image, TouchableOpacity } from 'react-native'
+import { StackActions, NavigationActions } from 'react-navigation'
 
 import styles from './setup-styles'
 
-const plugin = require('../assets/plug.jpg')
+const plugin = require('../assets/soak-rockwool.png')
 
 class SoakWoolScreen extends React.Component {
 	static navigationOptions = {
@@ -14,22 +14,20 @@ class SoakWoolScreen extends React.Component {
 	goToNext() {
 		const resetAction = StackActions.reset({
 			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'StartSeedlings' })],
-		});
-		this.props.navigation.dispatch(resetAction);
+			actions: [NavigationActions.navigate({ 
+				routeName: 'StartSeedlings'
+			})],
+		})
+		this.props.navigation.dispatch(resetAction)
 	}
 
 	cancel() {
-		const resetAction = StackActions.reset({
-			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'Greenhouse' })],
-		});
-		this.props.navigation.dispatch(resetAction);
+		return this.props.navigation.navigate('Auth')
 	}
 
 	render() {
 		return (
-			<SafeAreaView style={{flex: 1}}>
+			<View style={styles.container}>
 				<View style={styles.background}>
 					<Text style={styles.heading}>Soak the rockwool</Text>
 					<Text style={styles.text}>Soak the included rockwool in water for 5 minutes, and then remove the rockwool from the water.  Shake off excess water, and place the rockwool on the tray.</Text>
@@ -41,7 +39,7 @@ class SoakWoolScreen extends React.Component {
 						<Text style={styles.cancelButtonText}>Cancel Setup</Text>
 					</TouchableOpacity>
 				</View>
-			</SafeAreaView>
+			</View>
 		)
 	}
 }

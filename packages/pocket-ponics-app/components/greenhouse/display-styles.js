@@ -1,8 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native'
+import { BACKGROUND_COLOR } from '../../util/constants'
 
 export default StyleSheet.create({
+	container: {
+		flex: 1
+	},
 	background: {
-		color: '#FFFFFF',
+		color: BACKGROUND_COLOR,
 		alignItems: 'center',
 		justifyContent: 'center',
 		margin: 10,
@@ -36,16 +40,16 @@ export default StyleSheet.create({
 		aspectRatio: 150/126,
 	},
 	topImage: {
-		height: '75%',
+		height: '65%',
 		width: '100%',
-		marginTop: '6%',
+		marginTop: '10%',
 		resizeMode: 'contain',
 	},
 	image: {
 		flex: 1,
 		aspectRatio: 1.5,
 		resizeMode: 'contain',
-		marginTop: '5%'
+		marginTop: '6%'
 	},
 	seedling: {
 		flex: 1,

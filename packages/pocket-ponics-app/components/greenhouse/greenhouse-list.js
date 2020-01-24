@@ -1,6 +1,6 @@
-import React from 'react';
-import { Text, View, ScrollView, FlatList, Animated, Dimensions } from 'react-native';
-import Carousel from 'react-native-snap-carousel';
+import React from 'react'
+import { Dimensions } from 'react-native'
+import Carousel from 'react-native-snap-carousel'
 
 import styles from './display-styles'
 
@@ -8,7 +8,6 @@ import GreenhouseSwipeable from './swipeable'
 import NewGreenhouse from './new-greenhouse'
 
 class GreenhouseList extends React.Component {
-
 	constructor(props) {
 		super(props)
 
@@ -19,13 +18,12 @@ class GreenhouseList extends React.Component {
 
 	render() {
 		const { width } = Dimensions.get('window')
-		const contentOffset = (width - width) / 2
 
 		return (
 			<Carousel
 				data={this.props.greenhouses}
 				renderItem={({ item }) => {
-					if (item.type === 'greenhouse'){
+					if ('tiers' in item){
 						return (
 							<GreenhouseSwipeable
 								greenhouse={item}
@@ -33,11 +31,11 @@ class GreenhouseList extends React.Component {
 						)
 					}
 
-					return <NewGreenhouse navigation={this.props.navigation}/>
+					return <NewGreenhouse navigation={this.props.navigation} token={this.props.token}/>
 				}}
 				firstItem={this.props.current}
 				itemWidth={width}
-				style={{flex: 1}}
+				style={styles.container}
 				sliderWidth={width}
 				inactiveSlideScale={0.95}
 				inactiveSlideOpacity={1}
