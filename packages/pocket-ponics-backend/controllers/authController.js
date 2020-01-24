@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const validator = require('email-validator');
+const nodemailer = require("nodemailer");
 const passwordValidator = require('password-validator');
 import mySQL from './mySQLController';
 
@@ -63,14 +64,68 @@ exports.getToken = (req, res) => {
     })
 };
 
-//TODO: Send a reset password command to backend
+//Send a reset password command to backend
 exports.resetPassword = (req, res) => {
-    var username = req.body.username
-    
-    //NOTE: REVOKE TOKENS FOR USER_ID!
+    var email = req.body.email
 
-    res.status(200)
-    res.json({200: "RESET PASSWORD"})
+    //Generate new password
+    var newPassword = Math.random().toString(36).slice(-8);
+
+    mySQL.getUserIDForUser(email, function(err, record) {
+        if(!err)
+        {
+            var newPasswordHash = bcrypt.hashSync(newPassword, 10);
+            mySQL.updateUserHash(record.user_id, newPasswordHash, function(err, result) {
+                if(!err)
+                {                    
+                    let transporter = nodemailer.createTransport({
+                        host: "smtp.mail.com",
+                        port: 587,
+                        secure: false, 
+                        auth: {
+                          user: 'pocketponics@mail.com', 
+                          pass: 'P0ckEtPon1Cs!' 
+                        }
+                      });
+                    
+                      // Send email
+                      var mailSettings = {
+                        from: '"Pocket Ponics" <pocketponics@mail.com>', 
+                        to: email, 
+                        subject: "Your New Password",
+                        text: `Your new password is ${newPassword}`
+                      }
+                      
+                      transporter.sendMail(mailSettings, function(err, info) {
+                        if (err) 
+                        {
+                            console.log(err);
+                        } 
+                        else 
+                        {
+                            //Revoke tokens for user's old active sessions and device keys for notifications
+                            mySQL.revokeTokensAndDeviceKeys(record.user_id, function(err, result) {
+                                if(!err)
+                                {
+                                    res.status(200)
+                                    res.json({200: "User Password Reset"})
+                                }
+                                else
+                                {
+                                    res.status(201)
+                                    res.json({201: "Unable to reset user password"})
+                                }
+                            })
+                        }}); 
+                } 
+                else 
+                {
+                    res.status(201)
+                    res.json({201: "Unable to reset user password"})
+                }
+            })
+        }
+    })
 };
 
 //Create a user with provided email and password
@@ -153,9 +208,7 @@ exports.changePassword = (req, res) => {
                         var newPasswordHash = bcrypt.hashSync(newPassword, 10);
                         mySQL.updateUserHash(record.user_id, newPasswordHash, function(err, result) {
                             if(!err)
-                            {
-                                console.log("Update operation successful")
-                                
+                            {                                
                                 //Revoke tokens for user's old active sessions and device keys for notifications
                                 mySQL.revokeTokensAndDeviceKeys(record.user_id, function(err, result) {
                                     if(!err)

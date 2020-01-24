@@ -19,6 +19,24 @@ exports.getHashForUser = (email, callback) => {
     })
 }
 
+exports.getUserIDForUser = (email, callback) => {
+    sqlController.execute(`select user_id from user where email = "${email}"`, function(err, result)
+    {
+        if(result.rows.length == 1)
+        {        
+            callback(err, result.rows[0])
+        } 
+        else if(result.rows.length > 1)
+        {
+            callback(true, undefined)
+        }
+        else
+        {
+            callback(err, undefined)
+        }
+    })
+}
+
 exports.getHashForSensorGrid = (serial_no, callback) => {
     sqlController.execute(`select user_id, greenhouse_id, password_hash from sensor_grid where serial_no = "${serial_no}"`, function(err, result)
     {
