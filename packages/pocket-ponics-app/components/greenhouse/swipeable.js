@@ -34,7 +34,7 @@ class GreenhouseSwipeable extends React.Component {
 						displaySeedlings={this.props.greenhouse.seedling_time}/>
 				</View>
 				<GreenhouseStatsDisplay stats={this.getStats() || {}} navigation={this.props.navigation} />
-				<GreenhouseHistoryDisplay navigation={this.props.navigation} />
+				<GreenhouseHistoryDisplay navigation={this.props.navigation} history={this.props.greenhouse.history}/>
 			</ScrollView>
 		)
 	}	

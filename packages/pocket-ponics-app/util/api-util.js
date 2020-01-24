@@ -1,7 +1,7 @@
 import base64 from 'base-64'
 import { Notifications } from 'expo'
 
-const host = 'ec2-18-191-221-89.us-east-2.compute.amazonaws.com'
+const host = 'ec2-3-136-154-191.us-east-2.compute.amazonaws.com'
 const port = '8080'
 
 const greenhouse = '169.254.146.181'
@@ -146,6 +146,9 @@ const APIUtil = {
 	},
 	getGreenhouse(token, greenhouse) {
 		return APIUtil.get(`http://${host}:${port}/mobileapp/greenhouses/detail/${greenhouse}`, token, {})
+	},
+	getHistory(token, greenhouse) {
+		return APIUtil.get(`http://${host}:${port}/mobileapp/greenhouses/history/${greenhouse}`, token, {})
 	},
 	postGreenhouse(token, name) {
 		const randomSerial = Math.floor(Math.random() * 899999 + 100000)

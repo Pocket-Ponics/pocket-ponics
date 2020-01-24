@@ -1,4 +1,4 @@
-export const TOMATO_ID = 1
+export const TOMATO_ID = 5
 export const GREENBEAN_ID = 2
 export const SPINACH_ID = 3
 export const TURNIP_ID = 4
