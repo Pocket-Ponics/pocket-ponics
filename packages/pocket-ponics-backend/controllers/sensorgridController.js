@@ -3,6 +3,68 @@ const crypto = require('crypto');
 import mySQL from './mySQLController';
 import notificationController from './notificationController'
 
+//Post water_level, nutrient_level, light_level, backup_battery and power_source 
+exports.postGeneralGreenhouse = (req, res) => {
+    //convert base64 credentials to ascii
+    let basicAuth = req.headers.authorization.split(" ")[1]
+    let buff = new Buffer(basicAuth, 'base64');
+    let credentials = buff.toString('ascii').split(":");
+
+    //Store username and password provided
+    var serial_no = credentials[0];
+    var password = credentials[1];
+
+    //Store greenhouse readings provided
+    var power_supply = req.body.power_supply
+    var backup_battery_level = req.body.backup_battery_level
+    var light_level = req.body.light_level
+    var water_level = req.body.water_level
+    var nutrient_level = req.body.nutrient_level
+
+    //Retrieve password hash from database for given serial number
+    mySQL.getHashForSensorGrid(serial_no, function(err, record) {
+        if(err)
+        {
+            res.status(403)
+            res.json({403: "Authentication Error"})
+        }
+        else if(record == undefined)
+        {
+            res.status(402)
+            res.json({402: "Sensor Grid Not Found"})
+        } 
+        else 
+        {
+            //Calculate password hash and compare to retrieved hash
+            bcrypt.compare(password, record.password_hash, (err, result) => {
+                if(result)
+                {
+                    powerSourceNotification(record.user_id, record.greenhouse_id, power_supply)
+                    backupBatteryNotification(record.user_id, record.greenhouse_id, backup_battery_level)
+                    waterNutrientLevelNotification(record.user_id, record.greenhouse_id, water_level, nutrient_level)
+
+                    //Update greenhouse record and tiers record
+                    mySQL.updateGeneralGreenhouseReadings(record.user_id, record.greenhouse_id, water_level, nutrient_level, backup_battery_level, power_supply, light_level, function(err, record) {
+                        if(!err)
+                        {
+                            res.status(200)
+                            res.json({200: "General Greenhouse Readings Recorded"})
+                        }
+                        else {
+                            res.status(201)
+                            res.json({201: "Error recording general greenhouse readings"})
+                        }
+                    })
+                }
+                else {
+                    res.status(401)
+                    res.json({401: "Unauthorized"})
+                }        
+            })
+        }
+    })
+}
+
 //Post all sensor readings for all tiers of greenhouse
 exports.postReadingsGreenhouse = (req, res) => {
     //convert base64 credentials to ascii

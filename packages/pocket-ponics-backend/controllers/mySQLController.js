@@ -259,6 +259,21 @@ exports.updateReadingsForGreenhouse = (user_id, greenhouse_id, water_level, nutr
     })
 }
 
+
+exports.updateGeneralGreenhouseReadings = (user_id, greenhouse_id, water_level, nutrient_level, battery, power_source, light_level, callback) => {
+
+    var greenhouseUpdate = `UPDATE greenhouse SET water_level = ${water_level}, nutrient_level = ${nutrient_level}, battery = ${battery}, power_source = ${power_source}, light_level = ${light_level} WHERE (user_id = ${user_id} and greenhouse_id = ${greenhouse_id});`
+    var greenhouseUpdateHistory = `INSERT into historical_data (date, water_level, nutrient_level, battery, power_source, greenhouse_id, user_id, light_level) VALUES (NOW(), ${water_level}, ${nutrient_level}, ${battery}, ${power_source}, ${greenhouse_id}, ${user_id}, ${light_level});`
+
+    sqlController.executeTransaction([greenhouseUpdate, greenhouseUpdateHistory], function(err, result){
+        if(err)
+        {
+            console.log(result)
+        }
+        callback(err, result)
+    })
+}
+
 exports.updateReadingsForGreenhouseTier = (user_id, greenhouse_id, tier, water_level, ph_level, ec_level, callback) => {
     sqlController.execute(`UPDATE tiers SET water_level = ${water_level}, ph_level = ${ph_level}, ec_level = ${ec_level} WHERE user_id = ${user_id} and greenhouse_id = ${greenhouse_id} and tier = ${tier}`, function(err, result) {
         if(err)

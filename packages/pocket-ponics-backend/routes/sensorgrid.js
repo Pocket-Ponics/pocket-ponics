@@ -5,6 +5,9 @@ module.exports = function(app)
     app.route('/sensorgrid/sensor/greenhouse')
         .post(sensorgrid.postReadingsGreenhouse);
 
+    app.route('/sensorgrid/sensor/greenhouse/general')
+        .post(sensorgrid.postGeneralGreenhouse)
+
     app.route('/sensorgrid/sensor/:tier')
         .post(sensorgrid.postReadingsTier)
 
