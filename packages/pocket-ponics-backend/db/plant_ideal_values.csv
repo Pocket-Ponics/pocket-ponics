@@ -1,0 +1,6 @@
+plant_id,ph_level_low,ec_level_low,temp_low,cycle_time,ph_level_high,ec_level_high,temp_high,name,light_time
+1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,empty,NULL
+2,6.00,2.00,0.00,65,6.50,4.00,0.00,greenbeans,12
+3,5.50,1.80,0.00,60,6.60,2.30,0.00,spinach,10
+4,6.00,1.80,0.00,45,6.50,2.40,0.00,turnip,12
+5,5.50,2.00,0.00,84,6.50,5.00,0.00,tomato,10

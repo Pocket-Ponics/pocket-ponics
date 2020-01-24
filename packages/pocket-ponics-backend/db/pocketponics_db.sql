@@ -36,24 +36,17 @@ CREATE TABLE `active_sessions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `adjustments`
+-- Table structure for table `devices`
 --
 
-DROP TABLE IF EXISTS `adjustments`;
+DROP TABLE IF EXISTS `devices`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `adjustments` (
-  `adjustment_type` tinyint(4) NOT NULL,
-  `amount` decimal(5,2) NOT NULL,
+CREATE TABLE `devices` (
   `user_id` int(11) NOT NULL,
-  `tier` int(11) NOT NULL,
-  `greenhouse_id` int(11) NOT NULL,
-  PRIMARY KEY (`adjustment_type`,`user_id`,`greenhouse_id`,`tier`),
-  KEY `user_id` (`user_id`),
-  KEY `greenhouse_id` (`greenhouse_id`),
-  CONSTRAINT `greenhouse_id_fkadj` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
-  CONSTRAINT `user_id_fkadj` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `device_key` varchar(45) NOT NULL,
+  UNIQUE KEY `device_key_UNIQUE` (`device_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,7 +62,7 @@ CREATE TABLE `greenhouse` (
   `water_level` decimal(5,2) DEFAULT '0.00',
   `nutrient_level` decimal(5,2) DEFAULT '0.00',
   `battery` decimal(5,2) DEFAULT '0.00',
-  `seedling_time` datetime DEFAULT NULL,
+  `seedling_time` date DEFAULT NULL,
   `power_source` tinyint(4) DEFAULT '0',
   `light_level` decimal(5,2) DEFAULT '0.00',
   `user_id` int(11) NOT NULL,
@@ -77,7 +70,7 @@ CREATE TABLE `greenhouse` (
   UNIQUE KEY `greenhouse_id_UNIQUE` (`greenhouse_id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `user_id_fkgr` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -112,16 +105,20 @@ DROP TABLE IF EXISTS `plant_ideal`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `plant_ideal` (
-  `plant_id` int(11) NOT NULL,
-  `growth_stage` int(11) NOT NULL,
-  `ph_level_med` decimal(5,2) NOT NULL,
-  `ec_level_med` decimal(5,2) NOT NULL,
-  `water_level_med` decimal(5,2) NOT NULL,
-  `temp_med` decimal(5,2) NOT NULL,
-  `cycle_time` time NOT NULL,
-  PRIMARY KEY (`plant_id`,`growth_stage`),
-  UNIQUE KEY `plant_id_UNIQUE` (`plant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `plant_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ph_level_low` decimal(5,2) DEFAULT NULL,
+  `ec_level_low` decimal(5,2) DEFAULT NULL,
+  `temp_low` decimal(5,2) DEFAULT NULL,
+  `cycle_time` int(11) DEFAULT NULL,
+  `ph_level_high` decimal(5,2) DEFAULT NULL,
+  `ec_level_high` decimal(5,2) DEFAULT NULL,
+  `temp_high` decimal(5,2) DEFAULT NULL,
+  `name` varchar(45) NOT NULL,
+  `light_time` int(11) DEFAULT NULL,
+  PRIMARY KEY (`plant_id`),
+  UNIQUE KEY `plant_id_UNIQUE` (`plant_id`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -156,19 +153,19 @@ DROP TABLE IF EXISTS `tiers`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tiers` (
   `tier` int(11) NOT NULL,
-  `growth_stage` int(11) DEFAULT '0',
   `plant_id` int(11) DEFAULT NULL,
   `ph_level` decimal(5,2) DEFAULT '0.00',
   `ec_level` decimal(5,2) DEFAULT '0.00',
   `water_level` decimal(5,2) DEFAULT '0.00',
-  `cycle_time` time DEFAULT NULL,
+  `cycle_time` date DEFAULT NULL,
+  `light_start` int(11) DEFAULT NULL,
   `num_plants` int(11) DEFAULT '0',
   `greenhouse_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`tier`,`greenhouse_id`,`user_id`),
-  KEY `plant_id` (`plant_id`),
   KEY `greenhouse_id` (`greenhouse_id`),
   KEY `user_id` (`user_id`),
+  KEY `plant_id_fkt_idx` (`plant_id`),
   CONSTRAINT `greenhouse_id_fkt` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
   CONSTRAINT `plant_id_fkt` FOREIGN KEY (`plant_id`) REFERENCES `plant_ideal` (`plant_id`),
   CONSTRAINT `user_id_fkt` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
@@ -186,11 +183,12 @@ CREATE TABLE `user` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(128) NOT NULL,
   `password_hash` varchar(128) NOT NULL,
+  `admin` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_id_UNIQUE` (`user_id`),
   UNIQUE KEY `email_UNIQUE` (`email`),
   UNIQUE KEY `password_hash_UNIQUE` (`password_hash`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -202,4 +200,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-08 15:28:18
+-- Dump completed on 2020-01-23 21:03:40

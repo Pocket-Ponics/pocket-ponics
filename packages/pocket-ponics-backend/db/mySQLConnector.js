@@ -7,7 +7,8 @@ var pool = mysql.createPool({
     user     : process.env.DB_USER,
     password : process.env.DB_PASS,
     database : 'pocketponics',
-    debug    :  false
+    debug    :  false,
+    connectTimeout: 3000000
 });
 
 exports.execute = (query,callback) => {
