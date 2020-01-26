@@ -22,8 +22,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 
  const AuthStack = createSwitchNavigator({ 
  	AuthLoading: { screen: AuthLoadingScreen },
- 	Login: { screen: LoginScreen } 
- })
+ 	Login: { screen: LoginScreen }})
 
 const AppStack = createStackNavigator({
 	Greenhouse: { screen: GreenhouseScreen },

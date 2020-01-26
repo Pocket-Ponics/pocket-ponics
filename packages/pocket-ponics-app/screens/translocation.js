@@ -9,7 +9,7 @@ import {
 	TouchableOpacity
 } from 'react-native';
 
-
+import styles from '../components/greenhouse/translocation';
 
 const tomatoImage = require('../assets/tomato.png')
 const greenbeanImage = require('../assets/greenbean.png')
@@ -24,39 +24,39 @@ export default class Example extends React.Component {
 	One(name) {
 		switch(name) {
 			case 'Tomatoes':
-				return ''
+				return 'Remove the seedling along with the rockwool from the tray.'
 			case 'Green Beans':
-				return ''
+				return 'Remove the seedling along with the rockwool from the tray.'
 			case 'Spinach':
-				return ''
+				return 'Remove the seedling along with the rockwool from the tray.'
 			case 'Turnip':
-				return 'Turnips'
+				return 'Remove the seedling along with the rockwool from the tray.'
 		}
 	}
 
 	Two(name) {
 		switch(name) {
 			case 'Tomatoes':
-				return ''
+				return 'Wrap a moist paper towel around the rockwool.'
 			case 'Green Beans':
-				return ''
+				return 'Wrap a moist paper towel around the rockwool.'
 			case 'Spinach':
-				return ''
+				return 'Wrap a moist paper towel around the rockwool.'
 			case 'Turnip':
-				return ''
+				return 'Wrap a moist paper towel around the rockwool.'
 		}
 	}
 
 	Three(name) {
 		switch(name) {
 			case 'Tomatoes':
-				return ''
+				return 'Place the wrapped rockwool into a net pot inside the tier.'
 			case 'Green Beans':
-				return ''
+				return 'place the wrapped rockwool into a net pot in the tier.'
 			case 'Spinach':
-				return ''
+				return 'place the wrapped rockwool into a net pot in the tier.'
 			case 'Turnip':
-				return ''
+				return 'place the wrapped rockwool into a net pot in the tier.'
 		}
 	}
 
@@ -65,13 +65,13 @@ export default class Example extends React.Component {
 		return (
 			<View style={styles.backgroundContainer}>
 				<Text style={styles.value}>
-					<Text style={styles.valueName}>instructions for translocation of:</Text> {name}
+					<Text style={styles.valueName}>Instructions for translocation of:</Text> {name}
 				</Text>
 
 				<Text style={styles.value}></Text>
 
 				<Text style={styles.value}>
-					<Text style={styles.valueName}>Step 1:</Text> {this.One(name)} 
+					<Text style={styles.valueName}>Step 1:</Text> Remove the seedling along with the rockwool from the tray. 
 				</Text>
 
 				<Text style={styles.value}></Text>
