@@ -15,6 +15,8 @@ const tomatoImage = require('../assets/tomato.png')
 const greenbeanImage = require('../assets/greenbean.png')
 const spinachImage = require('../assets/spinach.png')
 const turnipImage = require('../assets/turnip.png')
+var date = new Date().getDate();
+const daysTilharvest = 0
 
 const { width: WIDTH } = Dimensions.get('window')
 
@@ -127,9 +129,11 @@ export default class Example extends React.Component {
 						</Text>
 					</View>
 				</View>
-				<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('HarvestInstruction', {name: this.getReadableName(plant.name), })}>
-					<Text style={styles.buttonText}>Harvest {this.getReadableName(plant.name)}</Text>
-				</TouchableOpacity>
+				{daysTilharvest === 0 ? (
+					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('HarvestInstruction', {name: this.getReadableName(plant.name), })}>
+						<Text style={styles.buttonText}>Harvest {this.getReadableName(plant.name)}</Text>
+					</TouchableOpacity>
+				) : null }
 			</View>
 		)
 	}
