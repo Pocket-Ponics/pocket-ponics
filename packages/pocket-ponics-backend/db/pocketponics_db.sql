@@ -41,6 +41,7 @@ CREATE TABLE `active_sessions` (
 
 LOCK TABLES `active_sessions` WRITE;
 /*!40000 ALTER TABLE `active_sessions` DISABLE KEYS */;
+INSERT INTO `active_sessions` VALUES ('q9jNiDqWBPdS0+XXdwvmzltdFyCyCqN0VhC+VY8Sg8U=','2020-01-27 22:53:58',18),('wQe47h5651H5JXoSEokI7qOQFT7R7tDq88ZKNlBuSGU=','2020-01-27 22:44:24',17);
 /*!40000 ALTER TABLE `active_sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -88,7 +89,7 @@ CREATE TABLE `greenhouse` (
   UNIQUE KEY `greenhouse_id_UNIQUE` (`greenhouse_id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `user_id_fkgr` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -157,7 +158,7 @@ CREATE TABLE `plant_ideal` (
   PRIMARY KEY (`plant_id`),
   UNIQUE KEY `plant_id_UNIQUE` (`plant_id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -166,6 +167,7 @@ CREATE TABLE `plant_ideal` (
 
 LOCK TABLES `plant_ideal` WRITE;
 /*!40000 ALTER TABLE `plant_ideal` DISABLE KEYS */;
+INSERT INTO `plant_ideal` VALUES (1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'empty',NULL,NULL,NULL,NULL),(2,6.00,2.00,0.00,65,6.50,4.00,0.00,'greenbeans',12,NULL,NULL,NULL),(3,5.50,1.80,0.00,60,6.60,2.30,0.00,'spinach',10,NULL,NULL,NULL),(4,6.00,1.80,0.00,45,6.50,2.40,0.00,'turnip',12,NULL,NULL,NULL),(5,5.50,2.00,0.00,84,6.50,5.00,0.00,'tomato',10,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `plant_ideal` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -254,7 +256,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `user_id_UNIQUE` (`user_id`),
   UNIQUE KEY `email_UNIQUE` (`email`),
   UNIQUE KEY `password_hash_UNIQUE` (`password_hash`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -263,6 +265,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (17,'rohanpatel5753@knights.ucf.edu','$2b$10$cfEDA/Heq.B20Yr1mPg17uM/s8GKoQ7OWsAV.dcSD1OXTKUgHRZRi',1),(18,'test@knights.ucf.edu','$2b$10$yFkEgHLeiZ9AdXkzxUUvROgylUQMt4VAMYBl5CmB3uoahr7yrkZ.a',0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -275,4 +278,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-27 17:12:48
+-- Dump completed on 2020-01-27 17:25:21
