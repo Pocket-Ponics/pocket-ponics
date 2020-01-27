@@ -1,10 +1,16 @@
-import React from 'react';
-import { Text,View, SafeAreaView, Image, TouchableOpacity, Modal, FlatList } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
+import React from 'react'
+import { AsyncStorage, Text, View, Image, TouchableOpacity, Modal, FlatList, TextInput } from 'react-native'
+import { StackActions, NavigationActions } from 'react-navigation'
 
 import styles from './setup-styles'
 
 import Display from '../components/greenhouse/display'
+import { 
+	TOMATO_VALUES,
+	GREENBEAN_VALUES,
+	SPINACH_VALUES,
+	TURNIP_VALUES
+} from '../util/constants'
 
 const tomatoImage = require('../assets/tomato.png')
 const greenbeanImage = require('../assets/greenbean.png')
@@ -12,29 +18,13 @@ const spinachImage = require('../assets/spinach.png')
 const turnipImage = require('../assets/turnip.png')
 
 const plants = [
-	{ img: greenbeanImage, display: 'Greenbean', data: {
-		name: 'greenbeans',
-		pH: 6.4,
-		ec: 3.9
-	}},
-	{ img: spinachImage, display: 'Spinach', data: {
-		name: 'spinach',
-		pH: 6.1,
-		ec: 1.9,
-	}},
-	{ img: turnipImage, display: 'Turnip', data: {
-		name: 'turnip',
-		pH: 6.2,
-		ec: 2.0
-	}},
+	{ img: greenbeanImage, display: 'Greenbean', data: GREENBEAN_VALUES },
+	{ img: spinachImage, display: 'Spinach', data: SPINACH_VALUES },
+	{ img: turnipImage, display: 'Turnip', data: TURNIP_VALUES },
 ]
 
 const topplants = [
-	{ img: tomatoImage, display: 'Tomato', data: {
-		name: 'tomato',
-		pH: 6.3,
-		ec: 3.2
-	}},
+	{ img: tomatoImage, display: 'Tomato', data: TOMATO_VALUES },
 ]
 
 class TierSelectionScreen extends React.Component {
@@ -46,26 +36,30 @@ class TierSelectionScreen extends React.Component {
 		super(props)
 
 		this.state = {
-			tiers: [null, null, null, null],
+			tiers: [{}, {}, {}, {}],
+			name: '',
 			modalVisible: false,
 			currIndex: 0
 		}
+
+		this.onChangeName = this.onChangeName.bind(this)
 	}
 
-	goToNext() {
+	async goToNext() {
+		await AsyncStorage.setItem('tiers', JSON.stringify(this.state.tiers))
+		await AsyncStorage.setItem('name', this.state.name)
+
 		const resetAction = StackActions.reset({
 			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'FillWater' })],
-		});
-		this.props.navigation.dispatch(resetAction);
+			actions: [NavigationActions.navigate({ 
+				routeName: 'FillWater'
+			})],
+		})
+		this.props.navigation.dispatch(resetAction)
 	}
 
 	cancel() {
-		const resetAction = StackActions.reset({
-			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'Greenhouse' })],
-		});
-		this.props.navigation.dispatch(resetAction);
+		return this.props.navigation.navigate('Auth')
 	}
 
 	setTier(data) {
@@ -79,44 +73,64 @@ class TierSelectionScreen extends React.Component {
 		}))
 	}
 
+	onChangeName(name) {
+		this.setState({ name })
+	}
+
 	render() {
+		const opacityStyle = { opacity: this.state.name === '' ? 0.3 : 1 }
 		return (
-			<SafeAreaView style={{flex: 1}}>
+			<View style={styles.container}>
 				<View style={styles.background}>
 					<Modal
 						animationType="slide"
 						transparent={true}
 						visible={this.state.modalVisible}>
 						<View
-							style={{ justifyContent: 'flex-end', flex: 1 }}>
-							<View style={{ height: 400, backgroundColor: '#FFF', borderRadius: 10}}>
-							<Text style={{...styles.heading, color: "#000", alignSelf: 'center', marginTop: 20 }}>Plant Choices</Text>
-							<FlatList
-								data={this.state.currIndex === 0 ? topplants : plants}
-								renderItem={({ item }) => (
-									<TouchableOpacity style={styles.selectorButton} onPress={() => this.setTier(item.data)}>
-										<Image source={item.img} style={styles.selectorImg}/>
-										<Text>{item.display}</Text>
-									</TouchableOpacity>
-								)}
-								numColumns={3}
-								keyExtractor={(item, index) => index.toString()}/>
+							style={styles.modal}>
+							<View style={styles.modalDisplay}>
+								<Text style={styles.modalHeading}>Plant Choices</Text>
+								<FlatList
+									data={this.state.currIndex === 0 ? topplants : plants}
+									renderItem={({ item }) => (
+										<TouchableOpacity style={styles.selectorButton} onPress={() => this.setTier(item.data)}>
+											<Image source={item.img} style={styles.selectorImg}/>
+											<Text>{item.display}</Text>
+										</TouchableOpacity>
+									)}
+									numColumns={3}
+									keyExtractor={(item, index) => index.toString()}/>
 							</View>
 						</View>
-			        </Modal>
+					</Modal>
 					<Text style={styles.heading}>Select plants</Text>
-					<Text style={styles.text}>Tap each tier of the greenhouse to assign plants</Text>
-					<View style={{ flex: 1 }}>
-						<Display tiers={this.state.tiers} navigation={{navigate: (name, data) => this.setState({ modalVisible: true, currIndex: data.index })}}/>
+					<Text style={styles.text}>Name the greenhouse, and then tap each tier of the greenhouse to assign plants</Text>
+					<View style={styles.row}>
+						<Text style={styles.inputLabel}>Name:</Text>
+						<TextInput
+							style={styles.input}
+							placeholder={'Greenhouse Name'}
+							placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
+							value={this.state.name}
+							onChangeText={this.onChangeName}
+							autoCapitalize="words"/>
 					</View>
-					<TouchableOpacity style={styles.button} onPress={this.goToNext.bind(this)}>
+					<View style={styles.container}>
+						<Display 
+							tiers={this.state.tiers} 
+							navigation={{navigate: (name, data) => this.setState({ modalVisible: true, currIndex: data.index })}}/>
+					</View>
+					<TouchableOpacity 
+						style={{...styles.button, ...opacityStyle}} 
+						onPress={this.goToNext.bind(this)} 
+						disabled={this.state.name === ''}>
 						<Text style={styles.buttonText}>Continue Setup</Text>
 					</TouchableOpacity>
 					<TouchableOpacity style={styles.cancelButton} onPress={this.cancel.bind(this)}>
 						<Text style={styles.cancelButtonText}>Cancel Setup</Text>
 					</TouchableOpacity>
 				</View>
-			</SafeAreaView>
+			</View>
 		)
 	}
 }

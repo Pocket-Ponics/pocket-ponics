@@ -1,10 +1,7 @@
-import React from 'react';
-import { Text,View, SafeAreaView, Image, TouchableOpacity, AlertIOS, AsyncStorage } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
+import React from 'react'
+import { Text,View, TouchableOpacity, AsyncStorage } from 'react-native'
 
 import styles from './setup-styles'
-
-const plugin = require('../assets/plug.jpg')
 
 class ProfileScreen extends React.Component {
 	static navigationOptions = {
@@ -12,17 +9,26 @@ class ProfileScreen extends React.Component {
 	}
 
 	changePassword(){
-		AlertIOS.prompt(
-			'Enter your new password'
-		)
+		(async () => {
+			try {
+				const username = await AsyncStorage.getItem('username', '')
+				const password = await AsyncStorage.getItem('password', '')
+				const token = await AsyncStorage.getItem('token', '')
+				return this.props.navigation.navigate('ChangePassword', { 
+					username, 
+					password,
+					token })
+			} catch(e) {
+				console.log(e)
+			}
+		})()
 	}
 
 	logout() {
 		(async () => {
 			try {
-				const username = await AsyncStorage.setItem('username', '')
-				const password = await AsyncStorage.setItem('password', '')
-				this.setState({ username, password })
+				await AsyncStorage.setItem('username', '')
+				await AsyncStorage.setItem('password', '')
 				return this.props.navigation.navigate('Auth')
 			} catch(e) {
 				console.log(e)
@@ -31,12 +37,14 @@ class ProfileScreen extends React.Component {
 	}
 
 	render() {
+		const greenhouses = this.props.navigation.getParam('greenhouses', [])
+		const username = this.props.navigation.getParam('username', '')
+
 		return (
-			<SafeAreaView style={{flex: 1}}>
+			<View style={styles.container}>
 				<View style={styles.background}>
-					<Text style={styles.text}>Username: demouser</Text>
-					<Text style={styles.text}>Greenhouses: 2</Text>
-					<Text style={styles.text}>Last login: 1/2/2020</Text>
+					<Text style={styles.text}>Username: {username}</Text>
+					<Text style={styles.text}>Greenhouses: {greenhouses.length - 1}</Text>
 					<TouchableOpacity style={styles.button} onPress={this.changePassword.bind(this)}>
 						<Text style={styles.buttonText}>Change password</Text>
 					</TouchableOpacity>
@@ -44,7 +52,7 @@ class ProfileScreen extends React.Component {
 						<Text style={styles.buttonText}>Logout</Text>
 					</TouchableOpacity>
 				</View>
-			</SafeAreaView>
+			</View>
 		)
 	}
 }
