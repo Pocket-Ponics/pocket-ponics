@@ -1,7 +1,7 @@
 import base64 from 'base-64'
 import { Notifications } from 'expo'
 
-const host = '10.171.204.187'
+const host = 'ec2-18-191-221-89.us-east-2.compute.amazonaws.com'
 const port = '8080'
 
 const greenhouse = '169.254.146.181'
@@ -38,7 +38,7 @@ const APIUtil = {
 		})
 	},
 	getAuthToken(username, password) {
-		return APIUtil.timeoutFetch(5000, fetch(`http://${host}:${port}/auth/get_token`, {
+		return APIUtil.timeoutFetch(10000, fetch(`http://${host}:${port}/auth/get_token`, {
 			method: 'GET',
 			headers: new Headers({
 				'Authorization': 'Basic ' + base64.encode(`${username}:${password}`),
@@ -51,7 +51,7 @@ const APIUtil = {
 	},
 	createUser(email, password) {
 		const encode = APIUtil.urlEncode({ email, password })
-		return APIUtil.timeoutFetch(5000, fetch(`http://${host}:${port}/auth/create_user`, {
+		return APIUtil.timeoutFetch(10000, fetch(`http://${host}:${port}/auth/create_user`, {
 			method: 'POST',
 			headers: new Headers({
 				'Content-Type': 'application/x-www-form-urlencoded'
@@ -63,7 +63,7 @@ const APIUtil = {
 			.then(result => {console.log(result); return JSON.parse(result)})
 	},
 	get(endpoint, token, body) {
-		return APIUtil.timeoutFetch(5000, fetch(endpoint, {
+		return APIUtil.timeoutFetch(10000, fetch(endpoint, {
 			method: 'GET',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
@@ -101,7 +101,7 @@ const APIUtil = {
 			.then(result => JSON.parse(result))
 	},
 	post(endpoint, token, body) {
-		return APIUtil.timeoutFetch(5000, fetch(endpoint, {
+		return APIUtil.timeoutFetch(10000, fetch(endpoint, {
 			method: 'POST',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
@@ -114,7 +114,7 @@ const APIUtil = {
 			.then(result => JSON.parse(result))
 	},
 	put(endpoint, token, body) {
-		return APIUtil.timeoutFetch(5000, fetch(endpoint, {
+		return APIUtil.timeoutFetch(10000, fetch(endpoint, {
 			method: 'PUT',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
