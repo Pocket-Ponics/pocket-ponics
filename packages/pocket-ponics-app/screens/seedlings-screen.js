@@ -40,7 +40,7 @@ export default class SeedlingsScreen extends React.Component {
 				<TouchableOpacity>
 					<Text style={styles.button}>Water Seedlings</Text>
 				</TouchableOpacity>
-				<TouchableOpacity>
+				<TouchableOpacity onPress={() => this.props.navigation.navigate ('Translocation')}>
 					<Text style={styles.button}>Plant Seedlings</Text>
 				</TouchableOpacity>
 			</View>

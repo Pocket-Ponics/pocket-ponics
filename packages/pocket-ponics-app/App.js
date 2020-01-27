@@ -16,6 +16,7 @@ import ProfileScreen from './screens/profile-screen'
 import AuthLoadingScreen from './screens/auth-loading-screen'
 import LoginScreen from './screens/login-screen'
 import HarvestInstructionScreen from './screens/harvest-instruction-screen'
+import TranslocationScreen from './screens/translocation-screen'
 
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
@@ -38,6 +39,7 @@ const AppStack = createStackNavigator({
 	StartSeedlings: { screen: StartSeedlingsScreen },
 	Profile: { screen: ProfileScreen },
 	HarvestInstruction: { screen: HarvestInstructionScreen },
+	Translocation: { screen: TranslocationScreen }
 },{
 	defaultNavigationOptions: {
 		headerStyle: {
