@@ -1,7 +1,7 @@
 import base64 from 'base-64'
 import { Notifications } from 'expo'
 
-const host = 'ec2-18-191-221-89.us-east-2.compute.amazonaws.com'
+const host = '10.171.204.187'
 const port = '8080'
 
 const greenhouse = '169.254.146.181'

@@ -162,41 +162,43 @@ export default class Example extends React.Component {
 		const isReadyToHarvest = harvestDate - Date.now() < ONE_DAY
 		
 		return (
-			<View style={styles.backgroundContainer}>
-				<Image source={this.getImage(plant.plant_id)} style={styles.plantImage}/>
-				<Text style={styles.title}>{this.getReadableName(plant.plant_id)}</Text>
-				<View style={styles.plantInfoContainer}>
-					<View style={styles.valuesContainer}>
-						<Text style={styles.value}>
-							<Text style={styles.valueName}>pH:</Text> {plant.ph_level}
-						</Text>
+			<View style={styles.background}>
+				<View style={styles.container}>
+					<Image source={this.getImage(plant.plant_id)} style={styles.plantImage}/>
+					<Text style={styles.title}>{this.getReadableName(plant.plant_id)}</Text>
+					<View style={styles.plantInfoContainer}>
+						<View style={styles.valuesContainer}>
+							<Text style={styles.value}>
+								<Text style={styles.valueName}>pH:</Text> {plant.ph_level}
+							</Text>
 
-						<Text style={styles.value}>
-							<Text style={styles.valueName}>Electrical Conductivity:</Text> {plant.ec_level}
-						</Text>
-						
-						<Text style={styles.value}>
-							<Text style={styles.valueName}>Estimated Harvest:</Text> {harvestString}
-						</Text>
+							<Text style={styles.value}>
+								<Text style={styles.valueName}>Electrical Conductivity:</Text> {plant.ec_level}
+							</Text>
+							
+							<Text style={styles.value}>
+								<Text style={styles.valueName}>Estimated Harvest:</Text> {harvestString}
+							</Text>
+						</View>
+						<View style={styles.statusesContainer}>
+							<Text style={styles.value}>
+								{this.statusText(plant['plant_id'], plant['ph_level'], this.isValidpH)}
+							</Text>
+							<Text style={styles.value}>
+								{this.statusText(plant['plant_id'], plant['ec_level'], this.isValidEC)}
+							</Text>
+							<Text style={styles.value}>
+								{isReadyToHarvest ? 'Ready!' : ''}
+							</Text>
+						</View>
 					</View>
-					<View style={styles.statusesContainer}>
-						<Text style={styles.value}>
-							{this.statusText(plant['plant_id'], plant['ph_level'], this.isValidpH)}
-						</Text>
-						<Text style={styles.value}>
-							{this.statusText(plant['plant_id'], plant['ec_level'], this.isValidEC)}
-						</Text>
-						<Text style={styles.value}>
-							{isReadyToHarvest ? 'Ready!' : ''}
-						</Text>
-					</View>
+					{
+						isReadyToHarvest ? (
+							<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('HarvestInstruction', {name: this.getReadableName(plant.plant_id), })}>
+								<Text style={styles.buttonText}>Harvest {this.getReadableName(plant.plant_id)}</Text>
+							</TouchableOpacity>) : null
+					}
 				</View>
-				{
-					isReadyToHarvest ? (
-						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('HarvestInstruction', {name: this.getReadableName(plant.plant_id), })}>
-							<Text style={styles.button}>Harvest {this.getReadableName(plant.plant_id)}</Text>
-						</TouchableOpacity>) : null
-				}
 			</View>
 		)
 	}

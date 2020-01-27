@@ -11,6 +11,7 @@ import {
 	ONE_DAY
 } from '../util/constants'
 import styles from './seedlings-screen-styles'
+console.log(styles.buttonBox)
 
 const seedlingImage = require('../assets/seedling.png')
 
@@ -74,30 +75,34 @@ export default class SeedlingsScreen extends React.Component {
 		let nextWater = new Date(today.getTime() + (ONE_DAY * (daysTilTransplant % 7)))
 		
 		return (
-			<View style={styles.backgroundContainer}>
-				<Image source={seedlingImage} style={styles.plantImage}/>
-				<Text style={styles.title}>Seedlings</Text>
-				<View style={styles.plantInfoContainer}>
-					<View style={styles.valuesContainer}>
-						<Text style={styles.value}>
-							<Text style={styles.valueName}>Last Watered:</Text> {this.generateDateString(lastWater)}
-						</Text>
-						<Text style={styles.value}>
-							<Text style={styles.valueName}>Next Water:</Text> {this.generateDateString(nextWater)}
-						</Text>
-						<Text style={styles.value}>
-							<Text style={styles.valueName}>Transplant date:</Text> {transplantString}
-						</Text>
+			<View style={styles.background}>
+				<View style={styles.container}>
+					<Image source={seedlingImage} style={styles.plantImage}/>
+					<Text style={styles.title}>Seedlings</Text>
+					<View style={styles.plantInfoContainer}>
+						<View style={styles.valuesContainer}>
+							<Text style={styles.value}>
+								<Text style={styles.valueName}>Last Watered:</Text> {this.generateDateString(lastWater)}
+							</Text>
+							<Text style={styles.value}>
+								<Text style={styles.valueName}>Next Water:</Text> {this.generateDateString(nextWater)}
+							</Text>
+							<Text style={styles.value}>
+								<Text style={styles.valueName}>Transplant date:</Text> {transplantString}
+							</Text>
+						</View>
+					</View>
+					<View styles={styles.buttonBox}>
+						<TouchableOpacity style={styles.button}>
+							<Text style={styles.buttonText}>Water Seedlings</Text>
+						</TouchableOpacity>
+						{daysTilTransplant <= 0 ? (
+							<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Translocation')}>
+								<Text style={styles.buttonText}>Transplant Seedlings</Text>
+							</TouchableOpacity>
+						) : null }
 					</View>
 				</View>
-				<TouchableOpacity>
-					<Text style={styles.button}>Water Seedlings</Text>
-				</TouchableOpacity>
-				{daysTilTransplant <= 0 ? (
-					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Translocation', )}>
-						<Text style={styles.button}>Transplant Seedlings</Text>
-					</TouchableOpacity>
-				) : null }
 			</View>
 		)
 	}
