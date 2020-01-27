@@ -1,4 +1,5 @@
 import React from 'react';
+import { StyleSheet, Dimensions } from 'react-native'
 import { StackActions, NavigationActions } from 'react-navigation';
 
 import { 
@@ -192,8 +193,8 @@ export default class Example extends React.Component {
 				</View>
 				{
 					isReadyToHarvest ? (
-						<TouchableOpacity>
-							<Text style={styles.button}>Harvest {this.getReadableName(plant.name)}</Text>
+						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('HarvestInstruction', {name: this.getReadableName(plant.plant_id), })}>
+							<Text style={styles.button}>Harvest {this.getReadableName(plant.plant_id)}</Text>
 						</TouchableOpacity>) : null
 				}
 			</View>

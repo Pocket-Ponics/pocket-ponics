@@ -48,7 +48,7 @@ const AppStack = createStackNavigator({
 	StartSeedlings: { screen: StartSeedlingsScreen },
 	Profile: { screen: ProfileScreen },
 	HarvestInstruction: { screen: HarvestInstructionScreen },
-	Translocation: { screen: TranslocationScreen }
+	Translocation: { screen: TranslocationScreen },
 	ChangePassword: { screen: ChangePasswordScreen }
 },{
 	defaultNavigationOptions: {
@@ -65,10 +65,10 @@ const AppStack = createStackNavigator({
 const AppContainer = createAppContainer(createSwitchNavigator(
 	{
 		App: AppStack,
-		//Auth: AuthStack,
+		Auth: AuthStack,
 	},
 	{
-		//initialRouteName: 'Auth',
+		initialRouteName: 'Auth',
 	}
 ))
 
