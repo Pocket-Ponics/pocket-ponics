@@ -181,7 +181,7 @@ exports.getUserForToken = (token, callback) => {
 }
 
 exports.createPlantIdeal = (ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, callback) => {
-    sqlController.execute(`insert into plant_ideal (ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url) values (${ph_level_low}, ${ec_level_low}, ${temp_low}, ${cycle_time}, ${ph_level_high}, ${ec_level_high}, ${temp_high}, "${name}", ${light_time}, "${steps}", "${plant_url}", "${harvest_url}",);`, function(err, result) {
+    sqlController.execute(`insert into plant_ideal (ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url) values (${ph_level_low}, ${ec_level_low}, ${temp_low}, ${cycle_time}, ${ph_level_high}, ${ec_level_high}, ${temp_high}, "${name}", ${light_time}, "${steps}", "${plant_url}", "${harvest_url}");`, function(err, result) {
         if(!err)
         {
             callback(err, result.rows.insertId)
