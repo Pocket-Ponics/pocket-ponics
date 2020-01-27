@@ -18,6 +18,8 @@ import ProfileScreen from './screens/profile-screen'
 import ChangePasswordScreen from './screens/change-password-screen'
 import AuthLoadingScreen from './screens/auth-loading-screen'
 import LoginScreen from './screens/login-screen'
+import HarvestInstructionScreen from './screens/harvest-instruction-screen'
+import TranslocationScreen from './screens/translocation-screen'
 import SignUpScreen from './screens/signup-screen'
 import ResetScreen from './screens/reset-password-screen'
 
@@ -47,6 +49,8 @@ const AppStack = createStackNavigator({
 	SoakWool: { screen: SoakWoolScreen },
 	StartSeedlings: { screen: StartSeedlingsScreen },
 	Profile: { screen: ProfileScreen },
+	HarvestInstruction: { screen: HarvestInstructionScreen },
+	Translocation: { screen: TranslocationScreen },
 	ChangePassword: { screen: ChangePasswordScreen }
 },{
 	defaultNavigationOptions: {

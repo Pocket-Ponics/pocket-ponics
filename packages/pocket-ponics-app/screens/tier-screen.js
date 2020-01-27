@@ -1,4 +1,7 @@
-import React from 'react'
+import React from 'react';
+import { StyleSheet, Dimensions } from 'react-native'
+import { StackActions, NavigationActions } from 'react-navigation';
+
 import { 
 	Text, 
 	View,
@@ -25,6 +28,18 @@ const tomatoImage = require('../assets/tomato.png')
 const greenbeanImage = require('../assets/greenbean.png')
 const spinachImage = require('../assets/spinach.png')
 const turnipImage = require('../assets/turnip.png')
+var date = new Date().getDate();
+const daysTilharvest = 0
+
+const { width: WIDTH } = Dimensions.get('window')
+
+	class TierScreen extends React.Component 
+	{
+		static navigationOptions = 
+		{
+			title: 'Setup',
+		}
+	}
 
 export default class Example extends React.Component {
 	constructor(props) {
@@ -71,6 +86,22 @@ export default class Example extends React.Component {
 		}
 	}
 
+
+	// getReadableName(name) 
+	// {
+	// 	switch(name) 
+	// 	{
+	// 		case 'tomato':
+	// 			return 'Tomatoes'
+	// 		case 'greenbeans':
+	// 			return 'Green Beans'
+	// 		case 'spinach':
+	// 			return 'Spinach'
+	// 		case 'turnip':
+	// 			return 'Turnips'
+	// 	}
+	// }
+
 	getReadableName(id) {
 		switch(id) {
 		case TOMATO_ID:
@@ -116,6 +147,14 @@ export default class Example extends React.Component {
 		return 'Adjusting'
 	}
 
+	harvestinstruction() {
+		const resetAction = StackActions.reset({
+			index: 0,
+			actions: [NavigationActions.navigate({ routeName: 'HarvestInstruction' })],
+		});
+		this.props.navigation.dispatch(resetAction);
+	}
+
 	render() {
 		const plant = this.state.plant
 		const harvestDate = new Date(plant.cycle_time)
@@ -131,9 +170,11 @@ export default class Example extends React.Component {
 						<Text style={styles.value}>
 							<Text style={styles.valueName}>pH:</Text> {plant.ph_level}
 						</Text>
+
 						<Text style={styles.value}>
 							<Text style={styles.valueName}>Electrical Conductivity:</Text> {plant.ec_level}
 						</Text>
+						
 						<Text style={styles.value}>
 							<Text style={styles.valueName}>Estimated Harvest:</Text> {harvestString}
 						</Text>
@@ -152,11 +193,10 @@ export default class Example extends React.Component {
 				</View>
 				{
 					isReadyToHarvest ? (
-						<TouchableOpacity>
-							<Text style={styles.button}>Harvest {this.getReadableName(plant.name)}</Text>
+						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('HarvestInstruction', {name: this.getReadableName(plant.plant_id), })}>
+							<Text style={styles.button}>Harvest {this.getReadableName(plant.plant_id)}</Text>
 						</TouchableOpacity>) : null
 				}
-				
 			</View>
 		)
 	}
