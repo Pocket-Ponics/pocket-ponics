@@ -21,30 +21,15 @@ exports.getPlantIdeals = (req, res) => {
             }
             else if(rec != undefined)
             {    
-                mySQL.getRoleForUser(rec.user_id, function(err, rec2){
-                    if(err)
+                //Retrieve all plant ideal values from DB
+                mySQL.getAllPlantIdeals(function(err, record) {
+                    if(!err)
                     {
-                        res.status(403)
-                        res.json({403: "Authentication Error"})
-                    }
-                    else if(rec2.admin == 1)
-                    {
-                        //Retrieve all plant ideal values from DB
-                        mySQL.getAllPlantIdeals(function(err, record) {
-                            if(!err)
-                            {
-                                res.status(200)
-                                res.json(record.rows)
-                            } else {
-                                res.status(201)
-                                res.json({201: "Unable to retrieve plant ideals"})
-                            }
-                        })
-                    }
-                    else 
-                    {
-                        res.status(401)
-                        res.json({401: "Unauthorized"})
+                        res.status(200)
+                        res.json(record.rows)
+                    } else {
+                        res.status(201)
+                        res.json({201: "Unable to retrieve plant ideals"})
                     }
                 })
             }
@@ -141,6 +126,9 @@ exports.createPlantIdeal = (req, res) => {
         var temp_high = req.body.temp_high
         var name = req.body.name
         var light_time = req.body.light_time
+        var steps = req.body.steps
+        var plant_url = req.body.plant_url
+        var harvest_url = req.body.harvest_url
 
         //Retrieve user_id for given auth token
         mySQL.getUserForToken(cred, function(err, rec) {
@@ -161,7 +149,7 @@ exports.createPlantIdeal = (req, res) => {
                     else if(rec2.admin == 1)
                     {
                         //Create new plant ideal value in DB
-                        mySQL.createPlantIdeal(ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, function(err, record) {
+                        mySQL.createPlantIdeal(ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, function(err, record) {
                             if(!err)
                             {
                                 res.status(200)
@@ -212,6 +200,9 @@ exports.updatePlantIdeal = (req, res) => {
         var temp_high = req.body.temp_high
         var name = req.body.name
         var light_time = req.body.light_time
+        var steps = req.body.steps
+        var plant_url = req.body.plant_url
+        var harvest_url = req.body.harvest_url
 
         //Retrieve user_id for given auth token
         mySQL.getUserForToken(cred, function(err, rec) {
@@ -232,7 +223,7 @@ exports.updatePlantIdeal = (req, res) => {
                     else if(rec2.admin == 1)
                     {
                         //Update plant ideal value in DB
-                        mySQL.updatePlantIdeal(plant_id, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, function(err, record) {
+                        mySQL.updatePlantIdeal(plant_id, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_id, harvest_url, function(err, record) {
                             if(!err)
                             {
                                 res.status(200)
