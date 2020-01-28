@@ -3,12 +3,10 @@ import notificationController from './notificationController';
 const bcrypt = require('bcrypt');
 import * as tf from '@tensorflow/tfjs-node'
 import * as t from '@tensorflow/tfjs'
-const { Image } = require('image-js');
+var schedule = require('node-schedule');
 
 const path = require("path");
 var fs = require('fs');
-
-var schedule = require('node-schedule');
  
 var rule = new schedule.RecurrenceRule();
 rule.hour = 8;
@@ -806,13 +804,48 @@ exports.getReadingsGreenhouse = (req, res) => {
     }
 };
 
-classifyPlant(function(pred) {
-    console.log(pred)
-})
+//Classify plant image using neural network
+exports.classifyPlantImage = (req, res) => {
+
+    //Store plant image provided
+    var plantImageStr = req.body.image
+
+    var suffix = Math.random() * (1000 - 0) + 0
+    var imageStr = `classify-temp/temp${suffix}.jpeg`
+
+    fs.writeFile(imageStr, plantImageStr, {encoding: 'base64'}, function(err) {
+        if(!err)
+        {
+            console.log('File created successfully');
+
+            //Get sensor readings
+            classifyPlant(imageStr, (prediction) => {
+                fs.unlink(imageStr, function(err) {
+                    if(!err)
+                    {
+                        console.log('File deleted successfully')
+                    }
+                    else 
+                    {
+                        console.log('File deleted unsuccessfully')
+                    }
+                });
+                res.status(200)
+                res.json({200: "Classification Complete", prediction: prediction})
+            })
+        }
+        else
+        {
+            console.log('File created unsuccessfully');
+            res.status(201)
+            res.json({201: "Classification Error"})
+        }
+    });
+};
 
 //Classify plant as ripe/unripe and identify type of plant
-async function classifyPlant(callback){    
-    var tfimage1 = fs.readFileSync(path.resolve(__dirname, '../plant-dataset/preprocessed-sample-plants/unripegreenbeans1.jpeg'))
+async function classifyPlant(image, callback){
+    var tfimage1 = fs.readFileSync(image)
     
     //Define the classes
     var classes = ['ripe-greenbeans','ripe-spinach','ripe-tomatoes','ripe-turnip','unripe-greenbeans','unripe-spinach','unripe-tomatoes','unripe-turnip']
