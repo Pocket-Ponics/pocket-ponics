@@ -2,44 +2,17 @@ import mySQL from './mySQLController';
 
 //Retrieves all plant ideals
 exports.getPlantIdeals = (req, res) => {
-    if(req.headers.authorization == undefined)
-    {
-        res.status(210)
-        res.json({210: "Error: Missing Token"})
-    }
-    else
-    {
-        //Get auth token
-        let cred = req.headers.authorization.split(" ")[1]
-
-        //Retrieve user_id for given auth token
-        mySQL.getUserForToken(cred, function(err, rec) {
-            if(err)
-            {
-                res.status(403)
-                res.json({403: "Authentication Error"})
-            }
-            else if(rec != undefined)
-            {    
-                //Retrieve all plant ideal values from DB
-                mySQL.getAllPlantIdeals(function(err, record) {
-                    if(!err)
-                    {
-                        res.status(200)
-                        res.json(record.rows)
-                    } else {
-                        res.status(201)
-                        res.json({201: "Unable to retrieve plant ideals"})
-                    }
-                })
-            }
-            else 
-            {
-                res.status(401)
-                res.json({401: "Unauthorized"})
-            }
-        })
-    }
+    //Retrieve all plant ideal values from DB
+    mySQL.getAllPlantIdeals(function(err, record) {
+        if(!err)
+        {
+            res.status(200)
+            res.json(record.rows)
+        } else {
+            res.status(201)
+            res.json({201: "Unable to retrieve plant ideals"})
+        }
+    })   
 };
 
 //Delete a plant ideal value from DB
@@ -223,7 +196,7 @@ exports.updatePlantIdeal = (req, res) => {
                     else if(rec2.admin == 1)
                     {
                         //Update plant ideal value in DB
-                        mySQL.updatePlantIdeal(plant_id, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_id, harvest_url, function(err, record) {
+                        mySQL.updatePlantIdeal(plant_id, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, function(err, record) {
                             if(!err)
                             {
                                 res.status(200)

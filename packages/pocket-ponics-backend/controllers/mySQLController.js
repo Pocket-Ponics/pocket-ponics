@@ -193,7 +193,7 @@ exports.createPlantIdeal = (ph_level_low, ec_level_low, temp_low, cycle_time, ph
     })
 }
 
-exports.updatePlantIdeal = (plant_id, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, callback) => {
+exports.updatePlantIdeal = (plant_id, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, callback) => {
     sqlController.execute(`UPDATE plant_ideal SET ph_level_low = ${ph_level_low}, ec_level_low = ${ec_level_low}, temp_low = ${temp_low}, cycle_time = ${cycle_time}, ph_level_high = ${ph_level_high}, ec_level_high = ${ec_level_high}, temp_high = ${temp_high}, name = "${name}", light_time = ${light_time}, steps = "${steps}", plant_url = "${plant_url}", harvest_url = "${harvest_url}" where plant_id = ${plant_id}`, function(err, result) {        
         if(err || result.rows.affectedRows == 1)
         {

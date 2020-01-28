@@ -1,7 +1,7 @@
 import mySQL from './mySQLController';
 import notificationController from './notificationController';
-import e from 'express';
 const bcrypt = require('bcrypt');
+// const tf = require('@tensorflow/tfjs-node');
 
 var schedule = require('node-schedule');
  
@@ -799,4 +799,15 @@ exports.getReadingsGreenhouse = (req, res) => {
             }
         })
     }
+};
+
+
+//Classify plant as ripe/unripe and identify type of plant
+exports.classifyPlant = (req, res) => {
+    //Store image provided
+    var image = require('../ripetomato4.jpg')
+
+    // const model = tf.loadLayersModel(
+    //     'model_weights.h5');
+    // console.log(model.predict(image))
 };
