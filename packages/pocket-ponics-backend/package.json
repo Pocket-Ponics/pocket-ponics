@@ -14,6 +14,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@tensorflow-models/mobilenet": "^2.0.4",
+    "@tensorflow/tfjs": "^1.5.1",
+    "@tensorflow/tfjs-node": "^1.5.1",
     "async": "^3.1.0",
     "bcrypt": "^3.0.6",
     "bluebird": "^3.7.1",
@@ -22,6 +25,7 @@
     "expo-server-sdk": "^3.4.0",
     "express": "^4.17.1",
     "forever": "^1.0.0",
+    "image-js": "^0.21.8",
     "mysql": "^2.17.1",
     "node-gyp": "^6.1.0",
     "node-mysql-transaction": "^0.2.1",

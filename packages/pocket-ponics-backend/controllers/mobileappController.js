@@ -1,7 +1,11 @@
 import mySQL from './mySQLController';
 import notificationController from './notificationController';
 const bcrypt = require('bcrypt');
-// const tf = require('@tensorflow/tfjs-node');
+import * as tf from '@tensorflow/tfjs-node'
+import * as t from '@tensorflow/tfjs'
+const { Image } = require('image-js');
+
+var fs     = require('fs');
 
 var schedule = require('node-schedule');
  
@@ -801,13 +805,17 @@ exports.getReadingsGreenhouse = (req, res) => {
     }
 };
 
+classifyPlant()
 
 //Classify plant as ripe/unripe and identify type of plant
-exports.classifyPlant = (req, res) => {
+async function classifyPlant(){
     //Store image provided
-    var image = require('../ripetomato4.jpg')
-
-    // const model = tf.loadLayersModel(
-    //     'model_weights.h5');
-    // console.log(model.predict(image))
+    
+    var tfimage1 = fs.readFileSync('unripeturnip1.jpeg')
+    
+    t.loadLayersModel('file://../pocket-ponics-backend/model/model.json').then(async function(model){
+        const tensorImage = tf.node.decodeJpeg(tfimage1, 3);
+        var tens = tensorImage.div(tf.scalar(255))
+        const result = model.predict(tens.expandDims(0)).print()
+      });
 };
