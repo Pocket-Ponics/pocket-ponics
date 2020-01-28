@@ -844,8 +844,8 @@ exports.classifyPlantImage = (req, res) => {
 };
 
 //Classify plant as ripe/unripe and identify type of plant
-async function classifyPlant(image, callback){
-    var tfimage1 = fs.readFileSync(image)
+async function classifyPlant(imagePath, callback){
+    var image = fs.readFileSync(imagePath)
     
     //Define the classes
     var classes = ['ripe-greenbeans','ripe-spinach','ripe-tomatoes','ripe-turnip','unripe-greenbeans','unripe-spinach','unripe-tomatoes','unripe-turnip']
@@ -853,7 +853,7 @@ async function classifyPlant(image, callback){
     //Load trained model
     t.loadLayersModel('file://../pocket-ponics-backend/neuralnetwork-model/model/model.json').then(async function(model){
         //Convert image to tensor
-        var tensorImage = tf.node.decodeJpeg(tfimage1, 3);
+        var tensorImage = tf.node.decodeJpeg(image, 3);
 
         //Normalize tensor values
         var tensorImageInput = tensorImage.div(tf.scalar(255))
