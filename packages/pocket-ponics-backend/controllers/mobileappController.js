@@ -5,7 +5,8 @@ import * as tf from '@tensorflow/tfjs-node'
 import * as t from '@tensorflow/tfjs'
 const { Image } = require('image-js');
 
-var fs     = require('fs');
+const path = require("path");
+var fs = require('fs');
 
 var schedule = require('node-schedule');
  
@@ -805,17 +806,31 @@ exports.getReadingsGreenhouse = (req, res) => {
     }
 };
 
-classifyPlant()
+classifyPlant(function(pred) {
+    console.log(pred)
+})
 
 //Classify plant as ripe/unripe and identify type of plant
-async function classifyPlant(){
-    //Store image provided
+async function classifyPlant(callback){    
+    var tfimage1 = fs.readFileSync(path.resolve(__dirname, '../plant-dataset/preprocessed-sample-plants/unripegreenbeans1.jpeg'))
     
-    var tfimage1 = fs.readFileSync('unripeturnip1.jpeg')
-    
-    t.loadLayersModel('file://../pocket-ponics-backend/model/model.json').then(async function(model){
-        const tensorImage = tf.node.decodeJpeg(tfimage1, 3);
-        var tens = tensorImage.div(tf.scalar(255))
-        const result = model.predict(tens.expandDims(0)).print()
+    //Define the classes
+    var classes = ['ripe-greenbeans','ripe-spinach','ripe-tomatoes','ripe-turnip','unripe-greenbeans','unripe-spinach','unripe-tomatoes','unripe-turnip']
+
+    //Load trained model
+    t.loadLayersModel('file://../pocket-ponics-backend/neuralnetwork-model/model/model.json').then(async function(model){
+        //Convert image to tensor
+        var tensorImage = tf.node.decodeJpeg(tfimage1, 3);
+
+        //Normalize tensor values
+        var tensorImageInput = tensorImage.div(tf.scalar(255))
+
+        //Predict class from tensor input
+        var predictionTensor = model.predict(tensorImageInput.expandDims(0))
+
+        //Convert tensor output to class
+        var index = predictionTensor.argMax(1).arraySync()
+        var prediction = classes[index[0]]
+        callback(prediction)
       });
 };
