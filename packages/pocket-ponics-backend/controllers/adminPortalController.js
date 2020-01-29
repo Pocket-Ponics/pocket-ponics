@@ -10,7 +10,7 @@ exports.getPlantIdeals = (req, res) => {
             res.json(record.rows)
         } else {
             res.status(201)
-            res.json({201: "Unable to retrieve plant ideals"})
+            res.json({201: "Unable to retrieve plant ideals", error: record.sqlMessage})
         }
     })   
 };
@@ -56,7 +56,7 @@ exports.deletePlantIdeal = (req, res) => {
                                 res.json({200: "Deleted plant ideal"})
                             } else {
                                 res.status(201)
-                                res.json({201: "Unable to delete plant ideal"})
+                                res.json({201: "Unable to delete plant ideal", error: record.sqlMessage})
                             }
                         })
                     }
@@ -130,7 +130,7 @@ exports.createPlantIdeal = (req, res) => {
                                 res.json({200: "Created plant ideal", plant_id: record})
                             } else {
                                 res.status(201)
-                                res.json({201: "Unable to create plant ideal"})
+                                res.json({201: "Unable to create plant ideal", error: record.sqlMessage})
                             }
                         })
                     }
@@ -205,7 +205,7 @@ exports.updatePlantIdeal = (req, res) => {
                                 res.json({200: "Updated plant ideal"})
                             } else {
                                 res.status(201)
-                                res.json({201: "Unable to update plant ideal"})
+                                res.json({201: "Unable to update plant ideal", error: record.sqlMessage})
                             }
                         })
                     }

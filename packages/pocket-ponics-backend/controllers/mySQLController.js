@@ -247,7 +247,17 @@ exports.updateTierForGreenhouse = (user_id, greenhouse_id, tier, plant_id, cycle
 }
 
 exports.updateGreenhouseForUser = (user_id, greenhouse_id, name, seedling_time, callback) => {
-    sqlController.execute(`UPDATE greenhouse SET name = "${name}", seedling_time = "${seedling_time}" WHERE user_id = ${user_id} and greenhouse_id = ${greenhouse_id}`, function(err, result) {
+    var query = ""
+    if(seedling_time == '')
+    {
+        query = `UPDATE greenhouse SET name = "${name}" WHERE user_id = ${user_id} and greenhouse_id = ${greenhouse_id}`
+    }
+    else
+    {
+        query = `UPDATE greenhouse SET name = "${name}", seedling_time = "${seedling_time}" WHERE user_id = ${user_id} and greenhouse_id = ${greenhouse_id}`
+    }
+
+    sqlController.execute(query, function(err, result) {
         if(err || result.rows.affectedRows == 1)
         {
             callback(err, result)

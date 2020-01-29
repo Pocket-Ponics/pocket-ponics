@@ -52,7 +52,7 @@ exports.postGeneralGreenhouse = (req, res) => {
                         }
                         else {
                             res.status(201)
-                            res.json({201: "Error recording general greenhouse readings"})
+                            res.json({201: "Error recording general greenhouse readings", error: record.sqlMessage})
                         }
                     })
                 }
@@ -135,7 +135,7 @@ exports.postReadingsGreenhouse = (req, res) => {
                         }
                         else {
                             res.status(201)
-                            res.json({201: "Error recording greenhouse readings"})
+                            res.json({201: "Error recording greenhouse readings", error: record.sqlMessage})
                         }
                     })
                 }
@@ -194,7 +194,7 @@ exports.postReadingsTier = (req, res) => {
                         }
                         else {
                             res.status(201)
-                            res.json({201: "Error recording greenhouse tier readings"})
+                            res.json({201: "Error recording greenhouse tier readings", error: record.sqlMessage})
                         }
                     })
                 }
@@ -266,7 +266,7 @@ exports.postReadingsSingle = (req, res) => {
                         }
                         else {
                             res.status(201)
-                            res.json({201: "Error recording sensor reading"})
+                            res.json({201: "Error recording sensor reading", error: record.sqlMessage})
                         }
                     })
                 }
@@ -322,7 +322,7 @@ exports.updatePowerSource = (req, res) => {
                         }
                         else {
                             res.status(201)
-                            res.json({201: "Error recording power source"})
+                            res.json({201: "Error recording power source", error: record.sqlMessage})
                         }
                     })
                 }
@@ -378,7 +378,7 @@ exports.updateBackupBatteryLevel = (req, res) => {
                         }
                         else {
                             res.status(201)
-                            res.json({201: "Error recording battery level"})
+                            res.json({201: "Error recording battery level", error: record.sqlMessage})
                         }
                     })
                 }
@@ -428,7 +428,7 @@ exports.getTiersAndIdealValues = (req, res) => {
                         }
                         else {
                             res.status(201)
-                            res.json({201: "Error retrieving tier data"})
+                            res.json({201: "Error retrieving tier data", error: record.sqlMessage})
                         }
                     })
                 }
