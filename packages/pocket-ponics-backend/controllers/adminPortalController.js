@@ -102,6 +102,7 @@ exports.createPlantIdeal = (req, res) => {
         var steps = req.body.steps
         var plant_url = req.body.plant_url
         var harvest_url = req.body.harvest_url
+        var num_plants = req.body.num_plants
 
         //Retrieve user_id for given auth token
         mySQL.getUserForToken(cred, function(err, rec) {
@@ -122,7 +123,7 @@ exports.createPlantIdeal = (req, res) => {
                     else if(rec2.admin == 1)
                     {
                         //Create new plant ideal value in DB
-                        mySQL.createPlantIdeal(ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, function(err, record) {
+                        mySQL.createPlantIdeal(ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, num_plants, function(err, record) {
                             if(!err)
                             {
                                 res.status(200)
@@ -176,6 +177,7 @@ exports.updatePlantIdeal = (req, res) => {
         var steps = req.body.steps
         var plant_url = req.body.plant_url
         var harvest_url = req.body.harvest_url
+        var num_plants = req.body.num_plants
 
         //Retrieve user_id for given auth token
         mySQL.getUserForToken(cred, function(err, rec) {
@@ -196,7 +198,7 @@ exports.updatePlantIdeal = (req, res) => {
                     else if(rec2.admin == 1)
                     {
                         //Update plant ideal value in DB
-                        mySQL.updatePlantIdeal(plant_id, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, function(err, record) {
+                        mySQL.updatePlantIdeal(plant_id, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, num_plants, function(err, record) {
                             if(!err)
                             {
                                 res.status(200)

@@ -180,8 +180,8 @@ exports.getUserForToken = (token, callback) => {
     })
 }
 
-exports.createPlantIdeal = (ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, callback) => {
-    sqlController.execute(`insert into plant_ideal (ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url) values (${ph_level_low}, ${ec_level_low}, ${temp_low}, ${cycle_time}, ${ph_level_high}, ${ec_level_high}, ${temp_high}, "${name}", ${light_time}, "${steps}", "${plant_url}", "${harvest_url}");`, function(err, result) {
+exports.createPlantIdeal = (ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, num_plants, callback) => {
+    sqlController.execute(`insert into plant_ideal (ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, num_plants) values (${ph_level_low}, ${ec_level_low}, ${temp_low}, ${cycle_time}, ${ph_level_high}, ${ec_level_high}, ${temp_high}, "${name}", ${light_time}, "${steps}", "${plant_url}", "${harvest_url}", ${num_plants});`, function(err, result) {
         if(!err)
         {
             callback(err, result.rows.insertId)
@@ -193,8 +193,8 @@ exports.createPlantIdeal = (ph_level_low, ec_level_low, temp_low, cycle_time, ph
     })
 }
 
-exports.updatePlantIdeal = (plant_id, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, callback) => {
-    sqlController.execute(`UPDATE plant_ideal SET ph_level_low = ${ph_level_low}, ec_level_low = ${ec_level_low}, temp_low = ${temp_low}, cycle_time = ${cycle_time}, ph_level_high = ${ph_level_high}, ec_level_high = ${ec_level_high}, temp_high = ${temp_high}, name = "${name}", light_time = ${light_time}, steps = "${steps}", plant_url = "${plant_url}", harvest_url = "${harvest_url}" where plant_id = ${plant_id}`, function(err, result) {        
+exports.updatePlantIdeal = (plant_id, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, num_plants, callback) => {
+    sqlController.execute(`UPDATE plant_ideal SET ph_level_low = ${ph_level_low}, ec_level_low = ${ec_level_low}, temp_low = ${temp_low}, cycle_time = ${cycle_time}, ph_level_high = ${ph_level_high}, ec_level_high = ${ec_level_high}, temp_high = ${temp_high}, name = "${name}", light_time = ${light_time}, steps = "${steps}", plant_url = "${plant_url}", harvest_url = "${harvest_url}", num_plants = ${num_plants} where plant_id = ${plant_id}`, function(err, result) {        
         if(err || result.rows.affectedRows == 1)
         {
             callback(err, result)
@@ -233,8 +233,8 @@ exports.getRoleForUser = (user_id, callback) => {
     })
 }
 
-exports.updateTierForGreenhouse = (user_id, greenhouse_id, tier, plant_id, cycle_time, num_plants, light_start, callback) => {
-    sqlController.execute(`UPDATE tiers SET plant_id = ${plant_id}, cycle_time = "${cycle_time}", num_plants = ${num_plants}, light_start = ${light_start} WHERE user_id = ${user_id} and tier = ${tier} and greenhouse_id = ${greenhouse_id}`, function(err, result) {
+exports.updateTierForGreenhouse = (user_id, greenhouse_id, tier, plant_id, cycle_time, light_start, callback) => {
+    sqlController.execute(`UPDATE tiers SET plant_id = ${plant_id}, cycle_time = "${cycle_time}", light_start = ${light_start} WHERE user_id = ${user_id} and tier = ${tier} and greenhouse_id = ${greenhouse_id}`, function(err, result) {
         if(err || result.rows.affectedRows == 1)
         {
             callback(err, result)
@@ -410,7 +410,7 @@ exports.getReadingsForGreenhouse = (user_id, greenhouse_id, callback) => {
 }
 
 exports.getTierForGreenhouse = (greenhouse_id, tier, user_id, callback) => {
-    sqlController.execute(`SELECT tier, plant_id, ph_level, ec_level, water_level, cycle_time, num_plants, light_start FROM tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id} and tier = ${tier}`, function(err, result) {
+    sqlController.execute(`SELECT tier, plant_id, ph_level, ec_level, water_level, cycle_time, light_start FROM tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id} and tier = ${tier}`, function(err, result) {
         if(result.rows.length == 1)
         {
             callback(err, result.rows[0])
@@ -583,7 +583,7 @@ exports.getGreenhouseDetail = (user_id, greenhouse_id, callback) => {
         {
             var greenhouseData = result.rows[0]
 
-            sqlController.execute(`SELECT tier, plant_id, ph_level, ec_level, water_level, cycle_time, light_start, num_plants FROM tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id}`, function(err, result) {
+            sqlController.execute(`SELECT tier, plant_id, ph_level, ec_level, water_level, cycle_time, light_start FROM tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id}`, function(err, result) {
                 if(result.rows.length == 4)
                 {
                     greenhouseData.tiers = result.rows
