@@ -150,6 +150,9 @@ const APIUtil = {
 	getGreenhouse(token, greenhouse) {
 		return APIUtil.get(`http://${host}:${port}/mobileapp/greenhouses/detail/${greenhouse}`, token, {})
 	},
+	getHistory(token, greenhouse) {
+		return APIUtil.get(`http://${host}:${port}/mobileapp/greenhouses/history/${greenhouse}`, token, {})
+	},
 	postGreenhouse(token, name) {
 		const randomSerial = Math.floor(Math.random() * 899999 + 100000)
 		const seedlingHarvest = new Date(Date.now() + (24 * 3600 * 1000 * 14))
