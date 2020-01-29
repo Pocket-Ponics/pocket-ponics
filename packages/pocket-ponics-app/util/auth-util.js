@@ -20,12 +20,18 @@ const AuthUtil = {
 			return loggedOutFn()
 		}
 
-		global.plants = {}
-		const plantData = await APIUtil.getPlants()
-		plantData.forEach(plant => global.plants[plant.plant_id] = plant)
+		// global.plants = {}
+		// const plantData = await 
+		// plantData.forEach(plant => global.plants[plant.plant_id] = plant)
 
 		let token
-		APIUtil.getAuthToken(username, password)
+		APIUtil.getPlants()
+			.then(response => {
+				global.plants = {}
+				response.forEach(plant => global.plants[plant.plant_id] = plant)
+
+				return APIUtil.getAuthToken(username, password)
+			})
 			.then(response => {
 				token = response.token
 				console.log('Token: ', token)
@@ -199,7 +205,8 @@ const AuthUtil = {
 							'cycle_time': null,
 							'num_plants': 0
 						}
-					]
+					],
+					history: []
 				}, 
 				{
 					type: 'add-page',

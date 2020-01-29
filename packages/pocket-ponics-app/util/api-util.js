@@ -134,8 +134,8 @@ const APIUtil = {
 				})
 			})
 	},
-	getPlants(token) {
-		return APIUtil.get(`http://${host}:${port}/adminportal`, token, {})
+	getPlants() {
+		return APIUtil.get(`http://${host}:${port}/adminportal`, '', {})
 	},
 	changePassword(token, email, old_password, new_password) {
 		return APIUtil.post(`http://${host}:${port}/auth/change_password`, token, {
@@ -165,14 +165,14 @@ const APIUtil = {
 			'seedling_time': dateString
 		})
 	},
-	postTier(token, greenhouse, tier, plant, numPlants, cycleTime) {
+	postTier(token, greenhouse, tier, plant, cycleTime) {
 		const plantHarvest = new Date(Date.now() + (24 * 3600 * 1000 * cycleTime))
 		const dateString = plantHarvest.getFullYear() + '-' + (plantHarvest.getMonth()+1) + '-' + plantHarvest.getDate()
 		
 		return APIUtil.put(`http://${host}:${port}/mobileapp/tiers/${greenhouse}/${tier}`, token, {
-			'plant_id': plant,
-			'num_plants': numPlants,
-			'cycle_time': dateString
+			plant_id: plant,
+			cycle_time: dateString,
+			light_start: 8
 		})
 	}
 }
