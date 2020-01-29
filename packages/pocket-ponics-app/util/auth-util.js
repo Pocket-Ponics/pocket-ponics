@@ -5,6 +5,7 @@ import APIUtil from '../util/api-util'
 
 const AuthUtil = {
 	getAuthToken: async(loggedOutFn, successFn) => {
+
 		// Retrieve username and password from storage
 		const username = await AsyncStorage.getItem('username')
 		const password = await AsyncStorage.getItem('password')
@@ -15,8 +16,11 @@ const AuthUtil = {
 			return loggedOutFn()
 		}
 
-		let token
+		global.plants = {}
+		const plantData = await APIUtil.getPlants()
+		plantData.forEach(plant => global.plants[plant.plant_id] = plant)
 
+		let token
 		APIUtil.getAuthToken(username, password)
 			.then(response => {
 				token = response.token
@@ -90,6 +94,7 @@ const AuthUtil = {
 				return APIUtil.getGreenhouses(token)
 			})
 			.then(response => {
+				console.log(greenhouses)
 				const greenhouses = response.greenhouses
 
 				return Promise.all(greenhouses.map(

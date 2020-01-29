@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { 
 	StyleSheet, 
 	Text, 
@@ -8,6 +8,14 @@ import {
 	Dimensions,
 	TouchableOpacity
 } from 'react-native'
+
+import { 
+	TOMATO_ID, 
+	GREENBEAN_ID, 
+	SPINACH_ID,
+	TURNIP_ID,
+	ONE_DAY
+} from '../util/constants'
 
 import styles from './setup-styles'
 
@@ -53,7 +61,7 @@ export default class Example extends React.Component {
 		case 'Spinach':
 			return 'To harvest your spinach, you will need a pair of scissors. Simply cut off the leaves as close to the root as you can. Your spinach plant will continue regrowing these leaves until you decide to remove the entire plant. Enjoy your spinach, and start thinking about what you want to grow next!'
 		case 'Turnip':
-			return 'Remove the turnip from the tier. with a pair of scissors, remove the leaves on top. Enjoy your turnips, and start thinking about what you want to grow next!'
+			return global.plants[TURNIP_ID].steps
 		}
 	}
 

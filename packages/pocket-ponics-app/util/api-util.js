@@ -75,31 +75,6 @@ const APIUtil = {
 			.then(response => response.text())
 			.then(result => JSON.parse(result))
 	},
-	getGreenhouseRegistration() {
-		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/registration/`, {
-			method: 'GET',
-		}))
-			.then(response => response.text())
-			.then(result => JSON.parse(result))
-	},
-	getGreenhouseWifis() {
-		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/wifi/`, {
-			method: 'GET',
-		}))
-			.then(response => response.text())
-			.then(result => JSON.parse(result))
-	},
-	sendWifiData(body) {
-		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/wifi/login`, {
-			method: 'POST',
-			headers: new Headers({
-				'Content-Type': 'application/json'
-			}),
-			body: JSON.stringify(body)
-		}))
-			.then(response => response.text())
-			.then(result => JSON.parse(result))
-	},
 	post(endpoint, token, body) {
 		return APIUtil.timeoutFetch(10000, fetch(endpoint, {
 			method: 'POST',
@@ -126,6 +101,31 @@ const APIUtil = {
 			.then(response => response.text())
 			.then(result => JSON.parse(result))
 	},
+	getGreenhouseRegistration() {
+		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/registration/`, {
+			method: 'GET',
+		}))
+			.then(response => response.text())
+			.then(result => JSON.parse(result))
+	},
+	getGreenhouseWifis() {
+		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/wifi/`, {
+			method: 'GET',
+		}))
+			.then(response => response.text())
+			.then(result => JSON.parse(result))
+	},
+	sendWifiData(body) {
+		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/wifi/login`, {
+			method: 'POST',
+			headers: new Headers({
+				'Content-Type': 'application/json'
+			}),
+			body: JSON.stringify(body)
+		}))
+			.then(response => response.text())
+			.then(result => JSON.parse(result))
+	},
 	setDeviceKey(token) {
 		return Notifications.getExpoPushTokenAsync()
 			.then(device_key => {
@@ -133,6 +133,9 @@ const APIUtil = {
 					device_key
 				})
 			})
+	},
+	getPlants(token) {
+		return APIUtil.get(`http://${host}:${port}/adminportal`, token, {})
 	},
 	changePassword(token, email, old_password, new_password) {
 		return APIUtil.post(`http://${host}:${port}/auth/change_password`, token, {
