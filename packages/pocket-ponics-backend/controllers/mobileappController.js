@@ -3,9 +3,9 @@ import notificationController from './notificationController';
 const bcrypt = require('bcrypt');
 import * as tf from '@tensorflow/tfjs-node'
 import * as t from '@tensorflow/tfjs'
+import { create } from 'domain';
 var schedule = require('node-schedule');
-
-const path = require("path");
+const sharp = require('sharp');
 var fs = require('fs');
  
 var rule = new schedule.RecurrenceRule();
@@ -806,30 +806,35 @@ exports.getReadingsGreenhouse = (req, res) => {
 
 //Classify plant image using neural network
 exports.classifyPlantImage = (req, res) => {
-
     //Store plant image provided
     var plantImageStr = req.body.image
 
+    //Generate new file name for image
     var suffix = Math.random() * (1000 - 0) + 0
     var imageStr = `classify-temp/temp${suffix}.jpeg`
 
+    //Convert base-64 to image and write to disk
     fs.writeFile(imageStr, plantImageStr, {encoding: 'base64'}, function(err) {
         if(!err)
         {
             console.log('File created successfully');
 
-            //Get sensor readings
-            classifyPlant(imageStr, (prediction) => {
-                fs.unlink(imageStr, function(err) {
-                    if(!err)
-                    {
-                        console.log('File deleted successfully')
-                    }
-                    else 
-                    {
-                        console.log('File deleted unsuccessfully')
-                    }
-                });
+            //Classify plant image
+            classifyPlant(imageStr, (prediction, createdFiles) => {
+                //Delete temporary files
+                createdFiles.forEach(file => {
+                    fs.unlink(file, function(err) {
+                        if(!err)
+                        {
+                            console.log('File deleted successfully')
+                        }
+                        else 
+                        {
+                            console.log('File deleted unsuccessfully')
+                        }
+                    });
+                })
+                
                 res.status(200)
                 res.json({200: "Classification Complete", prediction: prediction})
             })
@@ -845,25 +850,41 @@ exports.classifyPlantImage = (req, res) => {
 
 //Classify plant as ripe/unripe and identify type of plant
 async function classifyPlant(imagePath, callback){
-    var image = fs.readFileSync(imagePath)
-    
-    //Define the classes
-    var classes = ['ripe-greenbeans','ripe-spinach','ripe-tomatoes','ripe-turnip','unripe-greenbeans','unripe-spinach','unripe-tomatoes','unripe-turnip']
+    //Generate new file name for image
+    var suffix = Math.random() * (1000 - 0) + 0
+    var resizedImage = `classify-temp/temp${suffix}.jpeg`
+    var createdFiles = [imagePath, resizedImage]
 
-    //Load trained model
-    t.loadLayersModel('file://../pocket-ponics-backend/neuralnetwork-model/model/model.json').then(async function(model){
-        //Convert image to tensor
-        var tensorImage = tf.node.decodeJpeg(image, 3);
+    //Resize image and store as JPEG
+    sharp(imagePath).resize(331, 331).toFile(resizedImage, (err, info) => { 
+        if(!err)
+        {
+            //Read in resized image
+            var image = fs.readFileSync(resizedImage)
 
-        //Normalize tensor values
-        var tensorImageInput = tensorImage.div(tf.scalar(255))
+            //Define the classes
+            var classes = ['ripe-greenbeans','ripe-spinach','ripe-tomatoes','ripe-turnip','unripe-greenbeans','unripe-spinach','unripe-tomatoes','unripe-turnip']
 
-        //Predict class from tensor input
-        var predictionTensor = model.predict(tensorImageInput.expandDims(0))
+            //Load trained model
+            t.loadLayersModel('file://../pocket-ponics-backend/neuralnetwork-model/model/model.json').then(async function(model){
+                //Convert image to tensor
+                var tensorImage = tf.node.decodeJpeg(image, 3);
 
-        //Convert tensor output to class
-        var index = predictionTensor.argMax(1).arraySync()
-        var prediction = classes[index[0]]
-        callback(prediction)
-      });
+                //Normalize tensor values
+                var tensorImageInput = tensorImage.div(tf.scalar(255))
+
+                //Predict class from tensor input
+                var predictionTensor = model.predict(tensorImageInput.expandDims(0))
+
+                //Convert tensor output to class
+                var index = predictionTensor.argMax(1).arraySync()
+                var prediction = classes[index[0]]
+                callback(prediction, createdFiles)
+            });
+        }
+        else
+        {
+            console.log('Unable to resize image')
+        }
+    });
 };
