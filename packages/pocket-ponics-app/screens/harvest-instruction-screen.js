@@ -41,7 +41,7 @@ export default class Example extends React.Component {
 
 	getHarvestImage(name) {
 		switch(name) {
-		case 'Tomatoes':
+		case 'Tomato':
 			return tomatoHarvest
 		case 'Green Beans':
 			return greenbeanHarvest
@@ -54,7 +54,7 @@ export default class Example extends React.Component {
 
 	getHarvestInstructions(name) {
 		switch(name) {
-		case 'Tomatoes':
+		case 'Tomato':
 			return 'With one hand, hold the stem of the plant. With the other hand, grasp the fuit firmly yet gently. Pull the fruit away from the stem, breaking the stalk just above the calyx(star-shaped leaves on top of the tomato). Enjoy your tomatoes, and start thinking about what you want to grow next!'
 		case 'Green Beans':
 			return 'With one hand, hold the stem of the plant. With the other hand, grasp the top of the green bean firmly. gently pull the pod away from the stem, breaking it off the vine. Enjoy your green beans, and start thinking about what you want to grow next!'
