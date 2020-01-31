@@ -15,7 +15,7 @@ if (result.error) {
     * Middleware
     */
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(bodyParser.json());
 
 // catch 400

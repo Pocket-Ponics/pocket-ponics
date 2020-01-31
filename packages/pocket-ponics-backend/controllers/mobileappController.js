@@ -817,7 +817,7 @@ exports.classifyPlantImage = (req, res) => {
             console.log('File created successfully');
 
             //Classify plant image
-            classifyPlant(imageStr, (prediction, createdFiles) => {
+            classifyPlant(imageStr, (err, prediction, accuracy, createdFiles) => {
                 //Delete temporary files
                 createdFiles.forEach(file => {
                     fs.unlink(file, function(err) {
@@ -831,9 +831,17 @@ exports.classifyPlantImage = (req, res) => {
                         }
                     });
                 })
-                
-                res.status(200)
-                res.json({200: "Classification Complete", prediction: prediction})
+
+                if(err)
+                {
+                    res.status(201)
+                    res.json({201: "Error: Unable to Perform Classification", error: err.toString()})
+                }
+                else
+                {
+                    res.status(200)
+                    res.json({200: "Classification Complete", prediction: prediction, accuracy: accuracy})
+                }
             })
         }
         else
@@ -875,13 +883,15 @@ async function classifyPlant(imagePath, callback){
 
                 //Convert tensor output to class
                 var index = predictionTensor.argMax(1).arraySync()
+                var accuracy = predictionTensor.arraySync()[0][index]
                 var prediction = classes[index[0]]
-                callback(prediction, createdFiles)
+                callback(false, prediction, accuracy, createdFiles)
             });
         }
         else
         {
-            console.log('Unable to resize image')
+            console.log(err)
+            callback(err, err, 0.00, [])
         }
     });
 };
