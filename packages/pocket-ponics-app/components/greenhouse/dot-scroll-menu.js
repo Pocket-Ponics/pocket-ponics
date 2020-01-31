@@ -1,5 +1,5 @@
-import React from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import React from 'react'
+import { Text, View, TouchableOpacity } from 'react-native'
 
 import styles from './dot-scroll-menu-style'
 
@@ -12,13 +12,13 @@ const DotScrollMenu = props => {
 				{props.greenhouseList.map((greenhouse, index) => {
 					if(index === props.greenhouseList.length - 1){
 						return (
-							<TouchableOpacity key='add' onPress={() => props.swapItem(index)}>
+							<TouchableOpacity key={index} onPress={() => props.swapItem(index)}>
 								<Text style={index === props.current ? styles.current : styles.dot}>+</Text>
 							</TouchableOpacity>
 						)
 					}
 					return (
-						<TouchableOpacity key={greenhouse.id} onPress={() => props.swapItem(index)}>
+						<TouchableOpacity key={index} onPress={() => props.swapItem(index)}>
 							<Text style={index === props.current ? styles.current : styles.dot}>•</Text>
 						</TouchableOpacity>
 					)

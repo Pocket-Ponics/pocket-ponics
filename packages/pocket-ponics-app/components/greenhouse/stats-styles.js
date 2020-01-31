@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native'
+import { TEXT_COLOR } from '../../util/constants'
 
 export default StyleSheet.create({
 	background: {
@@ -11,12 +12,12 @@ export default StyleSheet.create({
 	text: {
 		fontSize: 25,
 		paddingLeft: 30,
-		color: '#FFFFFF',
+		color: TEXT_COLOR,
 		flex: 1,
 	},
 	title: {
 		fontSize: 40,
-		color: '#FFFFFF',
+		color: TEXT_COLOR,
 		textAlign: 'center'
 	},
 	icon: {

@@ -1,166 +1,203 @@
 import React from 'react';
+import { StyleSheet, Dimensions } from 'react-native'
+import { StackActions, NavigationActions } from 'react-navigation';
+
 import { 
-	StyleSheet, 
 	Text, 
-	View, 
-	ImageBackground,
+	View,
 	Image,
-	Dimensions,
-	TouchableOpacity
-} from 'react-native';
+	TouchableOpacity, 
+	AsyncStorage, 
+} from 'react-native'
+
+import { 
+	TOMATO_ID, 
+	GREENBEAN_ID, 
+	SPINACH_ID,
+	TURNIP_ID,
+	TOMATO_VALUES,
+	GREENBEAN_VALUES,
+	SPINACH_VALUES,
+	TURNIP_VALUES,
+	ONE_DAY
+} from '../util/constants'
+
+import styles from './tier-screen-styles'
 
 const tomatoImage = require('../assets/tomato.png')
 const greenbeanImage = require('../assets/greenbean.png')
 const spinachImage = require('../assets/spinach.png')
 const turnipImage = require('../assets/turnip.png')
+var date = new Date().getDate();
+const daysTilharvest = 0
 
 const { width: WIDTH } = Dimensions.get('window')
 
+	class TierScreen extends React.Component 
+	{
+		static navigationOptions = 
+		{
+			title: 'Setup',
+		}
+	}
+
 export default class Example extends React.Component {
-	getImage(name) {
-		switch(name) {
-			case 'tomato':
-				return tomatoImage
-			case 'greenbeans':
-				return greenbeanImage
-			case 'spinach':
-				return spinachImage
-			case 'turnip':
-				return turnipImage
+	constructor(props) {
+		super(props)
+
+		this.state = {
+			plant: this.props.navigation.getParam('plant', {}),
 		}
 	}
 
-	getReadableName(name) {
-		switch(name) {
-			case 'tomato':
-				return 'Tomatoes'
-			case 'greenbeans':
-				return 'Green Beans'
-			case 'spinach':
-				return 'Spinach'
-			case 'turnip':
-				return 'Turnips'
+	async getPlant() {
+		const greenhouseString = await AsyncStorage.getItem('greenhouses')
+
+		if(greenhouseString === null) {
+			console.log('Error retrieving from storage')
+			return
+		}
+
+		const greenhouses = JSON.parse(greenhouseString)
+		const greenhouseId = this.props.navigation.getParam('greenhouseId', 0)
+		const tierId = this.props.navigation.getParam('tierId', 0)
+
+		if(greenhouseId !== 0 && tierId !== 0) {
+			const plant = greenhouses.filter(() => true)[0].tiers[tierId-1]
+
+			this.setState({ plant })
 		}
 	}
 
-	isValidpH(name, pH) {
-		switch(name) {
-			case 'tomato':
-				return pH >= 5.5 && pH <= 6.5
-			case 'greenbeans':
-				return pH >= 6.0 && pH <= 6.5
-			case 'spinach':
-				return pH >= 5.5 && pH <= 6.6
-			case 'turnip':
-				return pH >= 6.0 && pH <= 6.5
+	componentDidMount() {
+		this.getPlant()
+	}
+
+	getImage(id) {
+		switch(id) {
+		case TOMATO_ID:
+			return tomatoImage
+		case GREENBEAN_ID:
+			return greenbeanImage
+		case SPINACH_ID:
+			return spinachImage
+		case TURNIP_ID:
+			return turnipImage
 		}
 	}
 
-	isValidEC(name, ec) {
-		switch(name) {
-			case 'tomato':
-				return ec >= 2.0 && ec <= 5.0
-			case 'greenbeans':
-				return ec >= 2.0 && ec <= 4.0
-			case 'spinach':
-				return ec >= 1.8 && ec <= 2.3
-			case 'turnip':
-				return ec >= 1.8 && ec <= 2.4
+
+	// getReadableName(name) 
+	// {
+	// 	switch(name) 
+	// 	{
+	// 		case 'tomato':
+	// 			return 'Tomatoes'
+	// 		case 'greenbeans':
+	// 			return 'Green Beans'
+	// 		case 'spinach':
+	// 			return 'Spinach'
+	// 		case 'turnip':
+	// 			return 'Turnips'
+	// 	}
+	// }
+
+	getReadableName(id) {
+		switch(id) {
+		case TOMATO_ID:
+			return 'Tomatoes'
+		case GREENBEAN_ID:
+			return 'Green Beans'
+		case SPINACH_ID:
+			return 'Spinach'
+		case TURNIP_ID:
+			return 'Turnips'
+		}
+	}
+
+	isValidpH(id, pH) {
+		switch(id) {
+		case TOMATO_ID:
+			return pH >= TOMATO_VALUES.minPH && pH <= TOMATO_VALUES.maxPH
+		case GREENBEAN_ID:
+			return pH >= GREENBEAN_VALUES.minPH && pH <= GREENBEAN_VALUES.maxPH
+		case SPINACH_ID:
+			return pH >= SPINACH_VALUES.minPH && pH <= SPINACH_VALUES.maxPH
+		case TURNIP_ID:
+			return pH >= TURNIP_VALUES.minPH && pH <= TURNIP_VALUES.maxPH
+		}
+	}
+
+	isValidEC(id, ec) {
+		switch(id) {
+		case TOMATO_ID:
+			return ec >= TOMATO_VALUES.minEC && ec <= TOMATO_VALUES.maxEC
+		case GREENBEAN_ID:
+			return ec >= GREENBEAN_VALUES.minEC && ec <= GREENBEAN_VALUES.maxEC
+		case SPINACH_ID:
+			return ec >= SPINACH_VALUES.minEC && ec <= SPINACH_VALUES.maxEC
+		case TURNIP_ID:
+			return ec >= TURNIP_VALUES.minEC && ec <= TURNIP_VALUES.maxEC
 		}
 	}
 
 	statusText(name, value, checker) {
-		if(checker(name, value)) return "Good!"
+		if(checker(name, value)) return 'Good!'
 
-		return "Adjusting"
+		return 'Adjusting'
+	}
+
+	harvestinstruction() {
+		const resetAction = StackActions.reset({
+			index: 0,
+			actions: [NavigationActions.navigate({ routeName: 'HarvestInstruction' })],
+		});
+		this.props.navigation.dispatch(resetAction);
 	}
 
 	render() {
-		const plant = this.props.navigation.getParam('plant')
+		const plant = this.state.plant
+		const harvestDate = new Date(plant.cycle_time)
+		const harvestString = `${harvestDate.getMonth()+1}/${harvestDate.getDate()}/${harvestDate.getFullYear()}`
+		const isReadyToHarvest = harvestDate - Date.now() < ONE_DAY
+		
 		return (
 			<View style={styles.backgroundContainer}>
-				<Image source={this.getImage(plant.name)} style={styles.plantImage}/>
-				<Text style={styles.title}>{this.getReadableName(plant.name)}</Text>
+				<Image source={this.getImage(plant.plant_id)} style={styles.plantImage}/>
+				<Text style={styles.title}>{this.getReadableName(plant.plant_id)}</Text>
 				<View style={styles.plantInfoContainer}>
 					<View style={styles.valuesContainer}>
 						<Text style={styles.value}>
-							<Text style={styles.valueName}>pH:</Text> {plant.pH}
+							<Text style={styles.valueName}>pH:</Text> {plant.ph_level}
 						</Text>
+
 						<Text style={styles.value}>
-							<Text style={styles.valueName}>Electrical Conductivity:</Text> {plant.ec}
+							<Text style={styles.valueName}>Electrical Conductivity:</Text> {plant.ec_level}
 						</Text>
+						
 						<Text style={styles.value}>
-							<Text style={styles.valueName}>Estimated Harvest:</Text> 11/10
+							<Text style={styles.valueName}>Estimated Harvest:</Text> {harvestString}
 						</Text>
 					</View>
 					<View style={styles.statusesContainer}>
 						<Text style={styles.value}>
-							{this.statusText(plant.name, plant.pH, this.isValidpH)}
+							{this.statusText(plant['plant_id'], plant['ph_level'], this.isValidpH)}
 						</Text>
 						<Text style={styles.value}>
-							{this.statusText(plant.name, plant.ec, this.isValidEC)}
+							{this.statusText(plant['plant_id'], plant['ec_level'], this.isValidEC)}
 						</Text>
 						<Text style={styles.value}>
-							Ready!
+							{isReadyToHarvest ? 'Ready!' : ''}
 						</Text>
 					</View>
 				</View>
-				<TouchableOpacity>
-					<Text style={styles.button}>Harvest {this.getReadableName(plant.name)}</Text>
-				</TouchableOpacity>
+				{
+					isReadyToHarvest ? (
+						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('HarvestInstruction', {name: this.getReadableName(plant.plant_id), })}>
+							<Text style={styles.button}>Harvest {this.getReadableName(plant.plant_id)}</Text>
+						</TouchableOpacity>) : null
+				}
 			</View>
 		)
 	}
 }
-
-const styles = StyleSheet.create({
-	backgroundContainer: {
-		flex: 1,
-		width: null,
-		height: null,
-		alignItems: 'center',
-		backgroundColor: '#472600'
-	},
-	plantImage: {
-		width: 250,
-		height: 175,
-		marginTop: 30,
-		marginBottom: 30,
-		resizeMode: 'contain',
-	},
-	title: {
-		fontSize: 36,
-		fontWeight: 'bold',
-		marginBottom: 20,
-		color: '#FFFFFF'
-	},
-	plantInfoContainer: {
-		flexDirection: 'row'
-	},
-	valuesContainer: {
-		alignItems: 'flex-start',
-	},
-	value: {
-		fontSize: 18,
-		paddingTop: 10,
-		color: '#FFFFFF'
-	},
-	valueName: {
-		fontWeight: 'bold'
-	},
-	statusesContainer: {
-		paddingLeft: 20,
-	},
-	button: {
-		backgroundColor: '#638E4E',
-		width: WIDTH - 55,
-		borderRadius: 22,
-		fontSize: 16,
-		color: 'white',
-		fontWeight: 'bold',
-		overflow: 'hidden',
-		padding: 12,
-		textAlign:'center',
-		marginTop: 30
-	}
-})

@@ -1,10 +1,10 @@
-import React from 'react';
-import { Text,View, SafeAreaView, Image, TouchableOpacity } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
+import React from 'react'
+import { Text,View, Image, TouchableOpacity } from 'react-native'
+import { StackActions, NavigationActions } from 'react-navigation'
 
 import styles from './setup-styles'
 
-const plugin = require('../assets/plug.jpg')
+const plugin = require('../assets/fill-water.png')
 
 class FillWaterScreen extends React.Component {
 	static navigationOptions = {
@@ -14,22 +14,20 @@ class FillWaterScreen extends React.Component {
 	goToNext() {
 		const resetAction = StackActions.reset({
 			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'FillNutrients' })],
-		});
-		this.props.navigation.dispatch(resetAction);
+			actions: [NavigationActions.navigate({ 
+				routeName: 'FillNutrients',
+			})],
+		})
+		this.props.navigation.dispatch(resetAction)
 	}
 
 	cancel() {
-		const resetAction = StackActions.reset({
-			index: 0,
-			actions: [NavigationActions.navigate({ routeName: 'Greenhouse' })],
-		});
-		this.props.navigation.dispatch(resetAction);
+		return this.props.navigation.navigate('Auth')
 	}
 
 	render() {
 		return (
-			<SafeAreaView style={{flex: 1}}>
+			<View style={styles.container}>
 				<View style={styles.background}>
 					<Text style={styles.heading}>Fill the water tank</Text>
 					<Text style={styles.text}>Unscrew the cap on the front of the water tank and pour in two gallons of water.  The water should be at the full tank mark.</Text>
@@ -41,7 +39,7 @@ class FillWaterScreen extends React.Component {
 						<Text style={styles.cancelButtonText}>Cancel Setup</Text>
 					</TouchableOpacity>
 				</View>
-			</SafeAreaView>
+			</View>
 		)
 	}
 }
