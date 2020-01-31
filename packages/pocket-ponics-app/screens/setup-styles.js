@@ -20,6 +20,7 @@ export default StyleSheet.create({
 		color: TEXT_COLOR,
 		fontSize: 32,
 		marginBottom: 20,
+		textAlign: 'center'
 	},
 	image: {
 		resizeMode: 'contain',

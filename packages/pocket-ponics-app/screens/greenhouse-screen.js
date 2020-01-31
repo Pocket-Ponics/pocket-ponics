@@ -44,8 +44,9 @@ class GreenhouseScreen extends React.Component {
 		}
 
 		const greenhouses = JSON.parse(greenhouseString)
+		const greenhouseId = this.props.navigation.getParam('greenhouseId', '')
 
-		const matchingIndex = greenhouses.findIndex(() => true)
+		const matchingIndex = greenhouses.findIndex(greenhouse => greenhouse.greenhouse_id === greenhouseId)
 		const currentGreenhouse = matchingIndex === -1 ? 0 : matchingIndex
 
 		this.setState({ greenhouses , username,  currentGreenhouse })

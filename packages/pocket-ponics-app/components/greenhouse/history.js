@@ -5,26 +5,44 @@ import { BATTERY_COLOR, WATER_COLOR, PLANT_COLOR } from '../../util/constants'
 
 import styles from './history-styles'
 
-const GreenhouseHistoryDisplay = () => {
+const GreenhouseHistoryDisplay = props => {
+	const dates = []
+	const battery = []
+	const nutrient = []
+	const water = []
+
+	console.log(props)
+
+	props.history.forEach((historical, index) => {
+		if(index%3 !== 0) return
+
+		const date = new Date(historical.date)
+
+		dates.push(`${date.getMonth()+1}/${date.getDate()}`)
+		battery.push(historical.battery)
+		nutrient.push(historical.nutrient_level)
+		water.push(historical.water_level)
+	})
+
 	return (
 		<View style={styles.background}>
 			<Text style={styles.text}>Historical Data</Text>
 			<LineChart
 				data={{
-					labels: ['12/1', '12/5', '12/9', '12/13', '12/17', '12/21', '12/25', '12/29', '1/2'],
+					labels: dates,
 					datasets: [
 						{
-							data: [70, 85, 85, 85, 85, 85, 70, 85, 85],
+							data: battery,
 							color: () => BATTERY_COLOR,
 							strokeWidth: 2
 						},
 						{
-							data: [60, 50, 100, 90, 80, 70, 60, 50, 100],
+							data: water,
 							color: () => WATER_COLOR,
 							strokeWidth: 2
 						},
 						{
-							data: [80, 75, 70, 65, 60, 55, 50, 100, 95],
+							data: nutrient,
 							color: () => PLANT_COLOR,
 							strokeWidth: 2
 						}
@@ -33,7 +51,7 @@ const GreenhouseHistoryDisplay = () => {
 				}}
 				width={ Dimensions.get('window').width }
 				height={250}
-				yAxisSuffix={'%'}
+				formatYLabel={label => Math.round(label) + '%'}
 				withShadow={false}
 				chartConfig={{
 					backgroundColor: '#472600',

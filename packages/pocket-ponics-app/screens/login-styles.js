@@ -56,7 +56,8 @@ const styles = StyleSheet.create({
 	},
 	signUp: {
 		color: PLANT_COLOR,
-		fontSize: 18
+		fontSize: 18,
+		marginBottom: 10,
 	}
 })
 

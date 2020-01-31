@@ -1,39 +1,27 @@
-import React from 'react';
+import React from 'react'
 import { 
-	StyleSheet, 
 	Text, 
 	View, 
-	ImageBackground,
 	Image,
-	Dimensions,
 	TouchableOpacity
-} from 'react-native';
+} from 'react-native'
 
-import styles from '../components/greenhouse/translocation';
+import styles from './setup-styles'
 
-const { width: WIDTH } = Dimensions.get('window')
+const transplant = require('../assets/transplant.png')
 
 export default class Example extends React.Component {
-
-	Steps() {
-		
-
-				return 'Remove the seedling along with the rockwool from the tray. Wrap a moist paper towel around the rockwool.Place the wrapped rockwool into a net pot inside the tier.'
-	}
-
 	render() {
 		return (
-			<View style={styles.backgroundContainer}>
-				<Text style={styles.value}>
-					<Text style={styles.valueName}>instructions for transplanting</Text>
-				</Text>
-
-				<Text style={styles.value}></Text>
-
-				<Text style={styles.value}>
-					<Text style={styles.valueName}>Directions: </Text> {this.Steps()} 
-				</Text>
-
+			<View style={styles.container}>
+				<View style={styles.background}>
+					<Text style={styles.heading}>Transplant Seedlings</Text>
+					<Text style={styles.text}>Remove the seedling along with the rockwool from the tray. Wrap a moist paper towel around the rockwool. Place the wrapped rockwool into a net pot inside the approriate tier.</Text>
+					<Image source={transplant} style={styles.image}/>
+					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Greenhouse')}>
+						<Text style={styles.buttonText}>Done Transplanting</Text>
+					</TouchableOpacity>
+				</View>
 			</View>
 		)
 	}	
