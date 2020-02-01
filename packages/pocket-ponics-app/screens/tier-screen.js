@@ -136,7 +136,7 @@ export default class Example extends React.Component {
 					</View>
 					{
 						isReadyToHarvest ? (
-							<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('HarvestInstruction', {name: this.getReadableName(plant.plant_id), })}>
+							<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('MLCamera', { id: plant.plant_id })}>
 								<Text style={styles.buttonText}>Harvest {this.getReadableName(plant.plant_id)}</Text>
 							</TouchableOpacity>) : null
 					}

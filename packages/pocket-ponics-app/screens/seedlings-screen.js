@@ -11,7 +11,6 @@ import {
 	ONE_DAY
 } from '../util/constants'
 import styles from './seedlings-screen-styles'
-console.log(styles.buttonBox)
 
 const seedlingImage = require('../assets/seedling.png')
 

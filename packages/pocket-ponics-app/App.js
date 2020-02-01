@@ -20,6 +20,7 @@ import AuthLoadingScreen from './screens/auth-loading-screen'
 import LoginScreen from './screens/login-screen'
 import HarvestInstructionScreen from './screens/harvest-instruction-screen'
 import TranslocationScreen from './screens/translocation-screen'
+import MLCameraScreen from './screens/ml-camera-screen'
 import SignUpScreen from './screens/signup-screen'
 import ResetScreen from './screens/reset-password-screen'
 
@@ -51,6 +52,7 @@ const AppStack = createStackNavigator({
 	Profile: { screen: ProfileScreen },
 	HarvestInstruction: { screen: HarvestInstructionScreen },
 	Translocation: { screen: TranslocationScreen },
+	MLCamera: { screen: MLCameraScreen },
 	ChangePassword: { screen: ChangePasswordScreen }
 },{
 	defaultNavigationOptions: {
@@ -131,7 +133,6 @@ class App extends React.Component {
 	}
 
 	handleNotification(notification) {
-		console.log(notification)
 		if(notification.origin === 'selected') {
 			return this.goToNotification(notification)
 		}
@@ -145,7 +146,6 @@ class App extends React.Component {
 	}
 
 	render() {
-		console.log(this.state.notification)
 		return (
 			<View style={styles.background}>
 				<Modal

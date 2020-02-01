@@ -11,8 +11,6 @@ const GreenhouseHistoryDisplay = props => {
 	const nutrient = []
 	const water = []
 
-	console.log(props)
-
 	props.history.forEach((historical, index) => {
 		if(index%3 !== 0) return
 

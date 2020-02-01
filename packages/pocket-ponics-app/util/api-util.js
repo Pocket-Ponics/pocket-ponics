@@ -60,7 +60,7 @@ const APIUtil = {
 			redirect: 'follow'
 		}))
 			.then(response => response.text())
-			.then(result => {console.log(result); return JSON.parse(result)})
+			.then(result => JSON.parse(result))
 	},
 	get(endpoint, token, body) {
 		return APIUtil.timeoutFetch(10000, fetch(endpoint, {
@@ -173,6 +173,11 @@ const APIUtil = {
 			plant_id: plant,
 			cycle_time: dateString,
 			light_start: 8
+		})
+	},
+	classifyPhoto(token, image) {
+		return APIUtil.post(`http://${host}:${port}/mobileapp/classification`, token, {
+			image
 		})
 	}
 }

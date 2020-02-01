@@ -154,6 +154,89 @@ const AuthUtil = {
 	},
 	// TODO - remove after the backend is pushed to AWS
 	runOfflineTestingCode(username, password, successFn) {
+		global.plants = {};
+		[
+			{
+				'plant_id': 1,
+				'ph_level_low': null,
+				'ec_level_low': null,
+				'temp_low': null,
+				'cycle_time': null,
+				'ph_level_high': null,
+				'ec_level_high': null,
+				'temp_high': null,
+				'name': '',
+				'light_time': null,
+				'steps': null,
+				'plant_url': null,
+				'harvest_url': null,
+				'num_plants': null
+			},
+			{
+				'plant_id': 2,
+				'ph_level_low': 6,
+				'ec_level_low': 2,
+				'temp_low': 0,
+				'cycle_time': 65,
+				'ph_level_high': 6.5,
+				'ec_level_high': 4,
+				'temp_high': 0,
+				'name': 'Green Beans',
+				'light_time': 12,
+				'steps': 'With one hand, hold the stem of the plant. With the other hand, grasp the top of the green bean firmly. gently pull the pod away from the stem, breaking it off the vine.',
+				'plant_url': null,
+				'harvest_url': null,
+				'num_plants': 8
+			},
+			{
+				'plant_id': 3,
+				'ph_level_low': 5.5,
+				'ec_level_low': 1.8,
+				'temp_low': 0,
+				'cycle_time': 60,
+				'ph_level_high': 6.6,
+				'ec_level_high': 2.3,
+				'temp_high': 0,
+				'name': 'Spinach',
+				'light_time': 10,
+				'steps': 'To harvest your spinach, you will need a pair of scissors. Simply cut off the leaves as close to the root as you can. Your spinach plant will continue regrowing these leaves until you decide to remove the entire plant.',
+				'plant_url': null,
+				'harvest_url': null,
+				'num_plants': 18
+			},
+			{
+				'plant_id': 4,
+				'ph_level_low': 6,
+				'ec_level_low': 1.8,
+				'temp_low': 0,
+				'cycle_time': 45,
+				'ph_level_high': 6.5,
+				'ec_level_high': 2.4,
+				'temp_high': 0,
+				'name': 'Turnip',
+				'light_time': 12,
+				'steps': 'Remove the turnip from the tier. With a pair of scissors, cut the leaves off the root, and remove any dangling roots.',
+				'plant_url': 'https://lh3.googleusercontent.com/HvTSEJ6TtVkSl0EV11E-L-cQ5jQrIUr9A_KRzCek1WDlswBLpav5PT836DcocoDKaG-IGqgU0ZunVnd_3NQZxXEThwq26yQUNikDox4d-LlZ1jQuwA=w1280',
+				'harvest_url': 'https://lh4.googleusercontent.com/H-8W1ypQLpiFElIqjlHeKU2skb5d-e8d547m0K4ZzjagdHGLEbHZqJy5ws6DttMA_bF3hiZi=w1280',
+				'num_plants': 18
+			},
+			{
+				'plant_id': 5,
+				'ph_level_low': 5.5,
+				'ec_level_low': 2,
+				'temp_low': 0,
+				'cycle_time': 84,
+				'ph_level_high': 6.5,
+				'ec_level_high': 5,
+				'temp_high': 0,
+				'name': 'Tomato',
+				'light_time': 10,
+				'steps': 'With one hand, hold the stem of the plant. With the other hand, grasp the fuit firmly yet gently. Twist the fruit away from the stem, breaking the stalk just above the top of the tomato.',
+				'plant_url': null,
+				'harvest_url': null,
+				'num_plants': 1
+			}
+		].forEach(plant => global.plants[plant.plant_id] = plant)
 		return Promise.all([
 			AsyncStorage.setItem('username', username),
 			AsyncStorage.setItem('password', password),
