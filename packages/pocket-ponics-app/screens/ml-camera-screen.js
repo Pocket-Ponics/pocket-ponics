@@ -95,7 +95,7 @@ const MLCameraScreen = props => {
 						</TouchableOpacity>
 					</View>
 				</Camera>
-				<TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('HarvestInstruction', { id })}>
+				<TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('HarvestInstruction', { ...props.navigation.state.params })}>
 					<Text style={styles.buttonText}>Start Harvesting</Text>
 				</TouchableOpacity>
 			</View>

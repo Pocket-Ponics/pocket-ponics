@@ -21,6 +21,7 @@ import LoginScreen from './screens/login-screen'
 import HarvestInstructionScreen from './screens/harvest-instruction-screen'
 import TranslocationScreen from './screens/translocation-screen'
 import MLCameraScreen from './screens/ml-camera-screen'
+import ReplantScreen from './screens/replant-screen'
 import SignUpScreen from './screens/signup-screen'
 import ResetScreen from './screens/reset-password-screen'
 
@@ -53,6 +54,7 @@ const AppStack = createStackNavigator({
 	HarvestInstruction: { screen: HarvestInstructionScreen },
 	Translocation: { screen: TranslocationScreen },
 	MLCamera: { screen: MLCameraScreen },
+	Replant: { screen: ReplantScreen },
 	ChangePassword: { screen: ChangePasswordScreen }
 },{
 	defaultNavigationOptions: {

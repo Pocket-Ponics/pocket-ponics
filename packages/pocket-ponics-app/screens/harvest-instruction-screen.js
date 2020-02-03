@@ -38,6 +38,12 @@ class HarvestInstructionScreen extends React.Component {
 		return global.plants[id].steps
 	}
 
+	goToNext(id) {
+		if(id === TURNIP_ID) return this.props.navigation.navigate('Replant', { ...this.props.navigation.state.params })
+
+		return this.props.navigation.navigate('Greenhouse')
+	}
+
 	render() {
 		const id = this.props.navigation.getParam('id')
 		return (
@@ -46,7 +52,7 @@ class HarvestInstructionScreen extends React.Component {
 					<Text style={styles.heading}>Harvest</Text>
 					<Text style={styles.text}>{this.getHarvestInstructions(id)}</Text>
 					<Image source={this.getHarvestImage(id)} style={styles.image}/>
-					<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Greenhouse')}>
+					<TouchableOpacity style={styles.button} onPress={this.goToNext.bind(this, id)}>
 						<Text style={styles.buttonText}>Done Harvesting</Text>
 					</TouchableOpacity>
 				</View>

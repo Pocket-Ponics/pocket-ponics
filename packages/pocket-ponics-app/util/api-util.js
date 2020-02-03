@@ -99,7 +99,7 @@ const APIUtil = {
 			redirect: 'follow'
 		}))
 			.then(response => response.text())
-			.then(result => JSON.parse(result))
+			.then(result => {console.log(result); JSON.parse(result)})
 	},
 	getGreenhouseRegistration() {
 		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/registration/`, {
@@ -178,6 +178,21 @@ const APIUtil = {
 	classifyPhoto(token, image) {
 		return APIUtil.post(`http://${host}:${port}/mobileapp/classification`, token, {
 			image
+		})
+	},
+	clearSeedlings(token, id, name) {
+		return APIUtil.put(`http://${host}:${port}/mobileapp/greenhouses/${id}`, token, {
+			name,
+			seedling_time: ''
+		})
+	},
+	plantSeedlings(token, id, name) {
+		const seedlingHarvest = new Date(Date.now() + (24 * 3600 * 1000 * 14))
+		const dateString = seedlingHarvest.getFullYear() + '-' + (seedlingHarvest.getMonth()+1) + '-' + seedlingHarvest.getDate()
+		
+		return APIUtil.put(`http://${host}:${port}/mobileapp/greenhouses/${id}`, token, {
+			name,
+			seedling_time: dateString
 		})
 	}
 }

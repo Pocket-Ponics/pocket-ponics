@@ -62,6 +62,9 @@ export default class SeedlingsScreen extends React.Component {
 			)
 		}
 
+		const name = this.props.navigation.getParam('name', '')
+		const id  = this.props.navigation.getParam('id', 0)
+
 		const transplantDate = new Date(seedlings)
 		const transplantString = this.generateDateString(transplantDate)
 		const today = new Date(Date.now())
@@ -96,7 +99,7 @@ export default class SeedlingsScreen extends React.Component {
 							<Text style={styles.buttonText}>Water Seedlings</Text>
 						</TouchableOpacity>
 						{daysTilTransplant <= 0 ? (
-							<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Translocation')}>
+							<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Translocation', { name, id })}>
 								<Text style={styles.buttonText}>Transplant Seedlings</Text>
 							</TouchableOpacity>
 						) : null }
