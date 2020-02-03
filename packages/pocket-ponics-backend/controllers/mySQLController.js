@@ -250,7 +250,7 @@ exports.updateGreenhouseForUser = (user_id, greenhouse_id, name, seedling_time, 
     var query = ""
     if(seedling_time == '')
     {
-        query = `UPDATE greenhouse SET name = "${name}" WHERE user_id = ${user_id} and greenhouse_id = ${greenhouse_id}`
+        query = `UPDATE greenhouse SET name = "${name}" , seedling_time=NULL WHERE user_id = ${user_id} and greenhouse_id = ${greenhouse_id}`
     }
     else
     {
