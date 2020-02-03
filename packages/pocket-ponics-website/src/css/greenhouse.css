@@ -1,0 +1,14 @@
+.tier {
+    width: 100%;
+  }
+
+  .greenhouse {
+    border: 1px solid red;
+    width: 350px;
+    height: 400px;
+  }
+
+.tier-plant {
+    position: relative;
+    width: 20%;
+}
