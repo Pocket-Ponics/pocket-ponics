@@ -13,22 +13,22 @@ import * as Permissions from 'expo-permissions'
 
 import APIUtil from '../util/api-util'
 
-import styles from './setup-styles'
+import styles from './ml-camera-styles'
 
 const displayImage = (success, accuracy) => {
-	if(success === null) return <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', width: '100%'}}/>
+	if(success === null) return <View style={styles.responseContainer}/>
 	if(!success || accuracy < .80) {
 		return (
-			<View style={{flex: 1, alignItems: 'center', justifyContent: 'center', width: '100%'}}>
+			<View style={styles.responseContainer}>
 				<Icon name='times-circle' size={70} color="#FFF"/>
-				<Text style={{color: '#FFF', fontSize: 30, textShadowColor: '#000', textShadowRadius: 1 }}>Do not harvest</Text>
+				<Text style={styles.responseText}>Do not harvest</Text>
 			</View>
 		)
 	}
 	return (
-		<View style={{flex: 1, alignItems: 'center', justifyContent: 'center', width: '100%'}}>
+		<View style={styles.responseContainer}>
 			<Icon name='check-circle' size={70} color="#FFF"/>
-			<Text>Ready to harvest!</Text>
+			<Text style={styles.responseText}>Ready to harvest!</Text>
 		</View>
 	)
 }
@@ -68,15 +68,11 @@ const MLCameraScreen = props => {
 					{ compress: 0, format: 'jpeg', base64: true }
 				)
 			})
-			.then(photo => {
-				console.log(photo.base64)
-				return APIUtil.classifyPhoto(token, photo.base64)
-			})
+			.then(photo => APIUtil.classifyPhoto(token, photo.base64))
 			.then(response => {
-				console.log(response)
 				setProcessing(false)
-				setSuccess(true)
-				setSuccess(true)
+				setSuccess(response.prediction.split('-')[0] === 'ripe')
+				setAccuracy(response.accuracy)
 			})
 			.catch(error => {
 				console.log(error)
@@ -91,10 +87,10 @@ const MLCameraScreen = props => {
 			<View style={styles.background}>
 				<Text style={styles.heading}>Harvest Check</Text>
 				<Text style={styles.text}>Point the camera at the plant, and then press the button to take a picture</Text>
-				<Camera style={{ flex: 1, padding: 5 }} ref={(ref) => { this.camera = ref }}>
-					{processing ? <ActivityIndicator size="large" color="#FFF" style={{ flex: 1,  width: '100%'}}/> : displayImage(success, accuracy)}
-					<View style={{ width: '100%', alignItems: 'center' }}>
-						<TouchableOpacity style={{ borderColor: 'white', borderWidth: 2, borderRadius: 50, paddingLeft: 4, paddingRight: 4}} onPress={() => takePicture()} disabled={processing}>
+				<Camera style={styles.camera} ref={(ref) => { this.camera = ref }}>
+					{processing ? <ActivityIndicator size="large" color="#FFF" style={styles.activity}/> : displayImage(success, accuracy)}
+					<View style={styles.cameraButtonContainer}>
+						<TouchableOpacity style={styles.cameraButton} onPress={() => takePicture()} disabled={processing}>
 							<Icon name={'circle'} size={50} color='#FFF' />
 						</TouchableOpacity>
 					</View>

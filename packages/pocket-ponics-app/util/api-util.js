@@ -63,7 +63,7 @@ const APIUtil = {
 			.then(result => JSON.parse(result))
 	},
 	get(endpoint, token, body) {
-		return APIUtil.timeoutFetch(10000, fetch(endpoint, {
+		return APIUtil.timeoutFetch(15000, fetch(endpoint, {
 			method: 'GET',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
@@ -76,7 +76,7 @@ const APIUtil = {
 			.then(result => JSON.parse(result))
 	},
 	post(endpoint, token, body) {
-		return APIUtil.timeoutFetch(10000, fetch(endpoint, {
+		return APIUtil.timeoutFetch(15000, fetch(endpoint, {
 			method: 'POST',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
@@ -89,7 +89,7 @@ const APIUtil = {
 			.then(result => JSON.parse(result))
 	},
 	put(endpoint, token, body) {
-		return APIUtil.timeoutFetch(10000, fetch(endpoint, {
+		return APIUtil.timeoutFetch(15000, fetch(endpoint, {
 			method: 'PUT',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
