@@ -153,8 +153,8 @@ exports.createEmptyTiersAndGridForNewGreenhouse = (greenhouse_id, user_id, seria
     })
 }
 
-exports.getGreenhouseHistoricalData = (user_id, greenhouse_id, lower_limit, upper_limit, callback) => {
-    sqlController.execute(`select * from historical_data where user_id = ${user_id} and greenhouse_id = ${greenhouse_id} and date >= '${lower_limit}' and date < '${upper_limit}'`, function(err, result) {
+exports.getGreenhouseHistoricalData = (user_id, greenhouse_id, callback) => {
+    sqlController.execute(`select hd1.* from pocketponics.historical_data hd1, (select date(date), max(date) as max_date from pocketponics.historical_data group by date(date) ) hd2 where hd1.date = hd2.max_date and greenhouse_id = ${greenhouse_id} and user_id = ${user_id} and date BETWEEN DATE_SUB(NOW(), INTERVAL 30 DAY) AND NOW()`, function(err, result) {
         if(err)
         {
             console.log(result)
@@ -180,8 +180,8 @@ exports.getUserForToken = (token, callback) => {
     })
 }
 
-exports.createPlantIdeal = (ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, callback) => {
-    sqlController.execute(`insert into plant_ideal (ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time) values (${ph_level_low}, ${ec_level_low}, ${temp_low}, ${cycle_time}, ${ph_level_high}, ${ec_level_high}, ${temp_high}, "${name}", ${light_time});`, function(err, result) {
+exports.createPlantIdeal = (ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, callback) => {
+    sqlController.execute(`insert into plant_ideal (ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url) values (${ph_level_low}, ${ec_level_low}, ${temp_low}, ${cycle_time}, ${ph_level_high}, ${ec_level_high}, ${temp_high}, "${name}", ${light_time}, "${steps}", "${plant_url}", "${harvest_url}");`, function(err, result) {
         if(!err)
         {
             callback(err, result.rows.insertId)
@@ -193,8 +193,8 @@ exports.createPlantIdeal = (ph_level_low, ec_level_low, temp_low, cycle_time, ph
     })
 }
 
-exports.updatePlantIdeal = (plant_id, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, callback) => {
-    sqlController.execute(`UPDATE plant_ideal SET ph_level_low = ${ph_level_low}, ec_level_low = ${ec_level_low}, temp_low = ${temp_low}, cycle_time = ${cycle_time}, ph_level_high = ${ph_level_high}, ec_level_high = ${ec_level_high}, temp_high = ${temp_high}, name = "${name}", light_time = ${light_time} where plant_id = ${plant_id}`, function(err, result) {        
+exports.updatePlantIdeal = (plant_id, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, callback) => {
+    sqlController.execute(`UPDATE plant_ideal SET ph_level_low = ${ph_level_low}, ec_level_low = ${ec_level_low}, temp_low = ${temp_low}, cycle_time = ${cycle_time}, ph_level_high = ${ph_level_high}, ec_level_high = ${ec_level_high}, temp_high = ${temp_high}, name = "${name}", light_time = ${light_time}, steps = "${steps}", plant_url = "${plant_url}", harvest_url = "${harvest_url}" where plant_id = ${plant_id}`, function(err, result) {        
         if(err || result.rows.affectedRows == 1)
         {
             callback(err, result)

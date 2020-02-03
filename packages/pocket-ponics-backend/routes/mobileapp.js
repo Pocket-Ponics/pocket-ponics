@@ -38,4 +38,7 @@ module.exports = function(app)
 
     app.route('/mobileapp/greenhouses/history/:greenhouse_id/')
         .get(mobileapp.getGreenhouseReadings)
+
+    app.route('/mobileapp/classification')
+        .post(mobileapp.classifyPlantImage)
 }

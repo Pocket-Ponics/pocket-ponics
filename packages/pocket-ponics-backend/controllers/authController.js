@@ -11,121 +11,138 @@ passVal.is().min(8).is().max(100).has().not().spaces()
 
 //Get an authentication token for given user credentials
 exports.getToken = (req, res) => {
-    //convert base64 credentials to ascii
-    let basicAuth = req.headers.authorization.split(" ")[1]
-    let buff = new Buffer(basicAuth, 'base64');
-    let credentials = buff.toString('ascii').split(":");
 
-    //Store email and password provided
-    var email = credentials[0];
-    var password = credentials[1];
+    if(req.headers.authorization == undefined)
+    {
+        res.status(210)
+        res.json({210: "Error: Missing Token"})
+    }
+    else
+    {
+        //convert base64 credentials to ascii
+        let basicAuth = req.headers.authorization.split(" ")[1]
+        let buff = new Buffer(basicAuth, 'base64');
+        let credentials = buff.toString('ascii').split(":");
 
-    //Retrieve password hash from database for given email
-    mySQL.getHashForUser(email, function(err, record) {
-        if(err)
-        {
-            res.status(403)
-            res.json({403: "Authentication Error"})
-        }
-        else if(record == undefined)
-        {
-            res.status(402)
-            res.json({402: "User Not Found"})
-        } 
-        else 
-        {
-            //Calculate password hash and compare to retrieved hash
-            bcrypt.compare(password, record.password_hash, (err, result) => {
-                if(result)
-                {
-                    //Calculate token, store in DB and return as response
-                    var token = crypto.randomBytes(32).toString('base64')
-                    
-                    //Store token in DB
-                    mySQL.insertTokenForUser(token, record.user_id, mySQL.getExpirationDateString(), (err, result) => {
-                        if(!err)
-                        {
-                            res.status(200)
-                            res.json({token: token})
-                        } 
-                        else 
-                        {
-                            res.status(403)
-                            res.json({403: "Error generating token"})
-                        }
-                    })
-                }
-                else {
-                    res.status(401)
-                    res.json({401: "Unauthorized"})
-                }        
-            })
-        }
-    })
+        //Store email and password provided
+        var email = credentials[0];
+        var password = credentials[1];
+
+        //Retrieve password hash from database for given email
+        mySQL.getHashForUser(email, function(err, record) {
+            if(err)
+            {
+                res.status(403)
+                res.json({403: "Authentication Error"})
+            }
+            else if(record == undefined)
+            {
+                res.status(402)
+                res.json({402: "User Not Found"})
+            } 
+            else 
+            {
+                //Calculate password hash and compare to retrieved hash
+                bcrypt.compare(password, record.password_hash, (err, result) => {
+                    if(result)
+                    {
+                        //Calculate token, store in DB and return as response
+                        var token = crypto.randomBytes(32).toString('base64')
+                        
+                        //Store token in DB
+                        mySQL.insertTokenForUser(token, record.user_id, mySQL.getExpirationDateString(), (err, result) => {
+                            if(!err)
+                            {
+                                res.status(200)
+                                res.json({token: token})
+                            } 
+                            else 
+                            {
+                                res.status(403)
+                                res.json({403: "Error generating token"})
+                            }
+                        })
+                    }
+                    else {
+                        res.status(401)
+                        res.json({401: "Unauthorized"})
+                    }        
+                })
+            }
+        })
+    }
 };
 
 //Send a reset password command to backend
 exports.resetPassword = (req, res) => {
     var email = req.body.email
 
-    //Generate new password
-    var newPassword = Math.random().toString(36).slice(-8);
+    if(!validator.validate(email))
+    {
+        res.status(210)
+        res.json({210: "Error: Invalid Email"})
+    }
+    else
+    {
+        //Generate new password
+        var newPassword = Math.random().toString(36).slice(-8);
 
-    mySQL.getUserIDForUser(email, function(err, record) {
-        if(!err)
-        {
-            var newPasswordHash = bcrypt.hashSync(newPassword, 10);
-            mySQL.updateUserHash(record.user_id, newPasswordHash, function(err, result) {
-                if(!err)
-                {                    
-                    let transporter = nodemailer.createTransport({
-                        host: "smtp.mail.com",
-                        port: 587,
-                        secure: false, 
-                        auth: {
-                          user: 'pocketponics@mail.com', 
-                          pass: 'P0ckEtPon1Cs!' 
+        mySQL.getUserIDForUser(email, function(err, record) {
+            if(!err)
+            {
+                var newPasswordHash = bcrypt.hashSync(newPassword, 10);
+                mySQL.updateUserHash(record.user_id, newPasswordHash, function(err, result) {
+                    if(!err)
+                    {                    
+                        let transporter = nodemailer.createTransport({
+                            host: "smtp.mail.com",
+                            port: 587,
+                            secure: false, 
+                            auth: {
+                            user: 'pocketponics@mail.com', 
+                            pass: 'P0ckEtPon1Cs!' 
+                            }
+                        });
+                        
+                        // Send email
+                        var mailSettings = {
+                            from: '"Pocket Ponics" <pocketponics@mail.com>', 
+                            to: email, 
+                            subject: "Your New Password",
+                            text: `Your new password is ${newPassword}`
                         }
-                      });
-                    
-                      // Send email
-                      var mailSettings = {
-                        from: '"Pocket Ponics" <pocketponics@mail.com>', 
-                        to: email, 
-                        subject: "Your New Password",
-                        text: `Your new password is ${newPassword}`
-                      }
-                      
-                      transporter.sendMail(mailSettings, function(err, info) {
-                        if (err) 
-                        {
-                            console.log(err);
-                        } 
-                        else 
-                        {
-                            //Revoke tokens for user's old active sessions and device keys for notifications
-                            mySQL.revokeTokensAndDeviceKeys(record.user_id, function(err, result) {
-                                if(!err)
-                                {
-                                    res.status(200)
-                                    res.json({200: "User Password Reset"})
-                                }
-                                else
-                                {
-                                    res.status(201)
-                                    res.json({201: "Unable to reset user password"})
-                                }
-                            })
-                        }}); 
-                } 
-                else 
-                {
-                    res.status(201)
-                    res.json({201: "Unable to reset user password"})
-                }
-            })
-        }
-    })
+                        
+                        transporter.sendMail(mailSettings, function(err, info) {
+                            if (err) 
+                            {
+                                console.log(err);
+                            } 
+                            else 
+                            {
+                                //Revoke tokens for user's old active sessions and device keys for notifications
+                                mySQL.revokeTokensAndDeviceKeys(record.user_id, function(err, result) {
+                                    if(!err)
+                                    {
+                                        res.status(200)
+                                        res.json({200: "User Password Reset"})
+                                    }
+                                    else
+                                    {
+                                        res.status(201)
+                                        res.json({201: "Unable to reset user password"})
+                                    }
+                                })
+                            }}); 
+                    } 
+                    else 
+                    {
+                        res.status(201)
+                        res.json({201: "Unable to reset user password"})
+                    }
+                })
+            }
+        })
+    }
 };
 
 //Create a user with provided email and password
@@ -184,7 +201,7 @@ exports.changePassword = (req, res) => {
     var oldPassword = req.body.old_password;
     var newPassword = req.body.new_password;
     
-    if(passVal.validate(newPassword))
+    if(passVal.validate(newPassword) && validator.validate(email))
     {
         //Retrieve password hash from DB for provided email
         mySQL.getHashForUser(email, function(err, record) {
@@ -242,6 +259,6 @@ exports.changePassword = (req, res) => {
     else
     {
         res.status(202)
-        res.json({202: "Invalid New Password Provided"})
+        res.json({202: "Invalid Email/New Password Provided"})
     }
 };
