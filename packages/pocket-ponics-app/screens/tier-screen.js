@@ -1,5 +1,4 @@
-import React from 'react';
-import { StyleSheet, Dimensions } from 'react-native'
+import React from 'react'
 import { StackActions, NavigationActions } from 'react-navigation';
 
 import { 
@@ -15,10 +14,6 @@ import {
 	GREENBEAN_ID, 
 	SPINACH_ID,
 	TURNIP_ID,
-	TOMATO_VALUES,
-	GREENBEAN_VALUES,
-	SPINACH_VALUES,
-	TURNIP_VALUES,
 	ONE_DAY
 } from '../util/constants'
 
@@ -28,18 +23,6 @@ const tomatoImage = require('../assets/tomato.png')
 const greenbeanImage = require('../assets/greenbean.png')
 const spinachImage = require('../assets/spinach.png')
 const turnipImage = require('../assets/turnip.png')
-var date = new Date().getDate();
-const daysTilharvest = 0
-
-const { width: WIDTH } = Dimensions.get('window')
-
-	class TierScreen extends React.Component 
-	{
-		static navigationOptions = 
-		{
-			title: 'Setup',
-		}
-	}
 
 export default class Example extends React.Component {
 	constructor(props) {
@@ -86,59 +69,18 @@ export default class Example extends React.Component {
 		}
 	}
 
-
-	// getReadableName(name) 
-	// {
-	// 	switch(name) 
-	// 	{
-	// 		case 'tomato':
-	// 			return 'Tomatoes'
-	// 		case 'greenbeans':
-	// 			return 'Green Beans'
-	// 		case 'spinach':
-	// 			return 'Spinach'
-	// 		case 'turnip':
-	// 			return 'Turnips'
-	// 	}
-	// }
-
 	getReadableName(id) {
-		switch(id) {
-		case TOMATO_ID:
-			return 'Tomatoes'
-		case GREENBEAN_ID:
-			return 'Green Beans'
-		case SPINACH_ID:
-			return 'Spinach'
-		case TURNIP_ID:
-			return 'Turnips'
-		}
+		return global.plants[id].name
 	}
 
 	isValidpH(id, pH) {
-		switch(id) {
-		case TOMATO_ID:
-			return pH >= TOMATO_VALUES.minPH && pH <= TOMATO_VALUES.maxPH
-		case GREENBEAN_ID:
-			return pH >= GREENBEAN_VALUES.minPH && pH <= GREENBEAN_VALUES.maxPH
-		case SPINACH_ID:
-			return pH >= SPINACH_VALUES.minPH && pH <= SPINACH_VALUES.maxPH
-		case TURNIP_ID:
-			return pH >= TURNIP_VALUES.minPH && pH <= TURNIP_VALUES.maxPH
-		}
+		return pH >= global.plants[id].ph_level_low
+			&& pH <= global.plants[id].ph_level_high
 	}
 
 	isValidEC(id, ec) {
-		switch(id) {
-		case TOMATO_ID:
-			return ec >= TOMATO_VALUES.minEC && ec <= TOMATO_VALUES.maxEC
-		case GREENBEAN_ID:
-			return ec >= GREENBEAN_VALUES.minEC && ec <= GREENBEAN_VALUES.maxEC
-		case SPINACH_ID:
-			return ec >= SPINACH_VALUES.minEC && ec <= SPINACH_VALUES.maxEC
-		case TURNIP_ID:
-			return ec >= TURNIP_VALUES.minEC && ec <= TURNIP_VALUES.maxEC
-		}
+		return ec >= global.plants[id].ec_level_low
+			&& ec <= global.plants[id].ec_level_high
 	}
 
 	statusText(name, value, checker) {
@@ -151,8 +93,8 @@ export default class Example extends React.Component {
 		const resetAction = StackActions.reset({
 			index: 0,
 			actions: [NavigationActions.navigate({ routeName: 'HarvestInstruction' })],
-		});
-		this.props.navigation.dispatch(resetAction);
+		})
+		this.props.navigation.dispatch(resetAction)
 	}
 
 	render() {
@@ -162,41 +104,43 @@ export default class Example extends React.Component {
 		const isReadyToHarvest = harvestDate - Date.now() < ONE_DAY
 		
 		return (
-			<View style={styles.backgroundContainer}>
-				<Image source={this.getImage(plant.plant_id)} style={styles.plantImage}/>
-				<Text style={styles.title}>{this.getReadableName(plant.plant_id)}</Text>
-				<View style={styles.plantInfoContainer}>
-					<View style={styles.valuesContainer}>
-						<Text style={styles.value}>
-							<Text style={styles.valueName}>pH:</Text> {plant.ph_level}
-						</Text>
+			<View style={styles.background}>
+				<View style={styles.container}>
+					<Image source={this.getImage(plant.plant_id)} style={styles.plantImage}/>
+					<Text style={styles.title}>{this.getReadableName(plant.plant_id)}</Text>
+					<View style={styles.plantInfoContainer}>
+						<View style={styles.valuesContainer}>
+							<Text style={styles.value}>
+								<Text style={styles.valueName}>pH:</Text> {plant.ph_level}
+							</Text>
 
-						<Text style={styles.value}>
-							<Text style={styles.valueName}>Electrical Conductivity:</Text> {plant.ec_level}
-						</Text>
-						
-						<Text style={styles.value}>
-							<Text style={styles.valueName}>Estimated Harvest:</Text> {harvestString}
-						</Text>
+							<Text style={styles.value}>
+								<Text style={styles.valueName}>Electrical Conductivity:</Text> {plant.ec_level}
+							</Text>
+							
+							<Text style={styles.value}>
+								<Text style={styles.valueName}>Estimated Harvest:</Text> {harvestString}
+							</Text>
+						</View>
+						<View style={styles.statusesContainer}>
+							<Text style={styles.value}>
+								{this.statusText(plant['plant_id'], plant['ph_level'], this.isValidpH)}
+							</Text>
+							<Text style={styles.value}>
+								{this.statusText(plant['plant_id'], plant['ec_level'], this.isValidEC)}
+							</Text>
+							<Text style={styles.value}>
+								{isReadyToHarvest ? 'Ready!' : ''}
+							</Text>
+						</View>
 					</View>
-					<View style={styles.statusesContainer}>
-						<Text style={styles.value}>
-							{this.statusText(plant['plant_id'], plant['ph_level'], this.isValidpH)}
-						</Text>
-						<Text style={styles.value}>
-							{this.statusText(plant['plant_id'], plant['ec_level'], this.isValidEC)}
-						</Text>
-						<Text style={styles.value}>
-							{isReadyToHarvest ? 'Ready!' : ''}
-						</Text>
-					</View>
+					{
+						isReadyToHarvest ? (
+							<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('HarvestInstruction', {name: this.getReadableName(plant.plant_id), })}>
+								<Text style={styles.buttonText}>Harvest {this.getReadableName(plant.plant_id)}</Text>
+							</TouchableOpacity>) : null
+					}
 				</View>
-				{
-					isReadyToHarvest ? (
-						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('HarvestInstruction', {name: this.getReadableName(plant.plant_id), })}>
-							<Text style={styles.button}>Harvest {this.getReadableName(plant.plant_id)}</Text>
-						</TouchableOpacity>) : null
-				}
 			</View>
 		)
 	}

@@ -3,8 +3,13 @@ import * as Permissions from 'expo-permissions'
 
 import APIUtil from '../util/api-util'
 
+const generateDateString = (date) => {
+	return `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+}
+
 const AuthUtil = {
 	getAuthToken: async(loggedOutFn, successFn) => {
+
 		// Retrieve username and password from storage
 		const username = await AsyncStorage.getItem('username')
 		const password = await AsyncStorage.getItem('password')
@@ -15,27 +20,61 @@ const AuthUtil = {
 			return loggedOutFn()
 		}
 
-		let token
+		// global.plants = {}
+		// const plantData = await 
+		// plantData.forEach(plant => global.plants[plant.plant_id] = plant)
 
-		APIUtil.getAuthToken(username, password)
+		let token
+		APIUtil.getPlants()
+			.then(response => {
+				global.plants = {}
+				response.forEach(plant => global.plants[plant.plant_id] = plant)
+
+				return APIUtil.getAuthToken(username, password)
+			})
 			.then(response => {
 				token = response.token
 				console.log('Token: ', token)
+				if(!token) {
+					return loggedOutFn()
+				}
 
-				return APIUtil.getGreenhouses(token)
+				return AuthUtil.retrieveGreenhouses(token, successFn) 
 			})
-			.then(response => {
-				const greenhouses = response.greenhouses
+			.catch(error => {
+				console.log('error', error)
 
-				return Promise.all(greenhouses.map(
+				// TODO - remove after the backend is pushed to AWS
+				return AuthUtil.runOfflineTestingCode(username, password, successFn)
+			})
+	},
+	retrieveGreenhouses(token, successFn) {
+		let greenhouseIds
+		let greenhouseData
+		return APIUtil.getGreenhouses(token)
+			.then(response => {
+				greenhouseIds = response.greenhouses
+
+				return Promise.all(greenhouseIds.map(
 					greenhouse => APIUtil.getGreenhouse(token, greenhouse)
 				))
 			})
 			.then(responses => {
+				greenhouseData = responses
+				const start = generateDateString(new Date(Date.now() - (1000 * 60 * 60 * 24 * 30)))
+				const end = generateDateString(new Date(Date.now()))
+
+				return Promise.all(greenhouseIds.map(
+					greenhouse => APIUtil.getHistory(token, greenhouse, start, end)
+				))
+			})
+			.then(responses => {
+				greenhouseData.forEach((greenhouse, index) => greenhouse.history = responses[index].history)
+				
 				return Promise.all([
 					AsyncStorage.setItem('token', token),
 					AsyncStorage.setItem('greenhouses', JSON.stringify([
-						...responses, 
+						...greenhouseData, 
 						{
 							type: 'add-page',
 							name: 'Setup',
@@ -44,12 +83,7 @@ const AuthUtil = {
 				])
 			})
 			.then(() => successFn())
-			.catch(error => {
-				console.log('error', error)
-
-				// TODO - remove after the backend is pushed to AWS
-				return AuthUtil.runOfflineTestingCode(username, password, successFn)
-			})
+			.catch(error => console.log('Data retrieval error', error))
 	},
 	login(username, password, successFn) {
 		let token
@@ -90,6 +124,7 @@ const AuthUtil = {
 				return APIUtil.getGreenhouses(token)
 			})
 			.then(response => {
+				console.log(greenhouses)
 				const greenhouses = response.greenhouses
 
 				return Promise.all(greenhouses.map(
@@ -126,6 +161,7 @@ const AuthUtil = {
 			AsyncStorage.setItem('greenhouses', JSON.stringify([
 				{
 					'name': 'herewbanana',
+					'greenhouse_id': 1,
 					'water_level': 0,
 					'nutrient_level': 0,
 					'battery': 0,
@@ -169,7 +205,8 @@ const AuthUtil = {
 							'cycle_time': null,
 							'num_plants': 0
 						}
-					]
+					],
+					history: []
 				}, 
 				{
 					type: 'add-page',

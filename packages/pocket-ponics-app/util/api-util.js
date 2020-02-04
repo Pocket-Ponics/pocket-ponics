@@ -1,7 +1,7 @@
 import base64 from 'base-64'
 import { Notifications } from 'expo'
 
-const host = 'ec2-18-191-221-89.us-east-2.compute.amazonaws.com'
+const host = '10.171.204.187'
 const port = '8080'
 
 const greenhouse = '169.254.146.181'
@@ -75,31 +75,6 @@ const APIUtil = {
 			.then(response => response.text())
 			.then(result => JSON.parse(result))
 	},
-	getGreenhouseRegistration() {
-		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/registration/`, {
-			method: 'GET',
-		}))
-			.then(response => response.text())
-			.then(result => JSON.parse(result))
-	},
-	getGreenhouseWifis() {
-		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/wifi/`, {
-			method: 'GET',
-		}))
-			.then(response => response.text())
-			.then(result => JSON.parse(result))
-	},
-	sendWifiData(body) {
-		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/wifi/login`, {
-			method: 'POST',
-			headers: new Headers({
-				'Content-Type': 'application/json'
-			}),
-			body: JSON.stringify(body)
-		}))
-			.then(response => response.text())
-			.then(result => JSON.parse(result))
-	},
 	post(endpoint, token, body) {
 		return APIUtil.timeoutFetch(10000, fetch(endpoint, {
 			method: 'POST',
@@ -126,6 +101,31 @@ const APIUtil = {
 			.then(response => response.text())
 			.then(result => JSON.parse(result))
 	},
+	getGreenhouseRegistration() {
+		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/registration/`, {
+			method: 'GET',
+		}))
+			.then(response => response.text())
+			.then(result => JSON.parse(result))
+	},
+	getGreenhouseWifis() {
+		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/wifi/`, {
+			method: 'GET',
+		}))
+			.then(response => response.text())
+			.then(result => JSON.parse(result))
+	},
+	sendWifiData(body) {
+		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/wifi/login`, {
+			method: 'POST',
+			headers: new Headers({
+				'Content-Type': 'application/json'
+			}),
+			body: JSON.stringify(body)
+		}))
+			.then(response => response.text())
+			.then(result => JSON.parse(result))
+	},
 	setDeviceKey(token) {
 		return Notifications.getExpoPushTokenAsync()
 			.then(device_key => {
@@ -133,6 +133,9 @@ const APIUtil = {
 					device_key
 				})
 			})
+	},
+	getPlants() {
+		return APIUtil.get(`http://${host}:${port}/adminportal`, '', {})
 	},
 	changePassword(token, email, old_password, new_password) {
 		return APIUtil.post(`http://${host}:${port}/auth/change_password`, token, {
@@ -147,6 +150,9 @@ const APIUtil = {
 	getGreenhouse(token, greenhouse) {
 		return APIUtil.get(`http://${host}:${port}/mobileapp/greenhouses/detail/${greenhouse}`, token, {})
 	},
+	getHistory(token, greenhouse) {
+		return APIUtil.get(`http://${host}:${port}/mobileapp/greenhouses/history/${greenhouse}`, token, {})
+	},
 	postGreenhouse(token, name) {
 		const randomSerial = Math.floor(Math.random() * 899999 + 100000)
 		const seedlingHarvest = new Date(Date.now() + (24 * 3600 * 1000 * 14))
@@ -159,14 +165,14 @@ const APIUtil = {
 			'seedling_time': dateString
 		})
 	},
-	postTier(token, greenhouse, tier, plant, numPlants, cycleTime) {
+	postTier(token, greenhouse, tier, plant, cycleTime) {
 		const plantHarvest = new Date(Date.now() + (24 * 3600 * 1000 * cycleTime))
 		const dateString = plantHarvest.getFullYear() + '-' + (plantHarvest.getMonth()+1) + '-' + plantHarvest.getDate()
 		
 		return APIUtil.put(`http://${host}:${port}/mobileapp/tiers/${greenhouse}/${tier}`, token, {
-			'plant_id': plant,
-			'num_plants': numPlants,
-			'cycle_time': dateString
+			plant_id: plant,
+			cycle_time: dateString,
+			light_start: 8
 		})
 	}
 }

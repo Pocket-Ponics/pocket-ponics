@@ -6,26 +6,17 @@ import styles from './setup-styles'
 
 import Display from '../components/greenhouse/display'
 import { 
-	TOMATO_VALUES,
-	GREENBEAN_VALUES,
-	SPINACH_VALUES,
-	TURNIP_VALUES
+	TOMATO_ID, 
+	GREENBEAN_ID, 
+	SPINACH_ID,
+	TURNIP_ID,
+	ONE_DAY
 } from '../util/constants'
 
 const tomatoImage = require('../assets/tomato.png')
 const greenbeanImage = require('../assets/greenbean.png')
 const spinachImage = require('../assets/spinach.png')
 const turnipImage = require('../assets/turnip.png')
-
-const plants = [
-	{ img: greenbeanImage, display: 'Greenbean', data: GREENBEAN_VALUES },
-	{ img: spinachImage, display: 'Spinach', data: SPINACH_VALUES },
-	{ img: turnipImage, display: 'Turnip', data: TURNIP_VALUES },
-]
-
-const topplants = [
-	{ img: tomatoImage, display: 'Tomato', data: TOMATO_VALUES },
-]
 
 class TierSelectionScreen extends React.Component {
 	static navigationOptions = {
@@ -43,6 +34,16 @@ class TierSelectionScreen extends React.Component {
 		}
 
 		this.onChangeName = this.onChangeName.bind(this)
+
+		this.plants = [
+			{ img: greenbeanImage, display: 'Greenbean', data: global.plants[GREENBEAN_ID] },
+			{ img: spinachImage, display: 'Spinach', data: global.plants[SPINACH_ID] },
+			{ img: turnipImage, display: 'Turnip', data: global.plants[TURNIP_ID] },
+		]
+
+		this.topplants = [
+			{ img: tomatoImage, display: 'Tomato', data: global.plants[TOMATO_ID] },
+		]
 	}
 
 	async goToNext() {
@@ -91,7 +92,7 @@ class TierSelectionScreen extends React.Component {
 							<View style={styles.modalDisplay}>
 								<Text style={styles.modalHeading}>Plant Choices</Text>
 								<FlatList
-									data={this.state.currIndex === 0 ? topplants : plants}
+									data={this.state.currIndex === 0 ? this.topplants : this.plants}
 									renderItem={({ item }) => (
 										<TouchableOpacity style={styles.selectorButton} onPress={() => this.setTier(item.data)}>
 											<Image source={item.img} style={styles.selectorImg}/>

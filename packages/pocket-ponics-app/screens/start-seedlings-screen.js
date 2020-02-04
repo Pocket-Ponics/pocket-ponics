@@ -56,10 +56,10 @@ class StartSeedlingsScreen extends React.Component {
 				console.log('Greenhouse registration response: ', response)
 				console.log('Greenhouse: ', response.id)
 				return Promise.all([
-					APIUtil.postTier(token, response.id, 1, tiers[0].plant_id, tiers[0].num_plants, tiers[0].cycle_time),
-					APIUtil.postTier(token, response.id, 2, tiers[1].plant_id, tiers[1].num_plants, tiers[1].cycle_time),
-					APIUtil.postTier(token, response.id, 3, tiers[2].plant_id, tiers[2].num_plants, tiers[2].cycle_time),
-					APIUtil.postTier(token, response.id, 4, tiers[3].plant_id, tiers[3].num_plants, tiers[3].cycle_time)
+					APIUtil.postTier(token, response.id, 1, tiers[0].plant_id, tiers[0].num_plants || 0, tiers[0].cycle_time),
+					APIUtil.postTier(token, response.id, 2, tiers[1].plant_id, tiers[1].num_plants || 0, tiers[1].cycle_time),
+					APIUtil.postTier(token, response.id, 3, tiers[2].plant_id, tiers[2].num_plants || 0, tiers[2].cycle_time),
+					APIUtil.postTier(token, response.id, 4, tiers[3].plant_id, tiers[3].num_plants || 0, tiers[3].cycle_time)
 				])
 			})
 			.then(response => {
@@ -91,7 +91,7 @@ class StartSeedlingsScreen extends React.Component {
 	}
 
 	render() {
-		const seedsArray = this.state.tiers.flatMap(tier => (new Array(tier.num_plants)).fill(tier.plant_id))
+		const seedsArray = this.state.tiers.flatMap(tier => (new Array(tier.num_plants || 1)).fill(tier.plant_id))
 		
 		return (
 			<View style={styles.container}>
