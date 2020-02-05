@@ -2,7 +2,6 @@ import mySQL from './mySQLController';
 import notificationController from './notificationController';
 const bcrypt = require('bcrypt-nodejs');
 import * as tf from '@tensorflow/tfjs-node'
-import * as t from '@tensorflow/tfjs'
 var schedule = require('node-schedule');
 const sharp = require('sharp');
 var fs = require('fs');
@@ -873,7 +872,7 @@ async function classifyPlant(imagePath, callback){
             var classes = ['ripe-greenbeans','ripe-spinach','ripe-tomatoes','ripe-turnip','unripe-greenbeans','unripe-spinach','unripe-tomatoes','unripe-turnip']
 
             //Load trained model
-            t.loadLayersModel('file://../pocket-ponics-backend/neuralnetwork-model/model/model.json').then(async function(model){
+            tf.loadLayersModel('file://../pocket-ponics-backend/neuralnetwork-model/model/model.json').then(async function(model){
                 //Convert image to tensor
                 var tensorImage = tf.node.decodeJpeg(image, 3);
 
