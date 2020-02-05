@@ -358,7 +358,8 @@ exports.createGreenhouse = (req, res) => {
                 var seedling_time = req.body.seedling_time
 
                 //Generate password hash for sensor grid
-                var grid_hash = bcrypt.hashSync(grid_password, 10)
+                var salt = bcrypt.genSaltSync(10)
+                var grid_hash = bcrypt.hashSync(grid_password, salt)
 
                 //Insert new greenhouse
                 mySQL.createGreenhouseForUser(greenhouse_name, seedling_time, rec.user_id, function(err, record) {
