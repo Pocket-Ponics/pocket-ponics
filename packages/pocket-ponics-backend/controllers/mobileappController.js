@@ -6,6 +6,8 @@ import * as t from '@tensorflow/tfjs'
 var schedule = require('node-schedule');
 const sharp = require('sharp');
 var fs = require('fs');
+global.fetch = require('node-fetch')
+
  
 var rule = new schedule.RecurrenceRule();
 rule.hour = 8;
