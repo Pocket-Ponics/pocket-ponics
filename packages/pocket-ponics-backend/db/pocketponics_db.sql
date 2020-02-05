@@ -18,82 +18,181 @@ USE `pocketponics`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Dumping data for table `active_sessions`
+-- Table structure for table `active_sessions`
 --
 
-LOCK TABLES `active_sessions` WRITE;
-/*!40000 ALTER TABLE `active_sessions` DISABLE KEYS */;
-INSERT INTO `active_sessions` VALUES ('+5y+kyqL6vANwTwSGccRU2B1TwOQajtkH3ABeBL86RI=','2020-01-27 23:20:39',19),('4+CzeAQ9Li9CYlQoR7QosrDysRONCwr6hNjTmXp7+Hk=','2020-01-27 23:53:12',19),('43jxeT1meDlpKZGZKgvNh0XVinDAZkx65Wif4zC4meM=','2020-01-27 23:45:57',19),('4kR1ucshoHCVxpkS86DfmVO1ikw0ZIEURZUahiNsckc=','2020-01-27 23:01:47',19),('8hUr9oGxI+rOJ9DjQ6Sb83Pn60all5SnNgOg1LLIj7s=','2020-01-27 23:22:48',19),('909BOyB16SaXM7MoF9sXIilPzm1Wymg/cHtL+sxxd8U=','2020-01-27 23:48:53',19),('A5f5JFmVXg7UVuVPq0YEeOLgYrSXIvNX6/hXdiMA9L0=','2020-01-27 23:21:55',19),('a5SIP+zh0KIiQBYA7WcFXCaAepuLF77QP5TJk1v0aCU=','2020-01-27 23:49:01',19),('Agbd4A5PT4DAI9rbtjBo1cmpCLqzMavnfz3dxvdpqAs=','2020-01-27 23:28:34',19),('aUylRTsenoYQD4Y7fKo4Skf99I70QjfQ6X1o0xwWQkk=','2020-01-27 23:57:58',19),('boXuPQnKJjstiq0c413UDgzmTX7Qr4avWZmrKWv2l1g=','2020-01-27 23:55:00',19),('c0dgDuQ1dQOosowaS4DlJH1Lgai5qvyKM//6EIm9RK0=','2020-01-29 21:42:37',19),('c2M2C4PA+YNNzuSUtEqY9w/v5gkjh0me2qlloA/qMII=','2020-01-28 00:10:36',19),('cUeMFxcRL5e6AuY0Q3LUKj8kZ+f/6Zl//x8zyQ8KL3Y=','2020-01-27 23:38:48',19),('diUftY7Axx1RE4E9jMKTSWO8Cf0K4NbydqnJtltP6WY=','2020-01-28 00:12:08',19),('dTkqTwsb3Co7/M/oT9OeZeH2GV5aiAmMK2y+2aQy21c=','2020-01-27 23:44:09',19),('EACOVmzNX8cOJxz7rdxwHMjaQ9HExzxgQfpta9xwsfM=','2020-01-27 23:44:30',19),('Eqoqi7qh8/6UFHHGI5M4KvbjpvlxUqJQf4RjMyC+tpY=','2020-01-27 23:46:46',19),('eqtkQFm5oQd2AdZUqVX14LZ/Yc6IToEapQcDWcUaORY=','2020-01-29 21:32:07',19),('fKZ2RnLy/k3fhe3sycc/zPS9jqzfebkk4IJ9ik8xnWg=','2020-01-27 23:19:00',19),('fzRzISS5RKzLi1btFnggp6JzJbm5OdnlobzAKZeR6Ug=','2020-01-27 23:26:49',19),('gje3tQfWyIg0NzYm4gwVrY056YI/gyE3bNqw4CzWp9s=','2020-01-27 23:42:49',19),('gXirGMyzAUkhXPw1CZLAAeQ5DcA5n50Ou2dJIU+L+8o=','2020-01-27 23:19:08',19),('HKXlSbtpYbezs2eevxG2bW/4krzRnADQOi/fct52dqA=','2020-01-27 23:15:45',19),('JMghL/n7YQR4usk6AaSowatpBDO55gqqghDe3tZpKgo=','2020-01-27 23:15:08',19),('K+5pVyNgG2nRX1ITrUZGK29LwMw8yYN2jK9RcATqGzc=','2020-01-29 21:39:07',19),('kmmX5FwjiPhDQrevEwd9Cl4yTKuJYauHNSLHSrjffno=','2020-01-27 23:54:43',19),('LHkNLMYvl13QCpv8rcXTImHl9y2TwoN1nJhr/+fqkJU=','2020-01-27 23:15:51',19),('LTmpu9GA19JrOvuyc+9U2LdaDZqv68FhVRvc3qFJkUE=','2020-01-27 23:02:37',19),('LWKMDscMPBWpN3bjPSdskTUdymtQIxsCeIncl+cGPjg=','2020-01-28 00:10:25',19),('NquzgHKdczFCBhC4F/GU3zIGwyNZ2OvK7ETTm52lslY=','2020-01-27 23:23:13',19),('ntMiZo6QyeOv27v5ZevrNHdnRci3GeTY8J3e3VJlCTw=','2020-01-28 00:18:05',19),('oAmMLYxsP9h/OyCQ+3KeJ5qe2Couo5hFZZqKz7EoPu0=','2020-01-28 00:17:48',19),('pE8s1zRtRK/jkEBUg0qZs8xv3dNZogMqzCUHgiYzzAU=','2020-01-27 23:40:07',19),('Q6bqGbA910VIOMPA/DAQTXIj3LvEJxsYfpUITszp2Qg=','2020-01-27 23:34:46',19),('q9jNiDqWBPdS0+XXdwvmzltdFyCyCqN0VhC+VY8Sg8U=','2020-01-27 22:53:58',18),('rWhqNv57zN3rIL+Hu0ZEsiY+bm3Lo3JKUweyiiJDUZo=','2020-01-27 23:03:45',19),('Sf0Ie8H9Bm46WtR06DHo3n3OA+XrymOSI9aLTLs709Q=','2020-01-27 23:03:22',19),('sV3eweV7in4EHBM/NenzQBfsnNFHdJ6MrsT53xVw9F4=','2020-01-27 23:51:07',19),('TZZceajHoVz5RViNVh//UhEonge2uIbPM3yKiQq30lU=','2020-01-29 21:39:46',19),('UgrbJiTxKfHoGKFg95BG06q2qUHK2Op6Y7AcJuJFiuE=','2020-01-27 23:22:18',19),('uiJAvP5dSDhk0uzTqkmlbQLlShhaF0EbWnQqBJvzoHA=','2020-01-27 23:16:59',19),('V6wBZGiVaZwndrVdnn+0llSAJTccxtgUOSvgCF3NGvY=','2020-01-27 22:57:22',19),('ViDtKKRUzFqYP6kte9C3nC+Cp4wC/LtF279GrILelWU=','2020-01-27 23:02:58',19),('woXLOZT+DMr0fdvWoYRtAPLSAY5Tr8hbA2Y99ru42eY=','2020-01-27 23:36:41',19),('wQe47h5651H5JXoSEokI7qOQFT7R7tDq88ZKNlBuSGU=','2020-01-27 22:44:24',17),('wUmT/8AcjBNwHXhzWeX6rC+vDRSUrrHB6sFn3oNwimY=','2020-01-27 23:21:15',19),('zeAnb+Mvu4bT1L3vIM5fdNwiQsVz3Ywh7XwY7i67+L4=','2020-01-27 23:44:56',19);
-/*!40000 ALTER TABLE `active_sessions` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `active_sessions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `active_sessions` (
+  `token` varchar(128) NOT NULL,
+  `expiration_date` datetime NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`token`),
+  UNIQUE KEY `token_UNIQUE` (`token`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `user_id_fkas` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `devices`
+-- Table structure for table `devices`
 --
 
-LOCK TABLES `devices` WRITE;
-/*!40000 ALTER TABLE `devices` DISABLE KEYS */;
-/*!40000 ALTER TABLE `devices` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `devices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `devices` (
+  `user_id` int(11) NOT NULL,
+  `device_key` varchar(45) NOT NULL,
+  UNIQUE KEY `device_key_UNIQUE` (`device_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `greenhouse`
+-- Table structure for table `greenhouse`
 --
 
-LOCK TABLES `greenhouse` WRITE;
-/*!40000 ALTER TABLE `greenhouse` DISABLE KEYS */;
-INSERT INTO `greenhouse` VALUES (1,'herewbanana',0.00,0.00,0.00,'2020-01-12',0,0.00,19);
-/*!40000 ALTER TABLE `greenhouse` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `greenhouse`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `greenhouse` (
+  `greenhouse_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `water_level` decimal(5,2) DEFAULT '0.00',
+  `nutrient_level` decimal(5,2) DEFAULT '0.00',
+  `battery` decimal(5,2) DEFAULT '0.00',
+  `seedling_time` date DEFAULT NULL,
+  `power_source` tinyint(4) DEFAULT '0',
+  `light_level` decimal(5,2) DEFAULT '0.00',
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`greenhouse_id`),
+  UNIQUE KEY `greenhouse_id_UNIQUE` (`greenhouse_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `user_id_fkgr` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `historical_data`
+-- Table structure for table `historical_data`
 --
 
-LOCK TABLES `historical_data` WRITE;
-/*!40000 ALTER TABLE `historical_data` DISABLE KEYS */;
-/*!40000 ALTER TABLE `historical_data` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `historical_data`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `historical_data` (
+  `date` datetime NOT NULL,
+  `water_level` decimal(5,2) NOT NULL,
+  `nutrient_level` decimal(5,2) NOT NULL,
+  `battery` decimal(5,2) NOT NULL,
+  `power_source` tinyint(4) NOT NULL,
+  `greenhouse_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `light_level` decimal(5,2) NOT NULL,
+  PRIMARY KEY (`date`,`user_id`,`greenhouse_id`),
+  KEY `user_id` (`user_id`),
+  KEY `greenhouse_id` (`greenhouse_id`),
+  CONSTRAINT `greenhouse_id_fkhd` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
+  CONSTRAINT `user_id_fkhd` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `plant_ideal`
+-- Table structure for table `plant_ideal`
 --
 
-LOCK TABLES `plant_ideal` WRITE;
-/*!40000 ALTER TABLE `plant_ideal` DISABLE KEYS */;
-INSERT INTO `plant_ideal` VALUES (1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'empty',NULL,NULL,NULL,NULL,NULL),(2,6.00,2.00,0.00,65,6.50,4.00,0.00,'Green Beans',12,NULL,NULL,NULL,8),(3,5.50,1.80,0.00,60,6.60,2.30,0.00,'Spinach',10,NULL,NULL,NULL,18),(4,13.00,13.00,13.00,13,13.00,13.00,13.00,'what',13,'the quick brown, asdfasdf','https://www.google.com','234',0),(5,5.50,2.00,0.00,84,6.50,5.00,0.00,'Tomato',10,NULL,NULL,NULL,1);
-/*!40000 ALTER TABLE `plant_ideal` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `plant_ideal`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `plant_ideal` (
+  `plant_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ph_level_low` decimal(5,2) DEFAULT NULL,
+  `ec_level_low` decimal(5,2) DEFAULT NULL,
+  `temp_low` decimal(5,2) DEFAULT NULL,
+  `cycle_time` int(11) DEFAULT NULL,
+  `ph_level_high` decimal(5,2) DEFAULT NULL,
+  `ec_level_high` decimal(5,2) DEFAULT NULL,
+  `temp_high` decimal(5,2) DEFAULT NULL,
+  `name` varchar(45) NOT NULL,
+  `light_time` int(11) DEFAULT NULL,
+  `steps` varchar(250) DEFAULT NULL,
+  `plant_url` varchar(250) DEFAULT NULL,
+  `harvest_url` varchar(250) DEFAULT NULL,
+  `num_plants` int(11) DEFAULT NULL,
+  PRIMARY KEY (`plant_id`),
+  UNIQUE KEY `plant_id_UNIQUE` (`plant_id`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `sensor_grid`
+-- Table structure for table `sensor_grid`
 --
 
-LOCK TABLES `sensor_grid` WRITE;
-/*!40000 ALTER TABLE `sensor_grid` DISABLE KEYS */;
-INSERT INTO `sensor_grid` VALUES ('19977991','$2b$10$5GX0WYujPSNLCwLJqLrxAOfrIhyDHWTi1alNqDZsAT.zvIj/8AYLS',19,1);
-/*!40000 ALTER TABLE `sensor_grid` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `sensor_grid`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sensor_grid` (
+  `serial_no` varchar(45) NOT NULL,
+  `password_hash` varchar(128) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `greenhouse_id` int(11) NOT NULL,
+  PRIMARY KEY (`serial_no`),
+  UNIQUE KEY `greenhouse_id_UNIQUE` (`greenhouse_id`),
+  UNIQUE KEY `password_hash_UNIQUE` (`password_hash`),
+  UNIQUE KEY `serial_no_UNIQUE` (`serial_no`),
+  KEY `greenhouse_id` (`greenhouse_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `greenhouse_id_fksg` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
+  CONSTRAINT `user_id_fksg` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tiers`
+-- Table structure for table `tiers`
 --
 
-LOCK TABLES `tiers` WRITE;
-/*!40000 ALTER TABLE `tiers` DISABLE KEYS */;
-INSERT INTO `tiers` VALUES (1,5,0.00,0.00,0.00,'2020-01-28',10,1,19),(2,2,0.00,0.00,0.00,'2020-01-28',10,1,19),(3,2,0.00,0.00,0.00,'2020-01-28',10,1,19),(4,4,0.00,0.00,0.00,'2020-01-28',10,1,19);
-/*!40000 ALTER TABLE `tiers` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `tiers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tiers` (
+  `tier` int(11) NOT NULL,
+  `plant_id` int(11) DEFAULT NULL,
+  `ph_level` decimal(5,2) DEFAULT '0.00',
+  `ec_level` decimal(5,2) DEFAULT '0.00',
+  `water_level` decimal(5,2) DEFAULT '0.00',
+  `cycle_time` date DEFAULT NULL,
+  `light_start` int(11) DEFAULT NULL,
+  `greenhouse_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`tier`,`greenhouse_id`,`user_id`),
+  KEY `greenhouse_id` (`greenhouse_id`),
+  KEY `user_id` (`user_id`),
+  KEY `plant_id_fkt_idx` (`plant_id`),
+  CONSTRAINT `greenhouse_id_fkt` FOREIGN KEY (`greenhouse_id`) REFERENCES `greenhouse` (`greenhouse_id`),
+  CONSTRAINT `plant_id_fkt` FOREIGN KEY (`plant_id`) REFERENCES `plant_ideal` (`plant_id`),
+  CONSTRAINT `user_id_fkt` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user`
+-- Table structure for table `user`
 --
 
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (17,'rohanpatel5753@knights.ucf.edu','$2b$10$cfEDA/Heq.B20Yr1mPg17uM/s8GKoQ7OWsAV.dcSD1OXTKUgHRZRi',1),(18,'test@knights.ucf.edu','$2b$10$yFkEgHLeiZ9AdXkzxUUvROgylUQMt4VAMYBl5CmB3uoahr7yrkZ.a',0),(19,'test4@gmail.com','$2b$10$3vieOFJio7mI.xN1AwTs7uXE7cTW.rpsR.WLiOF5IJk9amFFUxiiW',1);
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(128) NOT NULL,
+  `password_hash` varchar(128) NOT NULL,
+  `admin` tinyint(4) DEFAULT '0',
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `user_id_UNIQUE` (`user_id`),
+  UNIQUE KEY `email_UNIQUE` (`email`),
+  UNIQUE KEY `password_hash_UNIQUE` (`password_hash`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -104,4 +203,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-29 16:18:17
+-- Dump completed on 2020-02-05 10:49:20

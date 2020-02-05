@@ -90,7 +90,8 @@ exports.resetPassword = (req, res) => {
         mySQL.getUserIDForUser(email, function(err, record) {
             if(!err)
             {
-                var newPasswordHash = bcrypt.hashSync(newPassword, 10);
+                var salt = bcryptNodejs.genSaltSync(10);
+                var newPasswordHash = bcrypt.hashSync(newPassword, salt);
                 mySQL.updateUserHash(record.user_id, newPasswordHash, function(err, result) {
                     if(!err)
                     {                    
@@ -164,7 +165,8 @@ exports.createUser = (req, res) => {
             else if(record == undefined)
             {    
                 //Calculate hash for provided password
-                var password_hash = bcrypt.hashSync(password, 10)
+                var salt = bcryptNodejs.genSaltSync(10);
+                var password_hash = bcrypt.hashSync(password, salt)
     
                 //If email doesn't exist, create user in DB with email and password hash
                 mySQL.createUser(email, password_hash, (err, result) => {
@@ -222,7 +224,8 @@ exports.changePassword = (req, res) => {
                     if(result)
                     {
                         //Calculate new password hash and store in DB
-                        var newPasswordHash = bcrypt.hashSync(newPassword, 10);
+                        var salt = bcryptNodejs.genSaltSync(10);
+                        var newPasswordHash = bcrypt.hashSync(newPassword, salt);
                         mySQL.updateUserHash(record.user_id, newPasswordHash, function(err, result) {
                             if(!err)
                             {                                
