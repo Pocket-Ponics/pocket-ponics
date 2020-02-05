@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 const crypto = require('crypto');
 const validator = require('email-validator');
 const nodemailer = require("nodemailer");

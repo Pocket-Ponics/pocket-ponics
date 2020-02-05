@@ -1,6 +1,6 @@
 import mySQL from './mySQLController';
 import notificationController from './notificationController';
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 import * as tf from '@tensorflow/tfjs-node'
 import * as t from '@tensorflow/tfjs'
 var schedule = require('node-schedule');

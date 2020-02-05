@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 const crypto = require('crypto');
 import mySQL from './mySQLController';
 import notificationController from './notificationController'
