@@ -5,9 +5,9 @@ import * as tf from '@tensorflow/tfjs-node'
 var schedule = require('node-schedule');
 const sharp = require('sharp');
 var fs = require('fs');
-global.fetch = require('node-fetch')
 
- 
+loadNeuralNetwork()
+
 var rule = new schedule.RecurrenceRule();
 rule.hour = 8;
 rule.minute = 0;
@@ -16,6 +16,12 @@ rule.second = 0;
 var n = schedule.scheduleJob(rule, function(){
     notificationController.sendSeedlingAndTierNotifications()
 });
+
+async function loadNeuralNetwork()
+{
+    global.model = await tf.loadLayersModel('file://../pocket-ponics-backend/neuralnetwork-model/model/model.json')
+    console.log("Loaded Neural Network Model for Classification")
+}
 
 //Retrieves all greenhouses for a specific user
 exports.getGreenhouses = (req, res) => {
@@ -871,24 +877,21 @@ async function classifyPlant(imagePath, callback){
 
             //Define the classes
             var classes = ['ripe-greenbeans','ripe-spinach','ripe-tomatoes','ripe-turnip','unripe-greenbeans','unripe-spinach','unripe-tomatoes','unripe-turnip']
+            
+            //Convert image to tensor
+            var tensorImage = tf.node.decodeJpeg(image, 3);
 
-            //Load trained model
-            tf.loadLayersModel('file://../pocket-ponics-backend/neuralnetwork-model/model/model.json').then(async function(model){
-                //Convert image to tensor
-                var tensorImage = tf.node.decodeJpeg(image, 3);
+            //Normalize tensor values
+            var tensorImageInput = tensorImage.div(tf.scalar(255))
 
-                //Normalize tensor values
-                var tensorImageInput = tensorImage.div(tf.scalar(255))
+            //Predict class from tensor input
+            var predictionTensor = model.predict(tensorImageInput.expandDims(0))
 
-                //Predict class from tensor input
-                var predictionTensor = model.predict(tensorImageInput.expandDims(0))
-
-                //Convert tensor output to class
-                var index = predictionTensor.argMax(1).arraySync()
-                var accuracy = predictionTensor.arraySync()[0][index]
-                var prediction = classes[index[0]]
-                callback(false, prediction, accuracy, createdFiles)
-            });
+            //Convert tensor output to class
+            var index = predictionTensor.argMax(1).arraySync()
+            var accuracy = predictionTensor.arraySync()[0][index]
+            var prediction = classes[index[0]]
+            callback(false, prediction, accuracy, createdFiles)
         }
         else
         {
