@@ -7,14 +7,14 @@ exports.getHashForUser = (email, callback) => {
         if(result.rows.length == 1)
         {        
             callback(err, result.rows[0])
-        } 
-        else if(result.rows.length > 1)
+        }
+        else if(result.rows.length == 0)
         {
-            callback(true, undefined)
+            callback(err, undefined)
         }
         else
         {
-            callback(err, undefined)
+            callback(err, result)
         }
     })
 }
@@ -26,13 +26,9 @@ exports.getUserIDForUser = (email, callback) => {
         {        
             callback(err, result.rows[0])
         } 
-        else if(result.rows.length > 1)
-        {
-            callback(true, undefined)
-        }
         else
         {
-            callback(err, undefined)
+            callback(err, result)
         }
     })
 }
@@ -44,13 +40,9 @@ exports.getHashForSensorGrid = (serial_no, callback) => {
         {        
             callback(err, result.rows[0])
         } 
-        else if(result.rows.length > 1)
-        {
-            callback(true, undefined)
-        }
         else
         {
-            callback(err, undefined)
+            callback(err, result)
         }
     })
 }
@@ -169,13 +161,9 @@ exports.getUserForToken = (token, callback) => {
         {
             callback(err, result.rows[0])
         }
-        else if(result.rows.length > 1)
-        {
-            callback(true, undefined)
-        }
         else
         {
-            callback(err, undefined)
+            callback(err, result)
         }
     })
 }
@@ -222,13 +210,9 @@ exports.getRoleForUser = (user_id, callback) => {
         {
             callback(err, result.rows[0])
         }
-        else if(result.rows.length > 1)
-        {
-            callback(true, undefined)
-        }
         else
         {
-            callback(err, undefined)
+            callback(err, result)
         }
     })
 }
@@ -332,14 +316,10 @@ exports.updatePowerSourceForGreenhouse = (user_id, greenhouse_id, power_source, 
                 }
                 callback(err, result)
             })
-        } 
-        else if(result.rows.length > 1)
-        {
-            callback(true, undefined)
         }
         else
         {
-            callback(err, undefined)
+            callback(err, result)
         }
     })
 }
@@ -363,14 +343,10 @@ exports.updateBatteryForGreenhouse = (user_id, greenhouse_id, battery, callback)
                 }
                 callback(err, result)
             })
-        } 
-        else if(result.rows.length > 1)
-        {
-            callback(true, undefined)
         }
         else
         {
-            callback(err, undefined)
+            callback(err, result)
         }
     })
 }
@@ -397,7 +373,7 @@ exports.getReadingForSensors = (user_id, greenhouse_id, tier, callback) => {
             {
                 console.log(err)
             }
-            callback(true, undefined)
+            callback(true, result)
         }
     })
 }
@@ -414,7 +390,7 @@ exports.getReadingsForGreenhouse = (user_id, greenhouse_id, callback) => {
             {
                 console.log(err)
             }
-            callback(true, undefined)
+            callback(true, result)
         }
     })
 }
@@ -431,7 +407,7 @@ exports.getTierForGreenhouse = (greenhouse_id, tier, user_id, callback) => {
             {
                 console.log(err)
             }
-            callback(true, undefined)
+            callback(true, result)
         }
     })
 }
@@ -488,7 +464,7 @@ exports.getCurrentPowerSource = (user_id, greenhouse_id, callback) => {
             {
                 console.log(err)
             }
-            callback(true, undefined)
+            callback(true, result)
         }
     })
 }
@@ -548,7 +524,7 @@ exports.getGreenhouseForUser = (user_id, greenhouse_id, callback) => {
             {
                 console.log(err)
             }
-            callback(true, undefined)
+            callback(true, result)
         }
     })
 }
@@ -565,7 +541,7 @@ exports.getPlantIdealData = (callback) => {
             {
                 console.log(err)
             }
-            callback(true, undefined)
+            callback(true, result)
         }
     })
 }
@@ -582,7 +558,7 @@ exports.getTiersAndIdeal = (user_id, greenhouse_id, callback) => {
             {
                 console.log(err)
             }
-            callback(true, undefined)
+            callback(true, result)
         }
     })
 }
@@ -602,14 +578,14 @@ exports.getGreenhouseDetail = (user_id, greenhouse_id, callback) => {
                 else
                 {
                     console.log(err)
-                    callback(true, undefined)
+                    callback(true, result)
                 }
             })
         }
         else
         {
             console.log(err)
-            callback(true, undefined)
+            callback(true, result)
         }
     })
 }
