@@ -7,6 +7,8 @@ const port = '8080'
 const greenhouse = '169.254.146.181'
 const greenPort = '80'
 
+const waitingTime = 100 // 15000
+
 const APIUtil = {
 	processTextResults(res) {
 		return Promise.resolve(res.text())
@@ -38,7 +40,7 @@ const APIUtil = {
 		})
 	},
 	getAuthToken(username, password) {
-		return APIUtil.timeoutFetch(10000, fetch(`http://${host}:${port}/auth/get_token`, {
+		return APIUtil.timeoutFetch(waitingTime, fetch(`http://${host}:${port}/auth/get_token`, {
 			method: 'GET',
 			headers: new Headers({
 				'Authorization': 'Basic ' + base64.encode(`${username}:${password}`),
@@ -51,7 +53,7 @@ const APIUtil = {
 	},
 	createUser(email, password) {
 		const encode = APIUtil.urlEncode({ email, password })
-		return APIUtil.timeoutFetch(10000, fetch(`http://${host}:${port}/auth/create_user`, {
+		return APIUtil.timeoutFetch(waitingTime, fetch(`http://${host}:${port}/auth/create_user`, {
 			method: 'POST',
 			headers: new Headers({
 				'Content-Type': 'application/x-www-form-urlencoded'
@@ -63,7 +65,7 @@ const APIUtil = {
 			.then(result => JSON.parse(result))
 	},
 	get(endpoint, token, body) {
-		return APIUtil.timeoutFetch(15000, fetch(endpoint, {
+		return APIUtil.timeoutFetch(waitingTime, fetch(endpoint, {
 			method: 'GET',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
@@ -76,7 +78,7 @@ const APIUtil = {
 			.then(result => JSON.parse(result))
 	},
 	post(endpoint, token, body) {
-		return APIUtil.timeoutFetch(15000, fetch(endpoint, {
+		return APIUtil.timeoutFetch(waitingTime, fetch(endpoint, {
 			method: 'POST',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
@@ -89,7 +91,7 @@ const APIUtil = {
 			.then(result => JSON.parse(result))
 	},
 	put(endpoint, token, body) {
-		return APIUtil.timeoutFetch(15000, fetch(endpoint, {
+		return APIUtil.timeoutFetch(waitingTime, fetch(endpoint, {
 			method: 'PUT',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
@@ -102,21 +104,21 @@ const APIUtil = {
 			.then(result => {console.log(result); JSON.parse(result)})
 	},
 	getGreenhouseRegistration() {
-		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/registration/`, {
+		return APIUtil.timeoutFetch(waitingTime, fetch(`http://${greenhouse}:${greenPort}/registration/`, {
 			method: 'GET',
 		}))
 			.then(response => response.text())
 			.then(result => JSON.parse(result))
 	},
 	getGreenhouseWifis() {
-		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/wifi/`, {
+		return APIUtil.timeoutFetch(waitingTime, fetch(`http://${greenhouse}:${greenPort}/wifi/`, {
 			method: 'GET',
 		}))
 			.then(response => response.text())
 			.then(result => JSON.parse(result))
 	},
 	sendWifiData(body) {
-		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/wifi/login`, {
+		return APIUtil.timeoutFetch(waitingTime, fetch(`http://${greenhouse}:${greenPort}/wifi/login`, {
 			method: 'POST',
 			headers: new Headers({
 				'Content-Type': 'application/json'

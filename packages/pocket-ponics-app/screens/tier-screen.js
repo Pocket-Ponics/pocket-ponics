@@ -5,8 +5,7 @@ import {
 	Text, 
 	View,
 	Image,
-	TouchableOpacity, 
-	AsyncStorage, 
+	TouchableOpacity,
 } from 'react-native'
 
 import { 
@@ -24,36 +23,25 @@ const greenbeanImage = require('../assets/greenbean.png')
 const spinachImage = require('../assets/spinach.png')
 const turnipImage = require('../assets/turnip.png')
 
-export default class Example extends React.Component {
+class TierScreen extends React.Component {
 	constructor(props) {
 		super(props)
 
-		this.state = {
-			plant: this.props.navigation.getParam('plant', {}),
-		}
-	}
-
-	async getPlant() {
-		const greenhouseString = await AsyncStorage.getItem('greenhouses')
-
-		if(greenhouseString === null) {
-			console.log('Error retrieving from storage')
-			return
-		}
-
-		const greenhouses = JSON.parse(greenhouseString)
+		const greenhouses = global.greenhouses
 		const greenhouseId = this.props.navigation.getParam('greenhouseId', 0)
 		const tierId = this.props.navigation.getParam('tierId', 0)
 
-		if(greenhouseId !== 0 && tierId !== 0) {
-			const plant = greenhouses.filter(() => true)[0].tiers[tierId-1]
-
-			this.setState({ plant })
+		this.state = {
+			plant: greenhouses[greenhouseId].tiers[tierId-1],
 		}
 	}
 
 	componentDidMount() {
-		this.getPlant()
+		const greenhouses = global.greenhouses
+		const greenhouseId = this.props.navigation.getParam('greenhouseId', 0)
+		const tierId = this.props.navigation.getParam('tierId', 0)
+
+		this.setState({ plant: greenhouses[greenhouseId].tiers[tierId-1] })
 	}
 
 	getImage(id) {
@@ -145,3 +133,5 @@ export default class Example extends React.Component {
 		)
 	}
 }
+
+export default TierScreen

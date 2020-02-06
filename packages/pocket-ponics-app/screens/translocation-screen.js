@@ -19,18 +19,19 @@ class TransplantScreen extends React.Component {
 		const id  = this.props.navigation.getParam('id', 0)
 
 		const token = await AsyncStorage.getItem('token')
-		const greenhouseString = await AsyncStorage.getItem('greenhouses')
-
-		const greenhouses = JSON.parse(greenhouseString)
-		const matchingIndex = greenhouses.findIndex(greenhouse => greenhouse.greenhouse_id === id)
 
 		return APIUtil.clearSeedlings(token, id, name)
 			.then(() => {
-				greenhouses[matchingIndex].seedlings = 0
-				return AsyncStorage.setItem('greenhouses', JSON.stringify(greenhouses))
+				global.greenhouses[id].seedlings = 0
+				return this.props.navigation.navigate('Greenhouse')
 			})
-			.then(() => this.props.navigation.navigate('Greenhouse'))
-			.catch(error => console.log('Transplant Error', error))
+			.catch(error => {
+				console.log('Transplant Error', error)
+
+				// TODO - Remove when connected to AWS
+				global.greenhouses[id].seedling_time = 0
+				return this.props.navigation.navigate('Greenhouse')
+			})
 	}
 
 	render() {

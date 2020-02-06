@@ -156,7 +156,7 @@ class App extends React.Component {
 					visible={this.state.notification !== null}>
 					<TouchableOpacity 
 						style={styles.notification}
-						onPress={() => this.goToNotification(this.state.notification)}>
+						onPress={() => this.navigateToItem(this.state.notification.data)}>
 						<Text style={styles.notificationText}>{this.state.notificationText}</Text>
 					</TouchableOpacity>
 				</Modal>

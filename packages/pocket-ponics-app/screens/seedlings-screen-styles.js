@@ -31,9 +31,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		alignItems: 'center',
 	},
-	valuesContainer: {
-		borderWidth: 1,
-	},
 	value: {
 		fontSize: 18,
 		paddingTop: 10,
@@ -44,12 +41,6 @@ const styles = StyleSheet.create({
 	},
 	statusesContainer: {
 		paddingLeft: 20,
-	},
-	buttonBox: {
-		width: '100%',
-		borderColor: 'blue',
-		backgroundColor: 'white',
-		borderWidth: 1,
 	},
 	button: {
 		backgroundColor: ACTION_COLOR,

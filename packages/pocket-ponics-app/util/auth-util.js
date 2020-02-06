@@ -14,15 +14,12 @@ const AuthUtil = {
 		const username = await AsyncStorage.getItem('username')
 		const password = await AsyncStorage.getItem('password')
 		console.log(username, password)
+		global.username = username
 
 		// If the user is logged out, direct them to the login
 		if(!username || !password) {
 			return loggedOutFn()
 		}
-
-		// global.plants = {}
-		// const plantData = await 
-		// plantData.forEach(plant => global.plants[plant.plant_id] = plant)
 
 		let token
 		APIUtil.getPlants()
@@ -69,7 +66,11 @@ const AuthUtil = {
 				))
 			})
 			.then(responses => {
-				greenhouseData.forEach((greenhouse, index) => greenhouse.history = responses[index].history)
+				global.greenhouses = {}
+				greenhouseData.forEach((greenhouse, index) => {
+					greenhouse.history = responses[index].history
+					global.greenhouses[greenhouse.greenhouse_id] = greenhouse
+				})
 				
 				return Promise.all([
 					AsyncStorage.setItem('token', token),
@@ -121,30 +122,7 @@ const AuthUtil = {
 			})
 			.then(response => {
 				console.log('key time', response)
-				return APIUtil.getGreenhouses(token)
-			})
-			.then(response => {
-				console.log(greenhouses)
-				const greenhouses = response.greenhouses
-
-				return Promise.all(greenhouses.map(
-					greenhouse => APIUtil.getGreenhouse(token, greenhouse)
-				))
-			})
-			.then(responses => {
-				return Promise.all([
-					AsyncStorage.setItem('token', token),
-					AsyncStorage.setItem('greenhouses', JSON.stringify([
-						...responses, 
-						{
-							type: 'add-page',
-							name: 'Setup',
-						}
-					]))
-				])
-			})
-			.then(() => {
-				this.props.navigation.navigate('Greenhouse')
+				return AuthUtil.retrieveGreenhouses(token, successFn) 
 			})
 			.catch(error => {
 				console.log('error in code', error)
@@ -237,65 +215,65 @@ const AuthUtil = {
 				'num_plants': 1
 			}
 		].forEach(plant => global.plants[plant.plant_id] = plant)
+		
+		global.greenhouses = {};
+		[
+			{
+				'name': 'herewbanana',
+				'greenhouse_id': 1,
+				'water_level': 0,
+				'nutrient_level': 0,
+				'battery': 0,
+				'light_level': 0,
+				'power_source': 0,
+				'seedling_time': '2020-01-12T00:00:00.000Z',
+				'tiers': [
+					{
+						'tier': 1,
+						'plant_id': 5,
+						'ph_level': 0,
+						'ec_level': 0,
+						'water_level': 0,
+						'cycle_time': null,
+						'num_plants': 0
+					},
+					{
+						'tier': 2,
+						'plant_id': 4,
+						'ph_level': 0,
+						'ec_level': 0,
+						'water_level': 0,
+						'cycle_time': null,
+						'num_plants': 0
+					},
+					{
+						'tier': 3,
+						'plant_id': 4,
+						'ph_level': 0,
+						'ec_level': 0,
+						'water_level': 0,
+						'cycle_time': null,
+						'num_plants': 0
+					},
+					{
+						'tier': 4,
+						'plant_id': 4,
+						'ph_level': 0,
+						'ec_level': 0,
+						'water_level': 0,
+						'cycle_time': null,
+						'num_plants': 0
+					}
+				],
+				history: []
+			}
+		].forEach((greenhouse) => {
+			global.greenhouses[greenhouse.greenhouse_id] = greenhouse
+		})
 		return Promise.all([
 			AsyncStorage.setItem('username', username),
 			AsyncStorage.setItem('password', password),
 			AsyncStorage.setItem('token', 'mock-token'),
-			AsyncStorage.setItem('greenhouses', JSON.stringify([
-				{
-					'name': 'herewbanana',
-					'greenhouse_id': 1,
-					'water_level': 0,
-					'nutrient_level': 0,
-					'battery': 0,
-					'light_level': 0,
-					'power_source': 0,
-					'seedling_time': '2020-01-12T00:00:00.000Z',
-					'tiers': [
-						{
-							'tier': 1,
-							'plant_id': 1,
-							'ph_level': 0,
-							'ec_level': 0,
-							'water_level': 0,
-							'cycle_time': null,
-							'num_plants': 0
-						},
-						{
-							'tier': 2,
-							'plant_id': 4,
-							'ph_level': 0,
-							'ec_level': 0,
-							'water_level': 0,
-							'cycle_time': null,
-							'num_plants': 0
-						},
-						{
-							'tier': 3,
-							'plant_id': 4,
-							'ph_level': 0,
-							'ec_level': 0,
-							'water_level': 0,
-							'cycle_time': null,
-							'num_plants': 0
-						},
-						{
-							'tier': 4,
-							'plant_id': 4,
-							'ph_level': 0,
-							'ec_level': 0,
-							'water_level': 0,
-							'cycle_time': null,
-							'num_plants': 0
-						}
-					],
-					history: []
-				}, 
-				{
-					type: 'add-page',
-					name: 'Setup',
-				}
-			]))
 		])
 			.then(() => {
 				return successFn()

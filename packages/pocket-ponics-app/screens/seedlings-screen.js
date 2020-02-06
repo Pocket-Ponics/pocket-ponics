@@ -4,7 +4,6 @@ import {
 	View, 
 	Image,
 	TouchableOpacity,
-	AsyncStorage, 
 } from 'react-native'
 
 import { 
@@ -18,31 +17,12 @@ export default class SeedlingsScreen extends React.Component {
 	constructor(props) {
 		super(props)
 
-		this.state = {
-			seedlings: this.props.navigation.getParam('seedlings', null)
-		}
-	}
-
-	async getGreenhouses() {
-		const greenhouseString = await AsyncStorage.getItem('greenhouses')
-
-		if(greenhouseString === null) {
-			console.log('Error retrieving from storage')
-			return
-		}
-
-		const greenhouses = JSON.parse(greenhouseString)
+		const greenhouses = global.greenhouses
 		const greenhouseId = this.props.navigation.getParam('greenhouseId', 0) 
 
-		if(greenhouseId !== 0) {
-			const seedlings = greenhouses.filter(() => true)[0].seedling_time
-
-			this.setState({ seedlings })
+		this.state = {
+			seedlings: greenhouses[greenhouseId].seedling_time
 		}
-	}
-
-	componentDidMount() {
-		this.getGreenhouses()
 	}
 
 	generateDateString(date) {
@@ -63,9 +43,10 @@ export default class SeedlingsScreen extends React.Component {
 		}
 
 		const name = this.props.navigation.getParam('name', '')
-		const id  = this.props.navigation.getParam('id', 0)
+		const id  = this.props.navigation.getParam('greenhouseId', 0)
 
 		const transplantDate = new Date(seedlings)
+		console.log('date',transplantDate, seedlings)
 		const transplantString = this.generateDateString(transplantDate)
 		const today = new Date(Date.now())
 
