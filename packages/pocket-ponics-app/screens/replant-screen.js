@@ -33,9 +33,9 @@ class ReplantScreen extends React.Component {
 			})
 			.then(response => {
 				const seedlingHarvest = new Date(Date.now() + (24 * 3600 * 1000 * 14))
-				const dateString = seedlingHarvest.getFullYear() + '-0' + (seedlingHarvest.getMonth()+1) + '-' + seedlingHarvest.getDate() + 'T00:00:00.000Z'
+				const dateString = seedlingHarvest.getFullYear() + '-' + (seedlingHarvest.getMonth()+1) + '-' + seedlingHarvest.getDate() + 'T00:00:00.000Z'
 				const plantHarvest = new Date(Date.now() + (24 * 3600 * 1000 * global.plants[plantId].cycle_time))
-				const harvestString = plantHarvest.getFullYear() + '-0' + (plantHarvest.getMonth()+1) + '-' + plantHarvest.getDate() + 'T00:00:00.000Z'
+				const harvestString = plantHarvest.getFullYear() + '-' + (plantHarvest.getMonth()+1) + '-' + plantHarvest.getDate() + 'T00:00:00.000Z'
 				
 				
 				console.log('Tier registration response: ', response)
@@ -47,11 +47,11 @@ class ReplantScreen extends React.Component {
 				console.log('Replant Error', error)
 				// TODO - Remove when connected to AWS
 				const seedlingHarvest = new Date(Date.now() + (24 * 3600 * 1000 * 14))
-				const dateString = seedlingHarvest.getFullYear() + '-0' + (seedlingHarvest.getMonth()+1) + '-' + seedlingHarvest.getDate() + 'T00:00:00.000Z'
+				const dateString = seedlingHarvest.getFullYear() + '-' + (seedlingHarvest.getMonth()+1) + '-' + seedlingHarvest.getDate() + 'T00:00:00.000Z'
 				const plantHarvest = new Date(Date.now() + (24 * 3600 * 1000 * global.plants[plantId].cycle_time))
-				const harvestString = plantHarvest.getFullYear() + '-0' + (plantHarvest.getMonth()+1) + '-' + plantHarvest.getDate() + 'T00:00:00.000Z'
+				const harvestString = plantHarvest.getFullYear() + '-' + (plantHarvest.getMonth()+1) + '-' + plantHarvest.getDate() + 'T00:00:00.000Z'
 				global.greenhouses[greenhouseId].tiers[tierId - 1].cycle_time = harvestString
-				global.greenhouses[greenhouseId].seedling_time = '2020-01-02T00:00:00.000Z'
+				global.greenhouses[greenhouseId].seedling_time = dateString
 				console.log(global.greenhouses)
 				return this.props.navigation.navigate('Greenhouse')
 			})
