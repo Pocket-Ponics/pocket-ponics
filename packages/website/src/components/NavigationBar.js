@@ -39,7 +39,7 @@ export const NavigationBar = () => (
           </Nav.Item>
           <Nav.Item>
             <Nav.Link>
-              <Link to="/login">Login</Link>
+              <Link to="/admin">Admin</Link>
             </Nav.Link>
           </Nav.Item>
         </Nav>
