@@ -181,7 +181,7 @@ exports.getUserForToken = (token, callback) => {
         }
         else
         {
-            callback(err, result)
+            callback(err, undefined)
         }
     })
 }
