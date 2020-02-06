@@ -29,7 +29,6 @@ class NetworkConnectionScreen extends React.Component {
 	goToNext() {
 		APIUtil.getGreenhouseRegistration()
 			.then(response => {
-				console.log(response)
 				return Promise.all[
 					AsyncStorage.setItem('serialNo', response.serial),
 					AsyncStorage.setItem('password', response.password)
@@ -37,7 +36,6 @@ class NetworkConnectionScreen extends React.Component {
 			})
 			.then(() => APIUtil.getGreenhouseWifi())
 			.then(wifis => {
-				console.log(wifis)
 				const token = this.props.navigation.getParam('token', '')
 				const resetAction = StackActions.reset({
 					index: 0,

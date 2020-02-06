@@ -7,6 +7,8 @@ const port = '8080'
 const greenhouse = '169.254.146.181'
 const greenPort = '80'
 
+const waitingTime = 100 // 15000
+
 const APIUtil = {
 	processTextResults(res) {
 		return Promise.resolve(res.text())
@@ -38,7 +40,7 @@ const APIUtil = {
 		})
 	},
 	getAuthToken(username, password) {
-		return APIUtil.timeoutFetch(10000, fetch(`http://${host}:${port}/auth/get_token`, {
+		return APIUtil.timeoutFetch(waitingTime, fetch(`http://${host}:${port}/auth/get_token`, {
 			method: 'GET',
 			headers: new Headers({
 				'Authorization': 'Basic ' + base64.encode(`${username}:${password}`),
@@ -51,7 +53,7 @@ const APIUtil = {
 	},
 	createUser(email, password) {
 		const encode = APIUtil.urlEncode({ email, password })
-		return APIUtil.timeoutFetch(10000, fetch(`http://${host}:${port}/auth/create_user`, {
+		return APIUtil.timeoutFetch(waitingTime, fetch(`http://${host}:${port}/auth/create_user`, {
 			method: 'POST',
 			headers: new Headers({
 				'Content-Type': 'application/x-www-form-urlencoded'
@@ -60,10 +62,10 @@ const APIUtil = {
 			redirect: 'follow'
 		}))
 			.then(response => response.text())
-			.then(result => {console.log(result); return JSON.parse(result)})
+			.then(result => JSON.parse(result))
 	},
 	get(endpoint, token, body) {
-		return APIUtil.timeoutFetch(10000, fetch(endpoint, {
+		return APIUtil.timeoutFetch(waitingTime, fetch(endpoint, {
 			method: 'GET',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
@@ -76,7 +78,7 @@ const APIUtil = {
 			.then(result => JSON.parse(result))
 	},
 	post(endpoint, token, body) {
-		return APIUtil.timeoutFetch(10000, fetch(endpoint, {
+		return APIUtil.timeoutFetch(waitingTime, fetch(endpoint, {
 			method: 'POST',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
@@ -89,7 +91,7 @@ const APIUtil = {
 			.then(result => JSON.parse(result))
 	},
 	put(endpoint, token, body) {
-		return APIUtil.timeoutFetch(10000, fetch(endpoint, {
+		return APIUtil.timeoutFetch(waitingTime, fetch(endpoint, {
 			method: 'PUT',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
@@ -99,24 +101,24 @@ const APIUtil = {
 			redirect: 'follow'
 		}))
 			.then(response => response.text())
-			.then(result => JSON.parse(result))
+			.then(result => {console.log(result); JSON.parse(result)})
 	},
 	getGreenhouseRegistration() {
-		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/registration/`, {
+		return APIUtil.timeoutFetch(waitingTime, fetch(`http://${greenhouse}:${greenPort}/registration/`, {
 			method: 'GET',
 		}))
 			.then(response => response.text())
 			.then(result => JSON.parse(result))
 	},
 	getGreenhouseWifis() {
-		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/wifi/`, {
+		return APIUtil.timeoutFetch(waitingTime, fetch(`http://${greenhouse}:${greenPort}/wifi/`, {
 			method: 'GET',
 		}))
 			.then(response => response.text())
 			.then(result => JSON.parse(result))
 	},
 	sendWifiData(body) {
-		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/wifi/login`, {
+		return APIUtil.timeoutFetch(waitingTime, fetch(`http://${greenhouse}:${greenPort}/wifi/login`, {
 			method: 'POST',
 			headers: new Headers({
 				'Content-Type': 'application/json'
@@ -173,6 +175,26 @@ const APIUtil = {
 			plant_id: plant,
 			cycle_time: dateString,
 			light_start: 8
+		})
+	},
+	classifyPhoto(token, image) {
+		return APIUtil.post(`http://${host}:${port}/mobileapp/classification`, token, {
+			image
+		})
+	},
+	clearSeedlings(token, id, name) {
+		return APIUtil.put(`http://${host}:${port}/mobileapp/greenhouses/${id}`, token, {
+			name,
+			seedling_time: ''
+		})
+	},
+	plantSeedlings(token, id, name) {
+		const seedlingHarvest = new Date(Date.now() + (24 * 3600 * 1000 * 14))
+		const dateString = seedlingHarvest.getFullYear() + '-' + (seedlingHarvest.getMonth()+1) + '-' + seedlingHarvest.getDate()
+		
+		return APIUtil.put(`http://${host}:${port}/mobileapp/greenhouses/${id}`, token, {
+			name,
+			seedling_time: dateString
 		})
 	}
 }
