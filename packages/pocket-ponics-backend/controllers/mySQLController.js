@@ -19,6 +19,24 @@ exports.getHashForUser = (email, callback) => {
     })
 }
 
+exports.getHashForAdminUser = (email, callback) => {
+    sqlController.execute(`select user_id, password_hash from user where email = "${email}" and admin = "1"`, function(err, result)
+    {
+        if(result.rows.length == 1)
+        {        
+            callback(err, result.rows[0])
+        }
+        else if(result.rows.length == 0)
+        {
+            callback(err, undefined)
+        }
+        else
+        {
+            callback(err, result)
+        }
+    })
+}
+
 exports.getUserIDForUser = (email, callback) => {
     sqlController.execute(`select user_id from user where email = "${email}"`, function(err, result)
     {

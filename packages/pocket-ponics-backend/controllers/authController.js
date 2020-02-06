@@ -12,66 +12,116 @@ passVal.is().min(8).is().max(100).has().not().spaces()
 //Get an authentication token for given user credentials
 exports.getToken = (req, res) => {
 
-    if(req.headers.authorization == undefined)
-    {
-        res.status(210)
-        res.json({210: "Error: Missing Token"})
-    }
-    else
-    {
-        //convert base64 credentials to ascii
-        let basicAuth = req.headers.authorization.split(" ")[1]
-        let buff = new Buffer(basicAuth, 'base64');
-        let credentials = buff.toString('ascii').split(":");
+    //convert base64 credentials to ascii
+    let basicAuth = req.headers.authorization.split(" ")[1]
+    let buff = new Buffer(basicAuth, 'base64');
+    let credentials = buff.toString('ascii').split(":");
 
-        //Store email and password provided
-        var email = credentials[0];
-        var password = credentials[1];
+    //Store email and password provided
+    var email = credentials[0];
+    var password = credentials[1];
 
-        //Retrieve password hash from database for given email
-        mySQL.getHashForUser(email, function(err, record) {
-            if(err)
-            {
-                res.status(403)
-                res.json({403: "Authentication Error"})
-            }
-            else if(record == undefined)
-            {
-                res.status(402)
-                res.json({402: "User Not Found"})
-            } 
-            else 
-            {
-                //Calculate password hash and compare to retrieved hash
-                bcrypt.compare(password, record.password_hash, (err, result) => {
-                    if(result)
-                    {
-                        //Calculate token, store in DB and return as response
-                        var token = crypto.randomBytes(32).toString('base64')
-                        
-                        //Store token in DB
-                        mySQL.insertTokenForUser(token, record.user_id, mySQL.getExpirationDateString(), (err, result) => {
-                            if(!err)
-                            {
-                                res.status(200)
-                                res.json({token: token})
-                            } 
-                            else 
-                            {
-                                res.status(403)
-                                res.json({403: "Error generating token", error: record.sqlMessage})
-                            }
-                        })
-                    }
-                    else {
-                        res.status(401)
-                        res.json({401: "Unauthorized"})
-                    }        
-                })
-            }
-        })
-    }
+    //Retrieve password hash from database for given email
+    mySQL.getHashForUser(email, function(err, record) {
+        if(err)
+        {
+            res.status(403)
+            res.json({403: "Authentication Error"})
+        }
+        else if(record == undefined)
+        {
+            res.status(402)
+            res.json({402: "User Not Found"})
+        } 
+        else 
+        {
+            //Calculate password hash and compare to retrieved hash
+            bcrypt.compare(password, record.password_hash, (err, result) => {
+                if(result)
+                {
+                    //Calculate token, store in DB and return as response
+                    var token = crypto.randomBytes(32).toString('base64')
+                    
+                    //Store token in DB
+                    mySQL.insertTokenForUser(token, record.user_id, mySQL.getExpirationDateString(), (err, result) => {
+                        if(!err)
+                        {
+                            res.status(200)
+                            res.json({token: token})
+                        } 
+                        else 
+                        {
+                            res.status(403)
+                            res.json({403: "Error generating token", error: record.sqlMessage})
+                        }
+                    })
+                }
+                else {
+                    res.status(401)
+                    res.json({401: "Unauthorized"})
+                }        
+            })
+        }
+    })
+
 };
+
+exports.getTokenForAdmin = (req, res) => {
+
+    //convert base64 credentials to ascii
+    let basicAuth = req.headers.authorization.split(" ")[1]
+    let buff = new Buffer(basicAuth, 'base64');
+    let credentials = buff.toString('ascii').split(":");
+
+    //Store email and password provided
+    var email = credentials[0];
+    var password = credentials[1];
+
+    //Retrieve password hash from database for given email
+    mySQL.getHashForAdminUser(email, function(err, record) {
+        if(err)
+        {
+            console.log(err)
+            res.status(403)
+            res.json({403: "Authentication Error"})
+        }
+        else if(record == undefined)
+        {
+            res.status(402)
+            res.json({402: "User Not Found"})
+        } 
+        else 
+        {
+            //Calculate password hash and compare to retrieved hash
+            bcrypt.compare(password, record.password_hash, (err, result) => {
+                if(result)
+                {
+                    //Calculate token, store in DB and return as response
+                    var token = crypto.randomBytes(32).toString('base64')
+                    
+                    //Store token in DB
+                    mySQL.insertTokenForUser(token, record.user_id, mySQL.getExpirationDateString(), (err, result) => {
+                        if(!err)
+                        {
+                            res.status(200)
+                            res.json({token: token})
+                        } 
+                        else 
+                        {
+                            res.status(403)
+                            res.json({403: "Error generating token", error: record.sqlMessage})
+                        }
+                    })
+                }
+                else {
+                    console.log(err)
+                    res.status(401)
+                    res.json({401: "Unauthorized"})
+                }        
+            })
+        }
+    })
+}
 
 //Send a reset password command to backend
 exports.resetPassword = (req, res) => {
