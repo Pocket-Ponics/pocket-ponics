@@ -630,6 +630,5 @@ exports.insertTokenForUser = (token, user_id, expiration, callback) => {
 
 exports.getExpirationDateString = () => {
     var date = new Date(new Date().getTime() + 30*60000)
-    console.log(date.getMonth())
     return date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours()+ ":" + date.getMinutes() + ":" + date.getSeconds()
 }

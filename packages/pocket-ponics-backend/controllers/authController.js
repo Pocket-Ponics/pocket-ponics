@@ -11,7 +11,6 @@ passVal.is().min(8).is().max(100).has().not().spaces()
 
 //Get an authentication token for given user credentials
 exports.getToken = (req, res) => {
-
     //convert base64 credentials to ascii
     let basicAuth = req.headers.authorization.split(" ")[1]
     let buff = new Buffer(basicAuth, 'base64');
@@ -66,8 +65,8 @@ exports.getToken = (req, res) => {
 
 };
 
+//Get an authentication token for given admin user credentials
 exports.getTokenForAdmin = (req, res) => {
-
     //convert base64 credentials to ascii
     let basicAuth = req.headers.authorization.split(" ")[1]
     let buff = new Buffer(basicAuth, 'base64');
