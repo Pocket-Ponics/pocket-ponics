@@ -6,7 +6,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "lint": "npx eslint ./"
+    "lint": "npx eslint ./",
+    "precommit": "yarn lint"
   },
   "dependencies": {
     "base-64": "^0.1.0",
