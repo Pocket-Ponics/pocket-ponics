@@ -1,4 +1,4 @@
-// import { authController } from '../pocket-ponics-backend/controllers/authController';
+import authController from '../controllers/authController';
 
 test('getToken successfully', () => {
 });
