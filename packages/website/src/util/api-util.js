@@ -1,7 +1,6 @@
 import base64 from 'base-64'
-import { Notifications } from 'expo'
 
-const host = 'ec2-18-191-221-89.us-east-2.compute.amazonaws.com'
+const host = '10.171.204.187'
 const port = '8080'
 
 const greenPort = '80'
@@ -73,25 +72,6 @@ const APIUtil = {
 		}))
 			.then(response => response.text())
 			.then(result => JSON.parse(result))
-	},
-	sendWifiData(body) {
-		return APIUtil.timeoutFetch(10000, fetch(`http://${greenhouse}:${greenPort}/wifi/login`, {
-			method: 'POST',
-			headers: new Headers({
-				'Content-Type': 'application/json'
-			}),
-			body: JSON.stringify(body)
-		}))
-			.then(response => response.text())
-			.then(result => JSON.parse(result))
-	},
-	setDeviceKey(token) {
-		return Notifications.getExpoPushTokenAsync()
-			.then(device_key => {
-				APIUtil.post(`http://${host}:${port}/mobileapp/devices`, token, {
-					device_key
-				})
-			})
 	},
 	changePassword(token, email, old_password, new_password) {
 		return APIUtil.post(`http://${host}:${port}/auth/change_password`, token, {

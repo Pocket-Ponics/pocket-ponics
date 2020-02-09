@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Component } from 'react';
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import { render } from 'react-dom';
+import APIUtil from '../../util/api-util';
 import "./Login.css";
 //import authController from '../../util/authController';
 
@@ -16,7 +17,18 @@ export function Login(props) {
 
   function handleSubmit(event) {
    event.preventDefault();
-   window.location.href="http://localhost:3000/Admin";
+   APIUtil.getAuthToken(username, password)
+    .then(response => {
+      //save auth tocken
+      console.log('Success')
+      window.location.href="http://localhost:3000/Admin";
+    })
+    .catch(error =>{
+      //error page
+      console.log('bad');
+    })
+
+   
   }
 
   return (
