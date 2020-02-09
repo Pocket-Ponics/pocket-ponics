@@ -1,12 +1,7 @@
-import React from 'react';
-import {
-	ImageBackground,
-	Image,
-	Dimensions,
-	TouchableOpacity
-} from 'react-native';
+import { Dimensions } from 'react-native'
 
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native'
+import { TEXT_COLOR, BACKGROUD_COLOR , ACTION_COLOR } from '../../util/constants'
 
 const { width: WIDTH } = Dimensions.get('window')
 
@@ -16,7 +11,7 @@ export default StyleSheet.create({
 		width: null,
 		height: null,
 		alignItems: 'center',
-		backgroundColor: '#472600'
+		backgroundColor: BACKGROUD_COLOR
 	},
 	plantImage: {
 		width: 250,
@@ -29,7 +24,7 @@ export default StyleSheet.create({
 		fontSize: 36,
 		fontWeight: 'bold',
 		marginBottom: 20,
-		color: '#FFFFFF'
+		color: TEXT_COLOR
 	},
 	plantInfoContainer: {
 		flexDirection: 'row'
@@ -40,7 +35,7 @@ export default StyleSheet.create({
 	value: {
 		fontSize: 18,
 		paddingTop: 10,
-		color: '#FFFFFF'
+		color: TEXT_COLOR
 	},
 	valueName: {
 		fontWeight: 'bold'
@@ -49,11 +44,11 @@ export default StyleSheet.create({
 		paddingLeft: 20,
 	},
 	button: {
-		backgroundColor: '#638E4E',
+		backgroundColor: ACTION_COLOR,
 		width: WIDTH - 55,
 		borderRadius: 22,
 		fontSize: 16,
-		color: 'white',
+		color: TEXT_COLOR,
 		fontWeight: 'bold',
 		overflow: 'hidden',
 		padding: 12,

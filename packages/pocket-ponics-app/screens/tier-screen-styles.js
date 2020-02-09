@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { BACKGROUND_COLOR, TEXT_COLOR, ACTION_COLOR } from '../util/constants'
 
 const styles = StyleSheet.create({

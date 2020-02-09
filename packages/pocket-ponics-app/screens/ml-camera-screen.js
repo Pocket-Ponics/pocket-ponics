@@ -54,8 +54,6 @@ const MLCameraScreen = props => {
 		return <Text>No access to camera</Text>
 	}
 
-	const id = props.navigation.getParam('id')
-
 	const takePicture = async () => {
 		setProcessing(true)
 		const token = await AsyncStorage.getItem('token')

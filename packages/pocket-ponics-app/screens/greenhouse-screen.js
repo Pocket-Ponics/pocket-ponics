@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, Button } from 'react-native'
+import { Text, View, TouchableOpacity } from 'react-native'
 
 import styles from './greenhouse-screen-styles'
 
@@ -15,10 +15,9 @@ class GreenhouseScreen extends React.Component {
 				const username = navigation.getParam('username', '')
 
 				return (
-					<Button
-						onPress={() => navigation.navigate('Profile', { greenhouses , username })}
-						title="Profile"
-						color="#fff"/>
+					<TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Profile', { greenhouses , username })}>
+						<Text style={styles.buttonText}>Profile</Text>
+					</TouchableOpacity>
 				)
 			},
 		}

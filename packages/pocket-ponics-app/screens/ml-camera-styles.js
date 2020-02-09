@@ -1,8 +1,7 @@
 import { StyleSheet } from 'react-native'
-import { BACKGROUND_COLOR, TEXT_COLOR, ACTION_COLOR, PLANT_COLOR } from '../util/constants'
+import { BACKGROUND_COLOR, TEXT_COLOR, ACTION_COLOR } from '../util/constants'
 
 const black = '#000000'
-const darkener = 'rgba(0, 0, 0, 0.35)'
 
 // Contrast note: darkest brown, with darker green and lightest green meets WCAG standards
 export default StyleSheet.create({

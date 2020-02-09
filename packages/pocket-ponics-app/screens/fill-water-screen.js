@@ -22,7 +22,7 @@ class FillWaterScreen extends React.Component {
 	}
 
 	cancel() {
-		return this.props.navigation.navigate('Auth')
+		return this.props.navigation.navigate('Greenhouse')
 	}
 
 	render() {
