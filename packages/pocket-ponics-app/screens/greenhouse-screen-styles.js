@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { BACKGROUND_COLOR, } from '../util/constants'
+import { BACKGROUND_COLOR, TEXT_COLOR} from '../util/constants'
 
 const styles = StyleSheet.create({  
 	container: {
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 	},
 	buttonText: {
 		fontWeight: 'bold',
-		color: '#FFF',
+		color: TEXT_COLOR,
 		fontSize: 15,
 	}
 })
