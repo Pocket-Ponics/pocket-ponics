@@ -9,6 +9,14 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: BACKGROUND_COLOR
 	},
+	button: {
+		padding: 10,
+	},
+	buttonText: {
+		fontWeight: 'bold',
+		color: '#FFF',
+		fontSize: 15,
+	}
 })
 
 export default styles

@@ -60,7 +60,7 @@ class TierSelectionScreen extends React.Component {
 	}
 
 	cancel() {
-		return this.props.navigation.navigate('Auth')
+		return this.props.navigation.navigate('Greenhouse')
 	}
 
 	setTier(data) {

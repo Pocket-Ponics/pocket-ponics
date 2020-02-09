@@ -56,11 +56,7 @@ class ReplantScreen extends React.Component {
 				return this.props.navigation.navigate('Greenhouse')
 			})
 	}
-
-	cancel() {
-		this.props.navigation.navigate('Auth')
-	}
-
+	
 	getImage(id) {
 		switch(id) {
 		case TOMATO_ID:
@@ -96,9 +92,6 @@ class ReplantScreen extends React.Component {
 						keyExtractor={(item, index) => index.toString()}/>
 					<TouchableOpacity style={styles.button} onPress={this.goToNext.bind(this)}>
 						<Text style={styles.buttonText}>Finish Replanting</Text>
-					</TouchableOpacity>
-					<TouchableOpacity style={styles.cancelButton} onPress={this.cancel.bind(this)}>
-						<Text style={styles.cancelButtonText}>Cancel Setup</Text>
 					</TouchableOpacity>
 				</View>
 			</View>
