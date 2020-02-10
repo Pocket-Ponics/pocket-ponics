@@ -876,7 +876,7 @@ async function classifyPlant(imagePath, callback){
             var image = fs.readFileSync(resizedImage)
 
             //Define the classes
-            var classes = ['ripe-greenbeans','ripe-spinach','ripe-tomatoes','ripe-turnip','unripe-greenbeans','unripe-spinach','unripe-tomatoes','unripe-turnip']
+            var classes = ['ripe-greenbeans','ripe-spinach','ripe-tomato','ripe-turnip','unripe-greenbeans','unripe-spinach','unripe-tomato','unripe-turnip']
             
             //Convert image to tensor
             var tensorImage = tf.node.decodeJpeg(image, 3);
