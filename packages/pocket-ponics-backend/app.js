@@ -18,7 +18,7 @@ if (result.error) {
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(bodyParser.json());
 
-var origins = [''];
+var origins = ['http://localhost:3000'];
 
 app.use(cors({
   origin: function(origin, callback){
