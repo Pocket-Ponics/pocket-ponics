@@ -18,15 +18,27 @@ export function Login(props) {
 
   function handleSubmit(event) {
    event.preventDefault();
+   console.log('1')
    APIUtil.getAuthToken(username, password)
     .then(response => {
+      let token
+      token = response.token
+      console.log('token', token);
+      if(!response.token) {
+        console.log("incorrect")
+      }
       //save auth tocken
       console.log('Success')
       window.location.href="http://localhost:3000/Admin";
     })
     .catch(error =>{
       //error page
+let token
+      token = error.token
+      console.log('token', token);
       console.log('bad');
+      console.log('pass', password);
+      window.alert('Invalid username or password');
     })
 
    

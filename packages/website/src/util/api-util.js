@@ -1,7 +1,7 @@
 import base64 from 'base-64'
 
 const host = '10.171.204.187'
-const port = '8080'
+const port = '3000'
 
 const greenPort = '80'
 
@@ -36,18 +36,22 @@ const APIUtil = {
 		})
 	},
 	getAuthToken(username, password) {
+		console.log('begin')
 		return APIUtil.timeoutFetch(10000, fetch(`http://${host}:${port}/auth/get_token`, {
 			method: 'GET',
 			headers: new Headers({
+				
 				'Authorization': 'Basic ' + base64.encode(`${username}:${password}`),
 				'Content-Type': 'application/x-www-form-urlencoded'
 			}),
 			redirect: 'follow'
 		}))
+		console.log('end')
 			.then(response => response.text())
 			.then(result => JSON.parse(result))
 	},
 	createUser(email, password) {
+		console.log('here')
 		const encode = APIUtil.urlEncode({ email, password })
 		return APIUtil.timeoutFetch(10000, fetch(`http://${host}:${port}/auth/create_user`, {
 			method: 'POST',
