@@ -3,6 +3,9 @@ import { Alert } from 'react'
 
 import APIUtil from '../util/api-util'
 
+
+
+
 const AuthUtil = {
 	getAuthToken: (loggedOutFn, successFn) => {
 		// Retrieve username and password from storage
@@ -42,7 +45,7 @@ const AuthUtil = {
 				window.location.href="http://localhost:3000/Admin";
 			})
 			.catch(error => {
-				console.log('error in code', error)
+				window.alert('Incorrect Username or Password');
 			})
 	}
 	
