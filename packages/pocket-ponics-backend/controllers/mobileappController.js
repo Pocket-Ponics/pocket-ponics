@@ -825,7 +825,7 @@ exports.classifyPlantImage = (req, res) => {
             console.log('File created successfully');
 
             //Classify plant image
-            classifyPlant(imageStr, (err, prediction, accuracy, createdFiles) => {
+            classifyPlant(imageStr, (err, prediction, probability, createdFiles) => {
                 //Delete temporary files
                 createdFiles.forEach(file => {
                     fs.unlink(file, function(err) {
@@ -848,7 +848,7 @@ exports.classifyPlantImage = (req, res) => {
                 else
                 {
                     res.status(200)
-                    res.json({200: "Classification Complete", prediction: prediction, accuracy: accuracy})
+                    res.json({200: "Classification Complete", prediction: prediction, probability: probability})
                 }
             })
         }
@@ -889,9 +889,9 @@ async function classifyPlant(imagePath, callback){
 
             //Convert tensor output to class
             var index = predictionTensor.argMax(1).arraySync()
-            var accuracy = predictionTensor.arraySync()[0][index]
+            var probability = predictionTensor.arraySync()[0][index]
             var prediction = classes[index[0]]
-            callback(false, prediction, accuracy, createdFiles)
+            callback(false, prediction, probability, createdFiles)
         }
         else
         {
