@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, Button, AsyncStorage, } from 'react-native'
+import { Text, View, TouchableOpacity } from 'react-native'
 
 import styles from './greenhouse-screen-styles'
 
@@ -15,10 +15,9 @@ class GreenhouseScreen extends React.Component {
 				const username = navigation.getParam('username', '')
 
 				return (
-					<Button
-						onPress={() => navigation.navigate('Profile', { greenhouses , username })}
-						title="Profile"
-						color="#fff"/>
+					<TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Profile', { greenhouses , username })}>
+						<Text style={styles.buttonText}>Profile</Text>
+					</TouchableOpacity>
 				)
 			},
 		}
@@ -27,34 +26,38 @@ class GreenhouseScreen extends React.Component {
 	constructor(props) {
 		super(props)
 
-		this.state = {
-			currentGreenhouse: 0,
-			greenhouses: [],
-			username: ''
-		}
-	}
-
-	async getGreenhouses() {
-		const greenhouseString = await AsyncStorage.getItem('greenhouses')
-		const username = await AsyncStorage.getItem('username')
-
-		if(greenhouseString === null) {
-			console.log('Error retrieving from storage')
-			return
-		}
-
-		const greenhouses = JSON.parse(greenhouseString)
 		const greenhouseId = this.props.navigation.getParam('greenhouseId', '')
-
+		const greenhouses = [
+			...Object.values(global.greenhouses),
+			{
+				type: 'add-page',
+				name: 'Setup',
+			}
+		]
 		const matchingIndex = greenhouses.findIndex(greenhouse => greenhouse.greenhouse_id === greenhouseId)
 		const currentGreenhouse = matchingIndex === -1 ? 0 : matchingIndex
 
-		this.setState({ greenhouses , username,  currentGreenhouse })
-		this.props.navigation.setParams({ greenhouses , username })
-	}
+		this.state = {
+			currentGreenhouse,
+			greenhouses,
+			username: global.username
+		}
 
-	componentDidMount() {
-		this.getGreenhouses()
+		// Handle the cases when we navigate back to the greenhouse screen but the greenhouses have changed
+		this.props.navigation.addListener('didFocus', () => {
+			const greenhouseId = this.props.navigation.getParam('greenhouseId', '')
+			const greenhouses = [
+				...Object.values(global.greenhouses),
+				{
+					type: 'add-page',
+					name: 'Setup',
+				}
+			]
+			const matchingIndex = greenhouses.findIndex(greenhouse => greenhouse.greenhouse_id === greenhouseId)
+			const currentGreenhouse = matchingIndex === -1 ? 0 : matchingIndex
+
+			this.setState({ greenhouses, currentGreenhouse })
+		})
 	}
 
 	swapItem(index) {

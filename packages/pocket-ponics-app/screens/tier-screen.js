@@ -1,12 +1,11 @@
 import React from 'react'
-import { StackActions, NavigationActions } from 'react-navigation';
+import { StackActions, NavigationActions } from 'react-navigation'
 
 import { 
 	Text, 
 	View,
 	Image,
-	TouchableOpacity, 
-	AsyncStorage, 
+	TouchableOpacity,
 } from 'react-native'
 
 import { 
@@ -24,36 +23,25 @@ const greenbeanImage = require('../assets/greenbean.png')
 const spinachImage = require('../assets/spinach.png')
 const turnipImage = require('../assets/turnip.png')
 
-export default class Example extends React.Component {
+class TierScreen extends React.Component {
 	constructor(props) {
 		super(props)
 
-		this.state = {
-			plant: this.props.navigation.getParam('plant', {}),
-		}
-	}
-
-	async getPlant() {
-		const greenhouseString = await AsyncStorage.getItem('greenhouses')
-
-		if(greenhouseString === null) {
-			console.log('Error retrieving from storage')
-			return
-		}
-
-		const greenhouses = JSON.parse(greenhouseString)
+		const greenhouses = global.greenhouses
 		const greenhouseId = this.props.navigation.getParam('greenhouseId', 0)
 		const tierId = this.props.navigation.getParam('tierId', 0)
 
-		if(greenhouseId !== 0 && tierId !== 0) {
-			const plant = greenhouses.filter(() => true)[0].tiers[tierId-1]
-
-			this.setState({ plant })
+		this.state = {
+			plant: greenhouses[greenhouseId].tiers[tierId-1],
 		}
 	}
 
 	componentDidMount() {
-		this.getPlant()
+		const greenhouses = global.greenhouses
+		const greenhouseId = this.props.navigation.getParam('greenhouseId', 0)
+		const tierId = this.props.navigation.getParam('tierId', 0)
+
+		this.setState({ plant: greenhouses[greenhouseId].tiers[tierId-1] })
 	}
 
 	getImage(id) {
@@ -136,7 +124,7 @@ export default class Example extends React.Component {
 					</View>
 					{
 						isReadyToHarvest ? (
-							<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('HarvestInstruction', {name: this.getReadableName(plant.plant_id), })}>
+							<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('MLCamera', { ...this.props.navigation.state.params, id: plant.plant_id })}>
 								<Text style={styles.buttonText}>Harvest {this.getReadableName(plant.plant_id)}</Text>
 							</TouchableOpacity>) : null
 					}
@@ -145,3 +133,5 @@ export default class Example extends React.Component {
 		)
 	}
 }
+
+export default TierScreen

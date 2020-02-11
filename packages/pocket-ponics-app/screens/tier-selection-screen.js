@@ -9,8 +9,7 @@ import {
 	TOMATO_ID, 
 	GREENBEAN_ID, 
 	SPINACH_ID,
-	TURNIP_ID,
-	ONE_DAY
+	TURNIP_ID
 } from '../util/constants'
 
 const tomatoImage = require('../assets/tomato.png')
@@ -60,7 +59,7 @@ class TierSelectionScreen extends React.Component {
 	}
 
 	cancel() {
-		return this.props.navigation.navigate('Auth')
+		return this.props.navigation.navigate('Greenhouse')
 	}
 
 	setTier(data) {
