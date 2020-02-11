@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { Component } from 'react';
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import { render } from 'react-dom';
 import APIUtil from '../../util/api-util';
 import "./Login.css";
 import Spacer from 'react-add-space';
-//import authController from '../../util/authController';
-
+import AuthUtil from '../../util/auth-util'
 
 export function Login(props) {
   const [username, setUsername] = useState('');
@@ -17,19 +15,8 @@ export function Login(props) {
   }
 
   function handleSubmit(event) {
-   event.preventDefault();
-   APIUtil.getAuthToken(username, password)
-    .then(response => {
-      //save auth tocken
-      console.log('Success')
-      window.location.href="http://localhost:3000/Admin";
-    })
-    .catch(error =>{
-      //error page
-      console.log('bad');
-    })
-
-   
+    event.preventDefault();
+    return AuthUtil.login(username, password, () => this.props.navigation.navigate('Admin'))
   }
 
   return (

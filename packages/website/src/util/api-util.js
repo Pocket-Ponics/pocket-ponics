@@ -3,8 +3,6 @@ import base64 from 'base-64'
 const host = '10.171.204.187'
 const port = '8080'
 
-const greenPort = '80'
-
 const APIUtil = {
 	processTextResults(res) {
 		return Promise.resolve(res.text())
