@@ -8,7 +8,7 @@ var mysql = require('mysql')
 
 describe('MySQL Controller', () => {
 
-	test ('getHashForUser', () => {
+	test ('getHashForUser selects successfully', () => {
 		mySQLConnector.execute.mockImplementation((string, fn) => {
 			fn(false, {
 				rows: ['mock_row']
@@ -17,34 +17,105 @@ describe('MySQL Controller', () => {
 		})
 
 		const callback = jest.fn()
-		mySQLConnector.getHashForUser('mock_email', callback)
+		mySQLController.getHashForUser('mock_email', callback)
 
-		expect()
+		expect(mySQLConnector.execute)
+			.toHaveBeenCalledWith(
+				'select user_id, password_hash from user where email = "mock_email"',
+				expect.any(Function))
+		expect(callback).toHaveBeenCalled()
 	})
-	// getGreenhouseForUser
-	// addDeviceKeyForUser
-	// deleteDeviceKeyForUser
-	// getAllPlantIdeals
-	// getGreenhouseHistoricalData
-	// deletePlantIdeal
-	// updateReadingsForGreenhouse
-	// updateReadingsForSensorType
-	// createUser
-	// revokeTokens
-	// revokeDeviceKeys
 
-	test ('revokeDeviceKeys deletes successfully', () => {
+	test ('getHashForUser returns too many rows', () => {
 		mySQLConnector.execute.mockImplementation((string, fn) => {
-			fn()
+			fn(false, {
+				rows: ['mock_row', 'mock_row']
+			})
 			return string
 		})
 
 		const callback = jest.fn()
-		mySQLConnector.revokeDeviceKeys(callback)
+		mySQLController.getHashForUser('mock_email', callback)
 
-		expect(mySQLConnector.execute)
-			.toHaveBeenCalledWith()
+		expect(mySQLConnector.execute).toHaveBeenCalled()
+		expect(callback).toHaveBeenCalledWith(true, undefined)
 	})
+
+	test ('getHashForUser returns unsuccessfully', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn(true, {
+				rows: []
+			})
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.getHashForUser('mock_email', callback)
+
+		expect(mySQLConnector.execute).toHaveBeenCalled()
+		expect(callback).toHaveBeenCalledWith(true, undefined)
+	})
+
+	// test ('getHashForSensorGrid returns successfully', () => {
+	// 	mySQLConnector.execute.mockImplementation((string, fn) => {
+	// 		fn(false, {
+	// 			rows: ['mock_row']
+	// 		})
+	// 		return string
+	// 	})
+
+	// 	const callback = jest.fn()
+	// 	mySQLController.getHashForSensorGrid('mock_serial_no', callback)
+
+	// 	expect(mySQLConnector.execute)
+	// 		.toHaveBeenCalledWith(
+	// 			'select user_id, greenhouse_id, password_hash from sensor_grid where serial_no = "${serial_no}"',
+	// 			expect.any(Function))
+	// 	expect(callback).toHaveBeenCalled()
+	// })
+
+	test ('getHashForSensorGrid returns too many rows', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn(false, {
+				rows: ['mock_row', 'mock_row']
+			})
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.getHashForSensorGrid('mock_serial_no', callback)
+
+		expect(mySQLConnector.execute).toHaveBeenCalled()
+		expect(callback).toHaveBeenCalledWith(true, undefined)
+	})
+
+	test ('getHashForSensorGrid returns unsuccessfully', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn(true, {
+				rows: []
+			})
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.getHashForSensorGrid('mock_serial_no', callback)
+
+		expect(mySQLConnector.execute).toHaveBeenCalled()
+		expect(callback).toHaveBeenCalledWith(true, undefined)
+	})
+
+	// test ('revokeDeviceKeys deletes successfully', () => {
+	// 	mySQLConnector.execute.mockImplementation((string, fn) => {
+	// 		fn()
+	// 		return string
+	// 	})
+
+	// 	const callback = jest.fn()
+	// 	mySQLController.revokeDeviceKeys('mock_user_id', callback)
+
+	// 	expect(mySQLConnector.execute)
+	// 		.toHaveBeenCalledWith()
+	// })
 
 	test ('getReadySeedlings joins successfully', () => {
 		mySQLConnector.execute.mockImplementation((string, fn) => {
@@ -64,7 +135,7 @@ describe('MySQL Controller', () => {
 
 	test ('getReadySeedlings joins unsuccessfully', () => {
 		mySQLConnector.execute.mockImplementation((string, fn) => {
-			fn('mock_error', 'unsuccessful')
+			fn(true, 'unsuccessful')
 			return string
 		})
 
@@ -72,7 +143,7 @@ describe('MySQL Controller', () => {
 		mySQLController.getReadySeedlings(callback)
 
 		expect(mySQLConnector.execute).toHaveBeenCalled()
-		expect(callback).toHaveBeenCalledWith('mock_error', 'unsuccessful')
+		expect(callback).toHaveBeenCalledWith(true, 'unsuccessful')
 	})
 
 	test ('getReadyTiers joins successfully', () => {
@@ -93,7 +164,7 @@ describe('MySQL Controller', () => {
 
 	test ('getReadyTiers joins unsuccessfully', () => {
 		mySQLConnector.execute.mockImplementation((string, fn) => {
-			fn('mock_error', 'unsuccessful')
+			fn(true, 'unsuccessful')
 			return string
 		})
 
@@ -101,28 +172,28 @@ describe('MySQL Controller', () => {
 		mySQLController.getReadyTiers(callback)
 
 		expect(mySQLConnector.execute).toHaveBeenCalled()
-		expect(callback).toHaveBeenCalledWith('mock_error', 'unsuccessful')
+		expect(callback).toHaveBeenCalledWith(true, 'unsuccessful')
 	})
 
-	test ('updateUserHash updates successfully', () => {
-		mySQLConnector.execute.mockImplementation((string, fn) => {
-			fn()
-			return string
-		})
+	// test ('updateUserHash updates successfully', () => {
+	// 	mySQLConnector.execute.mockImplementation((string, fn) => {
+	// 		fn()
+	// 		return string
+	// 	})
 
-		const callback = jest.fn()
-		mySQLController.updateUserHash('mock_user_id', 'mock_password_hash', callback)
+	// 	const callback = jest.fn()
+	// 	mySQLController.updateUserHash('mock_user_id', 'mock_password_hash', callback)
 
-		expect(mySQLConnector.execute)
-			.toHaveBeenCalledWith(
-				'UPDATE user SET password_hash = "mock_password_hash" WHERE (user_id = mock_user_id)',
-				expect.any(Function))
-		expect(callback).toHaveBeenCalled()
-	})
+	// 	expect(mySQLConnector.execute)
+	// 		.toHaveBeenCalledWith(
+	// 			'UPDATE user SET password_hash = "mock_password_hash" WHERE (user_id = mock_user_id)',
+	// 			expect.any(Function))
+	// 	expect(callback).toHaveBeenCalled()
+	// })
 
 	test ('updateUserHash updates unsuccessfully', () => {
 		mySQLConnector.execute.mockImplementation((string, fn) => {
-			fn('mock_error', 'unsuccessful')
+			fn(true, 'unsuccessful')
 			return string
 		})
 
@@ -130,29 +201,28 @@ describe('MySQL Controller', () => {
 		mySQLController.updateUserHash('mock_user_id', 'mock_password_hash', callback)
 
 		expect(mySQLConnector.execute).toHaveBeenCalled()
-		expect(callback).toHaveBeenCalledWith('mock_error', 'unsuccessful')
+		expect(callback).toHaveBeenCalledWith(true, 'unsuccessful')
 	})
 
+	// test('insertTokenForUser inserts successfully ', () => {
+	// 	mySQLConnector.execute.mockImplementation((string, fn) => {
+	// 		fn()
+	// 		return string
+	// 	})
 
-	test('insertTokenForUser inserts successfully ', () => {
-		mySQLConnector.execute.mockImplementation((string, fn) => {
-			fn()
-			return string
-		})
+	// 	const callback = jest.fn()
+	// 	mySQLController.insertTokenForUser('mock_token', 'mock_user_id','mock_expiration', callback)
 
-		const callback = jest.fn()
-		mySQLController.insertTokenForUser('mock_token', 'mock_user_id','mock_expiration', callback)
-
-		expect(mySQLConnector.execute)
-			.toHaveBeenCalledWith(
-				'insert into active_sessions (token, expiration_date, user_id) VALUES ("mock_token", "mock_expiration", mock_user_id)', 
-				expect.any(Function))
-		expect(callback).toHaveBeenCalled()
-	})
+	// 	expect(mySQLConnector.execute)
+	// 		.toHaveBeenCalledWith(
+	// 			'insert into active_sessions (token, expiration_date, user_id) VALUES ("mock_token", "mock_expiration", mock_user_id)', 
+	// 			expect.any(Function))
+	// 	expect(callback).toHaveBeenCalled()
+	// })
 
 	test('insertTokenForUser inserts unsuccessfully', () => {
 		mySQLConnector.execute.mockImplementation((string, fn) => {
-			fn('mock_error', 'unsuccessful')
+			fn(true, 'unsuccessful')
 			return string
 		})
 
@@ -160,7 +230,7 @@ describe('MySQL Controller', () => {
 		mySQLController.insertTokenForUser('mock_token', 'mock_user_id','mock_expiration', callback)
 
 		expect(mySQLConnector.execute).toHaveBeenCalled()
-		expect(callback).toHaveBeenCalledWith('mock_error', 'unsuccessful')
+		expect(callback).toHaveBeenCalledWith(true, 'unsuccessful')
 	})
 
 	test('Testing expiration date format', () => {
