@@ -19,7 +19,7 @@ var n = schedule.scheduleJob(rule, function(){
 
 async function loadNeuralNetwork()
 {
-    global.model = await tf.loadLayersModel('file://../pocket-ponics-backend/neuralnetwork-model/model/model.json')
+    global.model = await tf.loadLayersModel('file://../pocket-ponics-backend/neuralnetwork-model-anomaly/model/model.json')
     console.log("Loaded Neural Network Model for Classification")
 }
 
@@ -876,7 +876,7 @@ async function classifyPlant(imagePath, callback){
             var image = fs.readFileSync(resizedImage)
 
             //Define the classes
-            var classes = ['ripe-greenbeans','ripe-spinach','ripe-tomato','ripe-turnip','unripe-greenbeans','unripe-spinach','unripe-tomato','unripe-turnip']
+            var classes = ['not-vegetable', 'ripe-greenbeans','ripe-spinach','ripe-tomato','ripe-turnip','unripe-greenbeans','unripe-spinach','unripe-tomato','unripe-turnip']
             
             //Convert image to tensor
             var tensorImage = tf.node.decodeJpeg(image, 3);
