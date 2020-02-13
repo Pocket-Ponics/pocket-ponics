@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1581610857465" clover="3.2.0">
-  <project timestamp="1581610857465" name="All files">
+<coverage generated="1581633794693" clover="3.2.0">
+  <project timestamp="1581633794693" name="All files">
     <metrics statements="350" coveredstatements="98" conditionals="144" coveredconditionals="22" methods="93" coveredmethods="21" elements="587" coveredelements="141" complexity="0" loc="350" ncloc="350" packages="1" files="2" classes="2"/>
-    <file name="authController.js" path="C:\Users\caami\pocket-ponics\packages\pocket-ponics-backend\controllers\authController.js">
+    <file name="authController.js" path="/Users/ca718039/pocket-ponics/packages/pocket-ponics-backend/controllers/authController.js">
       <metrics statements="84" coveredstatements="10" conditionals="30" coveredconditionals="0" methods="13" coveredmethods="0"/>
       <line num="1" count="1" type="stmt"/>
       <line num="2" count="1" type="stmt"/>
@@ -89,7 +89,7 @@
       <line num="191" count="0" type="stmt"/>
       <line num="192" count="0" type="stmt"/>
     </file>
-    <file name="mySQLController.js" path="C:\Users\caami\pocket-ponics\packages\pocket-ponics-backend\controllers\mySQLController.js">
+    <file name="mySQLController.js" path="/Users/ca718039/pocket-ponics/packages/pocket-ponics-backend/controllers/mySQLController.js">
       <metrics statements="266" coveredstatements="88" conditionals="114" coveredconditionals="22" methods="80" coveredmethods="21"/>
       <line num="1" count="2" type="stmt"/>
       <line num="2" count="2" type="stmt"/>

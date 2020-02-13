@@ -226,7 +226,38 @@ describe('MySQL Controller', () => {
 
 		expect(mySQLConnector.execute).toHaveBeenCalled()
 		expect(callback).toHaveBeenCalledWith(true, 'unsuccessful')
-	})	 
+	})
+
+	test ('createGreenhouseForUser inserts successfully', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn(false, {
+				rows: ['mock_inserted_id']
+			})
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.createGreenhouseForUser('mock_name', 'mock_seedling_time', 'mock_user_id', callback)
+
+		expect(mySQLConnector.execute)
+			.toHaveBeenCalledWith(
+				'insert into greenhouse (name, seedling_time, user_id) values ("mock_name", "mock_seedling_time", mock_user_id);',
+				expect.any(Function))
+		expect(callback).toHaveBeenCalled()
+	})
+
+	test ('createGreenhouseForUser selects unsuccessfully', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn(true, 'unsuccessful')
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.createGreenhouseForUser('mock_name', 'mock_time', 'mock_user_id', callback)
+
+		expect(mySQLConnector.execute).toHaveBeenCalled()
+		expect(callback).toHaveBeenCalledWith(true, 'unsuccessful')
+	})
 
 	// test ('revokeDeviceKeys deletes successfully', () => {
 	// 	mySQLConnector.execute.mockImplementation((string, fn) => {
@@ -252,7 +283,7 @@ describe('MySQL Controller', () => {
 
 		expect(mySQLConnector.execute)
 			.toHaveBeenCalledWith(
-				'SELECT DISTINCT greenhouse.user_id, greenhouse.greenhouse_id, devices.device_key FROM pocketponics.greenhouse LEFT JOIN devices ON greenhouse.user_id=devices.user_id where seedling_time = CURDATE()', 
+				'SELECT DISTINCT greenhouse.user_id, greenhouse.greenhouse_id, devices.device_key FROM pocketponics.greenhouse LEFT JOIN devices ON greenhouse.user_id=devices.user_id where seedling_time = CURDATE()',
 				expect.any(Function))
 		expect(callback).toHaveBeenCalled()
 	})
@@ -281,7 +312,7 @@ describe('MySQL Controller', () => {
 
 		expect(mySQLConnector.execute)
 			.toHaveBeenCalledWith(
-				'SELECT DISTINCT tiers.user_id, tiers.tier, tiers.greenhouse_id, devices.device_key FROM pocketponics.tiers LEFT JOIN devices ON tiers.user_id=devices.user_id where cycle_time = CURDATE()', 
+				'SELECT DISTINCT tiers.user_id, tiers.tier, tiers.greenhouse_id, devices.device_key FROM pocketponics.tiers LEFT JOIN devices ON tiers.user_id=devices.user_id where cycle_time = CURDATE()',
 				expect.any(Function))
 		expect(callback).toHaveBeenCalled()
 	})
@@ -339,7 +370,7 @@ describe('MySQL Controller', () => {
 
 	// 	expect(mySQLConnector.execute)
 	// 		.toHaveBeenCalledWith(
-	// 			'insert into active_sessions (token, expiration_date, user_id) VALUES ("mock_token", "mock_expiration", mock_user_id)', 
+	// 			'insert into active_sessions (token, expiration_date, user_id) VALUES ("mock_token", "mock_expiration", mock_user_id)',
 	// 			expect.any(Function))
 	// 	expect(callback).toHaveBeenCalled()
 	// })
