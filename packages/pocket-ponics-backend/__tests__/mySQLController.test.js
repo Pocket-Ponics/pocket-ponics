@@ -259,6 +259,34 @@ describe('MySQL Controller', () => {
 		expect(callback).toHaveBeenCalledWith(true, 'unsuccessful')
 	})
 
+	test ('deleteGreenhouseForUser has an error', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn(true, 'unsuccessful')
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.deleteGreenhouseForUser('mock_greenhouse_id', 'mock_user_id', callback)
+
+		expect(mySQLConnector.execute).toHaveBeenCalled()
+		expect(callback).toHaveBeenCalledWith(true, 'unsuccessful')
+	})
+
+	test ('deleteGreenhouseForUser has too many rows', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn(false, {
+				rows: ['mock_row', 'mock_row']
+			})
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.deleteGreenhouseForUser('mock_greenhouse_id', 'mock_user_id', callback)
+
+		expect(mySQLConnector.execute).toHaveBeenCalled()
+		expect(callback).toHaveBeenCalledWith(true, {'rows': ['mock_row', 'mock_row']})
+	})
+
 	test ('getGreenhouseHistoricalData selects successfully', () => {
 		mySQLConnector.execute.mockImplementation((string, fn) => {
 			fn(false, {
@@ -1026,7 +1054,7 @@ describe('MySQL Controller', () => {
 		expect(callback).toHaveBeenCalledWith(true, 'unsuccessful')
 	})
 
-	test ('getGreenhouseForUser select successfully', () => {
+	test ('getGreenhouseForUser selects successfully', () => {
 		mySQLConnector.execute.mockImplementation((string, fn) => {
 			fn(false, {
 				rows: ['mock_row']
@@ -1074,7 +1102,7 @@ describe('MySQL Controller', () => {
 		expect(callback).toHaveBeenCalledWith(true, undefined)
 	})
 
-	test ('getPlantIdealData select successfully', () => {
+	test ('getPlantIdealData selects successfully', () => {
 		mySQLConnector.execute.mockImplementation((string, fn) => {
 			fn()
 			return string
@@ -1103,7 +1131,7 @@ describe('MySQL Controller', () => {
 		expect(callback).toHaveBeenCalledWith(true, undefined)
 	})
 
-	test ('getTiersAndIdeal select successfully', () => {
+	test ('getTiersAndIdeal selects successfully', () => {
 		mySQLConnector.execute.mockImplementation((string, fn) => {
 			fn()
 			return string
@@ -1127,6 +1155,21 @@ describe('MySQL Controller', () => {
 
 		const callback = jest.fn()
 		mySQLController.getTiersAndIdeal('mock_user_id', 'mock_greenhouse_id', callback)
+
+		expect(mySQLConnector.execute).toHaveBeenCalled()
+		expect(callback).toHaveBeenCalledWith(true, undefined)
+	})
+
+	test ('getGreenhouseDetail selects too many rows', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn(true, {
+				rows: ['mock_row', 'mock_row']
+			})
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.getGreenhouseDetail ('mock_user_id', 'mock_greenhouse_id', callback)
 
 		expect(mySQLConnector.execute).toHaveBeenCalled()
 		expect(callback).toHaveBeenCalledWith(true, undefined)

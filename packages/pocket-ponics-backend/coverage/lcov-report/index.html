@@ -1,31 +1,62 @@
+
 <!doctype html>
 <html lang="en">
+
 <head>
     <title>Code coverage report for All files</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="prettify.css" />
     <link rel="stylesheet" href="base.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
             background-image: url(sort-arrow-sprite.png);
         }
     </style>
 </head>
+    
 <body>
 <div class='wrapper'>
-  <div class='pad1'>
-    <h1>
-      All files
-    </h1>
-    <div class='clearfix'>
+    <div class='pad1'>
+        <h1>All files</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">62.64% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>218/348</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">65.71% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>92/140</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">74.19% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>69/93</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">62.64% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>218/348</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
     </div>
-    <p class="quiet">
-      Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
-    </p>
-  </div>
-  <div class='status-line medium'></div>
-<div class="pad1">
+    <div class='status-line medium'></div>
+    <div class="pad1">
 <table class="coverage-summary">
 <thead>
 <tr>
@@ -43,48 +74,53 @@
 </thead>
 <tbody><tr>
 	<td class="file low" data-value="authController.js"><a href="authController.js.html">authController.js</a></td>
-	<td data-value="" class="pic low"><div class="chart"><div class="cover-fill" style="width: 0%;"></div><div class="cover-empty" style="width:100%;"></div></div></td>
-	<td data-value="" class="pct low">%</td>
-	<td data-value="" class="abs low">/</td>
-	<td data-value="" class="pct low">%</td>
-	<td data-value="" class="abs low">/</td>
-	<td data-value="" class="pct low">%</td>
-	<td data-value="" class="abs low">/</td>
-	<td data-value="" class="pct low">%</td>
-	<td data-value="" class="abs low">/</td>
+	<td data-value="11.9" class="pic low">
+	<div class="chart"><div class="cover-fill" style="width: 11%"></div><div class="cover-empty" style="width: 89%"></div></div>
+	</td>
+	<td data-value="11.9" class="pct low">11.9%</td>
+	<td data-value="84" class="abs low">10/84</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="30" class="abs low">0/30</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="13" class="abs low">0/13</td>
+	<td data-value="11.9" class="pct low">11.9%</td>
+	<td data-value="84" class="abs low">10/84</td>
 	</tr>
 
 <tr>
 	<td class="file medium" data-value="mySQLController.js"><a href="mySQLController.js.html">mySQLController.js</a></td>
-	<td data-value="" class="pic medium"><div class="chart"><div class="cover-fill" style="width: 0%;"></div><div class="cover-empty" style="width:100%;"></div></div></td>
-	<td data-value="" class="pct medium">%</td>
-	<td data-value="" class="abs medium">/</td>
-	<td data-value="" class="pct high">%</td>
-	<td data-value="" class="abs high">/</td>
-	<td data-value="" class="pct high">%</td>
-	<td data-value="" class="abs high">/</td>
-	<td data-value="" class="pct medium">%</td>
-	<td data-value="" class="abs medium">/</td>
+	<td data-value="78.79" class="pic medium">
+	<div class="chart"><div class="cover-fill" style="width: 78%"></div><div class="cover-empty" style="width: 22%"></div></div>
+	</td>
+	<td data-value="78.79" class="pct medium">78.79%</td>
+	<td data-value="264" class="abs medium">208/264</td>
+	<td data-value="83.64" class="pct high">83.64%</td>
+	<td data-value="110" class="abs high">92/110</td>
+	<td data-value="86.25" class="pct high">86.25%</td>
+	<td data-value="80" class="abs high">69/80</td>
+	<td data-value="78.79" class="pct medium">78.79%</td>
+	<td data-value="264" class="abs medium">208/264</td>
 	</tr>
 
 </tbody>
 </table>
-</div><div class='push'></div><!-- for sticky footer -->
-</div><!-- /wrapper -->
-<div class='footer quiet pad2 space-top1 center small'>
-  Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Feb 14 2020 12:03:08 GMT-0500 (Eastern Standard Time)
 </div>
-</div>
-<script src="prettify.js"></script>
-<script>
-window.onload = function () {
-        if (typeof prettyPrint === 'function') {
-            prettyPrint();
-        }
-};
-</script>
-<script src="sorter.js"></script>
-<script src="block-navigation.js"></script>
-</body>
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
+                at Fri Feb 14 2020 16:36:57 GMT-0500 (Eastern Standard Time)
+            </div>
+        </div>
+        <script src="prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="sorter.js"></script>
+        <script src="block-navigation.js"></script>
+    </body>
 </html>
+    
