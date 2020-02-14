@@ -5,9 +5,9 @@ exports.getHashForUser = (email, callback) => {
 	sqlController.execute(`select user_id, password_hash from user where email = "${email}"`, function(err, result)
 	{
 		if(result.rows.length == 1)
-		{        
+		{
 			callback(err, result.rows[0])
-		} 
+		}
 		else if(result.rows.length > 1)
 		{
 			callback(true, undefined)
@@ -23,9 +23,9 @@ exports.getHashForSensorGrid = (serial_no, callback) => {
 	sqlController.execute(`select user_id, greenhouse_id, password_hash from sensor_grid where serial_no = "${serial_no}"`, function(err, result)
 	{
 		if(result.rows.length == 1)
-		{        
+		{
 			callback(err, result.rows[0])
-		} 
+		}
 		else if(result.rows.length > 1)
 		{
 			callback(true, undefined)
@@ -82,7 +82,7 @@ exports.createGreenhouseForUser = (name, seedling_time, user_id, callback) => {
 		if(!err)
 		{
 			callback(err, result.rows.insertId)
-		} 
+		}
 		else {
 			console.log(result)
 			callback(err, result)
@@ -102,17 +102,17 @@ exports.deleteGreenhouseForUser = (greenhouse_id, user_id, callback) => {
 			console.log(result)
 			callback(err, result)
 		}
-		else if(result.rows.length == 1) 
+		else if(result.rows.length == 1)
 		{
 			sqlController.executeTransaction([tierQuery, historicalQuery, sensorGridQuery, greenhouseQuery], function(err, result) {
 				if(err)
 				{
 					console.log(result)
-				} 
+				}
 				callback(err, result)
 			})
-		} 
-		else 
+		}
+		else
 		{
 			callback(true, result)
 		}
@@ -167,7 +167,7 @@ exports.createPlantIdeal = (ph_level_low, ec_level_low, temp_low, cycle_time, ph
 		if(!err)
 		{
 			callback(err, result.rows.insertId)
-		} 
+		}
 		else {
 			console.log(result)
 			callback(err, result)
@@ -176,7 +176,7 @@ exports.createPlantIdeal = (ph_level_low, ec_level_low, temp_low, cycle_time, ph
 }
 
 exports.updatePlantIdeal = (plant_id, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, callback) => {
-	sqlController.execute(`UPDATE plant_ideal SET ph_level_low = ${ph_level_low}, ec_level_low = ${ec_level_low}, temp_low = ${temp_low}, cycle_time = ${cycle_time}, ph_level_high = ${ph_level_high}, ec_level_high = ${ec_level_high}, temp_high = ${temp_high}, name = "${name}", light_time = ${light_time} where plant_id = ${plant_id}`, function(err, result) {        
+	sqlController.execute(`UPDATE plant_ideal SET ph_level_low = ${ph_level_low}, ec_level_low = ${ec_level_low}, temp_low = ${temp_low}, cycle_time = ${cycle_time}, ph_level_high = ${ph_level_high}, ec_level_high = ${ec_level_high}, temp_high = ${temp_high}, name = "${name}", light_time = ${light_time} where plant_id = ${plant_id}`, function(err, result) {
 		if(err || result.rows.affectedRows == 1)
 		{
 			callback(err, result)
@@ -273,7 +273,7 @@ exports.updatePowerSourceForGreenhouse = (user_id, greenhouse_id, power_source, 
 	sqlController.execute(`select * from greenhouse where greenhouse_id = ${greenhouse_id} and user_id = ${user_id}`, function(err, result) {
 
 		if(result.rows.length == 1)
-		{        
+		{
 			var water_level = result.rows[0].water_level
 			var nutrient_level = result.rows[0].nutrient_level
 			var light_level = result.rows[0].light_level
@@ -289,7 +289,7 @@ exports.updatePowerSourceForGreenhouse = (user_id, greenhouse_id, power_source, 
 				}
 				callback(err, result)
 			})
-		} 
+		}
 		else if(result.rows.length > 1)
 		{
 			callback(true, undefined)
@@ -304,7 +304,7 @@ exports.updatePowerSourceForGreenhouse = (user_id, greenhouse_id, power_source, 
 exports.updateBatteryForGreenhouse = (user_id, greenhouse_id, battery, callback) => {
 	sqlController.execute(`select * from greenhouse where greenhouse_id = ${greenhouse_id} and user_id = ${user_id}`, function(err, result) {
 		if(result.rows.length == 1)
-		{        
+		{
 			var water_level = result.rows[0].water_level
 			var nutrient_level = result.rows[0].nutrient_level
 			var light_level = result.rows[0].light_level
@@ -320,7 +320,7 @@ exports.updateBatteryForGreenhouse = (user_id, greenhouse_id, battery, callback)
 				}
 				callback(err, result)
 			})
-		} 
+		}
 		else if(result.rows.length > 1)
 		{
 			callback(true, undefined)
@@ -444,7 +444,7 @@ exports.getReadyTiers = (callback) => {
 }
 
 exports.getDevicesForUser = (user_id, callback) => {
-	
+
 }
 
 exports.revokeTokensAndDeviceKeys = (user_id, callback) => {
@@ -485,10 +485,7 @@ exports.getPlantIdealData = (callback) => {
 		}
 		else
 		{
-			if(err)
-			{
-				console.log(err)
-			}
+			console.log(err)
 			callback(true, undefined)
 		}
 	})
@@ -502,10 +499,7 @@ exports.getTiersAndIdeal = (user_id, greenhouse_id, callback) => {
 		}
 		else
 		{
-			if(err)
-			{
-				console.log(err)
-			}
+			console.log(err)
 			callback(true, undefined)
 		}
 	})
