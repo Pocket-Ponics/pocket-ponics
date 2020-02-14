@@ -597,6 +597,22 @@ describe('MySQL Controller', () => {
 		expect(callback).toHaveBeenCalledWith(true, 'unsuccessful')
 	})
 
+	// test ('updateGreenhouseForUser updates successfully', () => {
+	// 	mySQLConnector.executeTransaction.mockImplementation((string, fn) => {
+	// 		fn()
+	// 		return string
+	// 	})
+
+	// 	const callback = jest.fn()
+	// 	mySQLController.updateGreenhouseForUser('mock_user_id', 'mock_greenhouse_id', 'mock_name', 'mock_seedling_time', callback)
+
+	// 	expect(mySQLConnector.execute)
+	// 		.toHaveBeenCalledWith(
+	// 			'UPDATE greenhouse SET name = "mock_name", seedling_time = "mock_seedling_time" WHERE user_id = mock_user_id and greenhouse_id = mock_greenhouse_id',
+	// 			expect.any(Function))
+	// 	expect(callback).toHaveBeenCalled()
+	// })
+
 	test ('updateReadingsForGreenhouseTier updates successfully', () => {
 		mySQLConnector.execute.mockImplementation((string, fn) => {
 			fn()
@@ -865,23 +881,23 @@ describe('MySQL Controller', () => {
 		expect(callback).toHaveBeenCalledWith(true, undefined)
 	})
 
-	// test ('createUser inserts new user successfully', () => {
-	// 	mySQLConnector.execute.mockImplementation((string, fn) => {
-	// 		fn()
-	// 		return string
-	// 	})
-
-	// 	const callback = jest.fn()
-	// 	mySQLController.createUser('mock_email', 'mock_password_hash', callback)
-
-	// 	expect(mySQLConnector.execute)
-	// 		.toHaveBeenCalledWith(
-	// 			'insert into user (email, password_hash) VALUES ("mock_email", "mock_password_hash")',
-	// 			expect.any(Function))
-	// 	expect(callback).toHaveBeenCalled()
-	// })
-
 	test ('createUser inserts new user successfully', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn()
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.createUser('mock_email', 'mock_password_hash', callback)
+
+		expect(mySQLConnector.execute)
+			.toHaveBeenCalledWith(
+				'insert into user (email, password_hash) VALUES ("mock_email", \'mock_password_hash\')',
+				expect.any(Function))
+		expect(callback).toHaveBeenCalled()
+	})
+
+	test ('createUser fails to insert', () => {
 		mySQLConnector.execute.mockImplementation((string, fn) => {
 			fn(true, 'unsuccessful')
 			return string
@@ -889,6 +905,64 @@ describe('MySQL Controller', () => {
 
 		const callback = jest.fn()
 		mySQLController.createUser('mock_email', 'mock_password_hash', callback)
+
+		expect(mySQLConnector.execute).toHaveBeenCalled()
+		expect(callback).toHaveBeenCalledWith(true, 'unsuccessful')
+	})
+
+	test ('revokeTokens deletes token successfully', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn()
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.revokeTokens('mock_user_id', callback)
+
+		expect(mySQLConnector.execute)
+			.toHaveBeenCalledWith(
+				'DELETE FROM active_sessions WHERE (user_id = mock_user_id)',
+				expect.any(Function))
+		expect(callback).toHaveBeenCalled()
+	})
+
+	test ('revokeTokens fails to delete', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn(true, 'unsuccessful')
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.revokeTokens('mock_user_id', callback)
+
+		expect(mySQLConnector.execute).toHaveBeenCalled()
+		expect(callback).toHaveBeenCalledWith(true, 'unsuccessful')
+	})
+
+	test ('revokeDeviceKeys deletes key successfully', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn()
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.revokeDeviceKeys('mock_user_id', callback)
+
+		expect(mySQLConnector.execute)
+			.toHaveBeenCalledWith(
+				'DELETE FROM devices WHERE user_id = mock_user_id',
+				expect.any(Function))
+		expect(callback).toHaveBeenCalled()
+	})
+
+	test ('revokeDeviceKeys has an error', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn(true, 'unsuccessful')
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.revokeDeviceKeys('mock_user_id', callback)
 
 		expect(mySQLConnector.execute).toHaveBeenCalled()
 		expect(callback).toHaveBeenCalledWith(true, 'unsuccessful')
@@ -950,6 +1024,112 @@ describe('MySQL Controller', () => {
 
 		expect(mySQLConnector.execute).toHaveBeenCalled()
 		expect(callback).toHaveBeenCalledWith(true, 'unsuccessful')
+	})
+
+	test ('getGreenhouseForUser select successfully', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn(false, {
+				rows: ['mock_row']
+			})
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.getGreenhouseForUser('mock_user_id' ,'mock_greenhouse_id', callback)
+
+		expect(mySQLConnector.execute)
+			.toHaveBeenCalledWith(
+				'select name, water_level, nutrient_level, battery, light_level, power_source, seedling_time from greenhouse where greenhouse_id = mock_greenhouse_id and user_id = mock_user_id',
+				expect.any(Function))
+		expect(callback).toHaveBeenCalled()
+	})
+
+	test ('getGreenhouseForUser selects too many rows', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn(false, {
+				rows: ['mock_row', 'mock_row']
+			})
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.getGreenhouseForUser('mock_user_id' ,'mock_greenhouse_id', callback)
+
+		expect(mySQLConnector.execute).toHaveBeenCalled()
+		expect(callback).toHaveBeenCalledWith(true, undefined)
+	})
+
+	test ('getGreenhouseForUser has an error', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn(true, {
+				rows: []
+			})
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.getGreenhouseForUser('mock_user_id' ,'mock_greenhouse_id', callback)
+
+		expect(mySQLConnector.execute).toHaveBeenCalled()
+		expect(callback).toHaveBeenCalledWith(true, undefined)
+	})
+
+	test ('getPlantIdealData select successfully', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn()
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.getPlantIdealData(callback)
+
+		expect(mySQLConnector.execute)
+			.toHaveBeenCalledWith(
+				'SELECT `cycle_time`, `light_time`, `ec_level_high`, `ec_level_low`, `name`, `ph_level_high`, `ph_level_low`, `plant_id`, `temp_high`, `temp_low` FROM `plant_ideal`',
+				expect.any(Function))
+		expect(callback).toHaveBeenCalled()
+	})
+
+	test ('getPlantIdealData has an error', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn(true, 'unsuccessful')
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.getPlantIdealData(callback)
+
+		expect(mySQLConnector.execute).toHaveBeenCalled()
+		expect(callback).toHaveBeenCalledWith(true, undefined)
+	})
+
+	test ('getTiersAndIdeal select successfully', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn()
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.getTiersAndIdeal('mock_user_id', 'mock_greenhouse_id', callback)
+
+		expect(mySQLConnector.execute)
+			.toHaveBeenCalledWith(
+				'SELECT tiers.user_id, tiers.tier, tiers.greenhouse_id, tiers.plant_id, tiers.light_start, plant_ideal.ph_level_high, plant_ideal.ph_level_low, plant_ideal.ec_level_high, plant_ideal.ec_level_low, plant_ideal.light_time FROM pocketponics.tiers LEFT JOIN plant_ideal ON tiers.plant_id=plant_ideal.plant_id where greenhouse_id = mock_greenhouse_id and user_id = mock_user_id',
+				expect.any(Function))
+		expect(callback).toHaveBeenCalled()
+	})
+
+	test ('getTiersAndIdeal has an error', () => {
+		mySQLConnector.execute.mockImplementation((string, fn) => {
+			fn(true, 'unsuccessful')
+			return string
+		})
+
+		const callback = jest.fn()
+		mySQLController.getTiersAndIdeal('mock_user_id', 'mock_greenhouse_id', callback)
+
+		expect(mySQLConnector.execute).toHaveBeenCalled()
+		expect(callback).toHaveBeenCalledWith(true, undefined)
 	})
 
 	test ('updateUserHash updates successfully', () => {
