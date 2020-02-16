@@ -20,7 +20,7 @@
     "react-navigation": "^4.1.0",
     "react-navigation-stack": "^2.1.0",
     "react-router-dom": "^5.0.0",
-    "react-scripts": "2.1.8",
+    "react-scripts": "^1.1.1",
     "reactstrap": "^8.4.1",
     "styled-components": "^4.4.1"
   },

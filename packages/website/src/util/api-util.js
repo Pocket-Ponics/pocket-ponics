@@ -34,7 +34,7 @@ const APIUtil = {
 		})
 	},
 	getAuthToken(username, password) {
-		return APIUtil.timeoutFetch(10000, fetch(`http://${host}:${port}/auth/get_token`, {
+		return APIUtil.timeoutFetch(10000, fetch(`http://${host}:${port}/auth/get_token_admin`, {
 			method: 'GET',
 			headers: new Headers({
 				'Authorization': 'Basic ' + base64.encode(`${username}:${password}`),
