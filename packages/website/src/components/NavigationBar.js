@@ -37,11 +37,6 @@ export const NavigationBar = () => (
               <Link to="/contact">Contact</Link>
             </Nav.Link>
           </Nav.Item>
-          <Nav.Item>
-            <Nav.Link>
-              <Link to="/login">Login</Link>
-            </Nav.Link>
-          </Nav.Item>
         </Nav>
       </Navbar.Collapse>
     </Navbar>
