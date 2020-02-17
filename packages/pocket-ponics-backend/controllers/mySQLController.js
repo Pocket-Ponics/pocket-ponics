@@ -1,4 +1,3 @@
-var mysql = require('mysql')
 var sqlController = require('../db/mySQLConnector')
 
 exports.getHashForUser = (email, callback) => {

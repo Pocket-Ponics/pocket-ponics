@@ -51,7 +51,7 @@ exports.getToken = (req, res) => {
                         else 
                         {
                             res.status(403)
-                            res.json({403: "Error generating token", error: record.sqlMessage})
+                            res.json({403: "Error generating token"})
                         }
                     })
                 }
@@ -108,7 +108,7 @@ exports.getTokenForAdmin = (req, res) => {
                         else 
                         {
                             res.status(403)
-                            res.json({403: "Error generating token", error: record.sqlMessage})
+                            res.json({403: "Error generating token"})
                         }
                     })
                 }
@@ -179,7 +179,7 @@ exports.resetPassword = (req, res) => {
                                     else
                                     {
                                         res.status(201)
-                                        res.json({201: "Unable to reset user password", error: record.sqlMessage})
+                                        res.json({201: "Unable to reset user password"})
                                     }
                                 })
                             }}); 
@@ -227,7 +227,7 @@ exports.createUser = (req, res) => {
                     else 
                     {
                         res.status(201)
-                        res.json({201: "Unable to create user", error: record.sqlMessage})
+                        res.json({201: "Unable to create user"})
                     }
                 })
             }
@@ -295,7 +295,7 @@ exports.changePassword = (req, res) => {
                             else 
                             {
                                 res.status(201)
-                                res.json({201: "Unable to change user password", error: record.sqlMessage})
+                                res.json({201: "Unable to change user password"})
                             }
                         })
                         

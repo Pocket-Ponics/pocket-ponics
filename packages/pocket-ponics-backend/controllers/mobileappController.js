@@ -59,7 +59,7 @@ exports.getGreenhouses = (req, res) => {
                         })
                     } else {
                         res.status(201)
-                        res.json({201: "Unable to retrieve greenhouses", error: record.sqlMessage})
+                        res.json({201: "Unable to retrieve greenhouses"})
                     }
                 })
             }
@@ -115,7 +115,7 @@ exports.addDeviceKey = (req, res) => {
                         } 
                         else {
                             res.status(201)
-                            res.json({201: "Unable to add device key", error: record.sqlMessage})
+                            res.json({201: "Unable to add device key"})
                         }
                     })
                 }
@@ -163,12 +163,12 @@ exports.deleteDeviceKey = (req, res) => {
                         if(!err)
                         {
                             res.status(200)
-                            res.json({200: "Deleted device key for user", error: record.sqlMessage})
+                            res.json({200: "Deleted device key for user"})
                         }
                         else
                         {
                             res.status(201)
-                            res.json({201: "Unable to delete device key", error: record.sqlMessage})
+                            res.json({201: "Unable to delete device key"})
                         }
                     })
                 }
@@ -229,7 +229,7 @@ exports.updateTier = (req, res) => {
                         else
                         {
                             res.status(201)
-                            res.json({201: "Unable to update tier", error: record.sqlMessage})
+                            res.json({201: "Unable to update tier"})
                         }
                     })
                 }
@@ -278,7 +278,7 @@ exports.getTier = (req, res) => {
                     else
                     {
                         res.status(201)
-                        res.json({201: "Unable to retrieve tier", error: record.sqlMessage})
+                        res.json({201: "Unable to retrieve tier"})
                     }
                 })
 
@@ -323,7 +323,7 @@ exports.getPlantData = (req, res) => {
                     else
                     {
                         res.status(201)
-                        res.json({201: "Unable to retrieve plant ideal data", error: record.sqlMessage})
+                        res.json({201: "Unable to retrieve plant ideal data"})
                     }
                 })
             }
@@ -388,12 +388,12 @@ exports.createGreenhouse = (req, res) => {
                                     {
                                         console.log(err)
                                         res.status(202)
-                                        res.json({202: "Error in rollback of greenhouse creation", error: record.sqlMessage})
+                                        res.json({202: "Error in rollback of greenhouse creation"})
                                     } 
                                     else 
                                     {
                                         res.status(201)
-                                        res.json({201: "Error creating greenhouse tiers/sensor grid registration", error: record.sqlMessage}) 
+                                        res.json({201: "Error creating greenhouse tiers/sensor grid registration"}) 
                                     }
                                 })
                             }
@@ -401,7 +401,7 @@ exports.createGreenhouse = (req, res) => {
                     }
                     else {
                         res.status(201)
-                        res.json({201: "Error creating greenhouse", error: record.sqlMessage})
+                        res.json({201: "Error creating greenhouse"})
                     }
                 })
             }
@@ -446,7 +446,7 @@ exports.getGreenhouse = (req, res) => {
                     }
                     else {
                         res.status(201)
-                        res.json({201: "Error retrieving greenhouse", error: record.sqlMessage})
+                        res.json({201: "Error retrieving greenhouse"})
                     }
                 })
             }
@@ -491,7 +491,7 @@ exports.getGreenhouseReadings = (req, res) => {
                     }
                     else {
                         res.status(201)
-                        res.json({201: "Error retrieving greenhouse historical data", error: record.sqlMessage})
+                        res.json({201: "Error retrieving greenhouse historical data"})
                     }
                 })
             }
@@ -549,7 +549,7 @@ exports.updateGreenhouse = (req, res) => {
                         else
                         {
                             res.status(201)
-                            res.json({201: "Unable to update greenhouse", error: record.sqlMessage})
+                            res.json({201: "Unable to update greenhouse"})
                         }
                     })
                 }
@@ -596,7 +596,7 @@ exports.deleteGreenhouse = (req, res) => {
                     else 
                     { 
                         res.status(201)
-                        res.json({201: "Error deleting greenhouse", error: record.sqlMessage}) 
+                        res.json({201: "Error deleting greenhouse"}) 
                     }
                 })
             }
@@ -657,7 +657,7 @@ exports.getReadingsSingle = (req, res) => {
                     }
                     else {
                         res.status(201)
-                        res.json({201: "Error retrieving sensor reading", error: record.sqlMessage})
+                        res.json({201: "Error retrieving sensor reading"})
                     }
                 })
             }
@@ -704,7 +704,7 @@ exports.getReadingsTier = (req, res) => {
                     }
                     else {
                         res.status(201)
-                        res.json({201: "Error retrieving sensor readings", error: record.sqlMessage})
+                        res.json({201: "Error retrieving sensor readings"})
                     }
                 })
             }
@@ -750,7 +750,7 @@ exports.getGreenhouseAndTiers = (req, res) => {
                     else {
                         console.log(err)
                         res.status(201)
-                        res.json({201: "Error retrieving greenhouse and tier", error: record.sqlMessage})
+                        res.json({201: "Error retrieving greenhouse and tier"})
                     }
                 })
             }
@@ -796,7 +796,7 @@ exports.getReadingsGreenhouse = (req, res) => {
                     }
                     else {
                         res.status(201)
-                        res.json({201: "Error retrieving sensor readings", error: record.sqlMessage})
+                        res.json({201: "Error retrieving sensor readings"})
                     }
                 })
             }

@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt-nodejs');
-const crypto = require('crypto');
 import mySQL from './mySQLController';
 import notificationController from './notificationController'
 
@@ -52,7 +51,7 @@ exports.postGeneralGreenhouse = (req, res) => {
                         }
                         else {
                             res.status(201)
-                            res.json({201: "Error recording general greenhouse readings", error: record.sqlMessage})
+                            res.json({201: "Error recording general greenhouse readings"})
                         }
                     })
                 }
@@ -135,7 +134,7 @@ exports.postReadingsGreenhouse = (req, res) => {
                         }
                         else {
                             res.status(201)
-                            res.json({201: "Error recording greenhouse readings", error: record.sqlMessage})
+                            res.json({201: "Error recording greenhouse readings"})
                         }
                     })
                 }
@@ -194,7 +193,7 @@ exports.postReadingsTier = (req, res) => {
                         }
                         else {
                             res.status(201)
-                            res.json({201: "Error recording greenhouse tier readings", error: record.sqlMessage})
+                            res.json({201: "Error recording greenhouse tier readings"})
                         }
                     })
                 }
@@ -266,7 +265,7 @@ exports.postReadingsSingle = (req, res) => {
                         }
                         else {
                             res.status(201)
-                            res.json({201: "Error recording sensor reading", error: record.sqlMessage})
+                            res.json({201: "Error recording sensor reading"})
                         }
                     })
                 }
@@ -322,7 +321,7 @@ exports.updatePowerSource = (req, res) => {
                         }
                         else {
                             res.status(201)
-                            res.json({201: "Error recording power source", error: record.sqlMessage})
+                            res.json({201: "Error recording power source"})
                         }
                     })
                 }
@@ -378,7 +377,7 @@ exports.updateBackupBatteryLevel = (req, res) => {
                         }
                         else {
                             res.status(201)
-                            res.json({201: "Error recording battery level", error: record.sqlMessage})
+                            res.json({201: "Error recording battery level"})
                         }
                     })
                 }
@@ -428,7 +427,7 @@ exports.getTiersAndIdealValues = (req, res) => {
                         }
                         else {
                             res.status(201)
-                            res.json({201: "Error retrieving tier data", error: record.sqlMessage})
+                            res.json({201: "Error retrieving tier data"})
                         }
                     })
                 }

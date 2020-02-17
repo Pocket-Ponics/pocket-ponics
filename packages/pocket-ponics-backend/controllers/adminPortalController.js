@@ -2,7 +2,6 @@ import mySQL from './mySQLController';
 
 //Retrieves all plant ideals
 exports.getPlantIdeals = (req, res) => {
-    //Retrieve all plant ideal values from DB
     mySQL.getAllPlantIdeals(function(err, record) {
         if(!err)
         {
@@ -10,14 +9,14 @@ exports.getPlantIdeals = (req, res) => {
             res.json(record.rows)
         } else {
             res.status(201)
-            res.json({201: "Unable to retrieve plant ideals", error: record.sqlMessage})
+            res.json({201: "Unable to retrieve plant ideals"})
         }
     })   
 };
 
 //Delete a plant ideal value from DB
 exports.deletePlantIdeal = (req, res) => {
-
+    //Return an error if no token provided
     if(req.headers.authorization == undefined)
     {
         res.status(210)
@@ -56,7 +55,7 @@ exports.deletePlantIdeal = (req, res) => {
                                 res.json({200: "Deleted plant ideal"})
                             } else {
                                 res.status(201)
-                                res.json({201: "Unable to delete plant ideal", error: record.sqlMessage})
+                                res.json({201: "Unable to delete plant ideal"})
                             }
                         })
                     }
@@ -78,7 +77,7 @@ exports.deletePlantIdeal = (req, res) => {
 
 //Creates a new plant ideal record 
 exports.createPlantIdeal = (req, res) => {
-
+    //Return an error if no token provided
     if(req.headers.authorization == undefined)
     {
         res.status(210)
@@ -130,7 +129,7 @@ exports.createPlantIdeal = (req, res) => {
                                 res.json({200: "Created plant ideal", plant_id: record})
                             } else {
                                 res.status(201)
-                                res.json({201: "Unable to create plant ideal", error: record.sqlMessage})
+                                res.json({201: "Unable to create plant ideal"})
                             }
                         })
                     }
@@ -152,14 +151,14 @@ exports.createPlantIdeal = (req, res) => {
 
 //Update existing plant ideal record
 exports.updatePlantIdeal = (req, res) => {
+    //Return an error if no token provided
     if(req.headers.authorization == undefined)
     {
         res.status(210)
         res.json({210: "Error: Missing Token"})
     }
     else
-    {
-            
+    {       
         //Get auth token
         let cred = req.headers.authorization.split(" ")[1]
 
@@ -205,7 +204,7 @@ exports.updatePlantIdeal = (req, res) => {
                                 res.json({200: "Updated plant ideal"})
                             } else {
                                 res.status(201)
-                                res.json({201: "Unable to update plant ideal", error: record.sqlMessage})
+                                res.json({201: "Unable to update plant ideal"})
                             }
                         })
                     }
