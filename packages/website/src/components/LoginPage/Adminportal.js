@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import { render } from 'react-dom';
 import APIUtil from '../../util/api-util';
-import "./Login.css";
+import "./Adminportal.css";
 import Spacer from 'react-add-space';
 import AuthUtil from '../../util/auth-util'
 
-export function Login(props) {
+export function Adminportal(props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState("");
 
@@ -20,7 +20,7 @@ export function Login(props) {
   }
 
   return (
-    <div className="Login">
+    <div className="Adminportal">
     <h2>   * * * * * * * * * * * * * * * * * * * Administrators Only * * * * * * * * * * * * * * * * * * *</h2>
     <p></p>
 
@@ -49,4 +49,4 @@ export function Login(props) {
     </div>
   );
 }
-render(<Login />, document.getElementById('root'));
+render(<Adminportal />, document.getElementById('root'));

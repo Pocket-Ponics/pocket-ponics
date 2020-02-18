@@ -1,9 +1,9 @@
 @media all and (min-width: 480px) {
-  .Login {
+  .Adminportal {
     padding: 60px 0;
   }
 
-  .Login form {
+  .Adminportal form {
     margin: 0 auto;
     max-width: 320px;
   }
