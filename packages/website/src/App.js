@@ -25,7 +25,7 @@ class App extends Component {
               <Route path="/about" component={About} />
               <Route path="/contact" component={Contact} />
               <Route path="/Adminportal" component={Adminportal} />
-              <Route path="/Admin" component={Admin} />
+              <Route path="/admin" component={Admin} />
               <Route component={NoMatch} />
             </Switch>
           </Layout>
