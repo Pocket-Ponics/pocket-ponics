@@ -1,10 +1,5 @@
 import { Alert } from 'react'
-
-
 import APIUtil from '../util/api-util'
-
-
-
 
 const AuthUtil = {
 	getAuthToken: (loggedOutFn, successFn) => {
@@ -17,14 +12,6 @@ const AuthUtil = {
 		if(!username || !password) {
 			return loggedOutFn()
 		}
-
-		let token
-
-		APIUtil.getAuthToken(username, password)
-			.then(response => {
-				token = response.token
-				return
-			})
 	},
 	login(username, password, successFn) {
 		let token
