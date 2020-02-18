@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import { render } from 'react-dom';
-import APIUtil from '../../util/api-util';
 import "./Adminportal.css";
-import Spacer from 'react-add-space';
 import AuthUtil from '../../util/auth-util'
 
 export function Adminportal(props) {
@@ -21,8 +19,8 @@ export function Adminportal(props) {
 
   return (
     <div className="Adminportal">
-    <h2>   * * * * * * * * * * * * * * * * * * * Administrators Only * * * * * * * * * * * * * * * * * * *</h2>
-    <p></p>
+    <center><h1>For Administrator Use Only</h1> </center>
+    <br />
 
       <form onSubmit={handleSubmit}>
         <FormGroup controlId="username" bsSize="large">
