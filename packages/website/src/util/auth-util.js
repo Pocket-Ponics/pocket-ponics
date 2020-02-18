@@ -15,7 +15,6 @@ const AuthUtil = {
 	},
 	login(username, password, successFn) {
 		let token
-		console.log('Token: ', token)
 		APIUtil.getAuthToken(username, password)
 			.then(response => {
 				if(!response.token) {
