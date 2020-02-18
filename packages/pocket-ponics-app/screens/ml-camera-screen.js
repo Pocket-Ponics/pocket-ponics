@@ -68,6 +68,7 @@ const MLCameraScreen = props => {
 			})
 			.then(photo => APIUtil.classifyPhoto(token, photo.base64))
 			.then(response => {
+				console.log(response)
 				setProcessing(false)
 				setSuccess(response.prediction.split('-')[0] === 'ripe')
 				setAccuracy(response.accuracy)
