@@ -8,7 +8,7 @@ import { NoMatch } from './NoMatch';
 import { Layout } from './components/Layout';
 import { NavigationBar } from './components/NavigationBar';
 import { Jumbotron } from './components/Jumbotron';
-import { Adminportal } from './components/LoginPage/Adminportal.js';
+import { Adminlogin } from './components/LoginPage/Adminlogin.js';
 import { Admin } from './Admin';
 
 
@@ -24,7 +24,7 @@ class App extends Component {
               <Route exact path="/" component={Home} />
               <Route path="/about" component={About} />
               <Route path="/contact" component={Contact} />
-              <Route path="/Adminportal" component={Adminportal} />
+              <Route path="/Adminlogin" component={Adminlogin} />
               <Route path="/admin" component={Admin} />
               <Route component={NoMatch} />
             </Switch>

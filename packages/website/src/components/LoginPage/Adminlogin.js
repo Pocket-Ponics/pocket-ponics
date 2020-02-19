@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import { render } from 'react-dom';
-import "./Adminportal.css";
+import "./Adminlogin.css";
 import AuthUtil from '../../util/auth-util'
 
-export function Adminportal(props) {
+export function Adminlogin(props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState("");
 
@@ -18,7 +18,7 @@ export function Adminportal(props) {
   }
 
   return (
-    <div className="Adminportal">
+    <div className="Adminlogin">
     <center><h1>For Administrator Use Only</h1> </center>
     <br />
 
@@ -47,4 +47,4 @@ export function Adminportal(props) {
     </div>
   );
 }
-render(<Adminportal />, document.getElementById('root'));
+render(<Adminlogin />, document.getElementById('root'));

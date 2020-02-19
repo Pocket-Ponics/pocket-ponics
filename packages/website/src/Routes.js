@@ -7,8 +7,8 @@ export default function Routes({ appProps }) {
   return (
     <Switch>
       <AppliedRoute path="/" exact component={Home} appProps={appProps} />
-      <Route path="/adminportal" exact component={Adminportal} />
-      <AppliedRoute path="/adminportal" exact component={Adminportal} appProps={appProps} />
+      <Route path="/adminlogin" exact component={Adminlogin} />
+      <AppliedRoute path="/adminlogin" exact component={Adminlogin} appProps={appProps} />
       { /* Finally, catch all unmatched routes */ }
       <Route component={NotFound} />
     </Switch>

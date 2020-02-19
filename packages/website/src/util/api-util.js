@@ -3,6 +3,8 @@ import base64 from 'base-64'
 const host = '10.171.204.187'
 const port = '8080'
 
+const waitingTime = 15000
+
 const APIUtil = {
 	processTextResults(res) {
 		return Promise.resolve(res.text())
@@ -77,6 +79,40 @@ const APIUtil = {
 			old_password,
 			new_password
 		})
+	},
+	createPlantIdeal(token, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url){
+		console.log("token:", token)
+		return APIUtil.post('http://localhost:3000/adminportal', token,{
+			ph_level_low,
+		    ec_level_low,
+		    temp_low,
+		    cycle_time, 
+		    ph_level_high, 
+		    ec_level_high, 
+		    temp_high, 
+		    name, 
+		    light_time, 
+		    steps, 
+		    plant_url, 
+		    harvest_url
+		}) 
+	},
+	post(endpoint, token, body) {
+		console.log("body:", body)
+		return APIUtil.timeoutFetch(waitingTime, fetch(endpoint, {
+			method: 'POST',
+			headers: new Headers({
+				'Authorization': 'Bearer ' + token,
+				'Content-Type': 'application/x-www-form-urlencoded'
+			}),
+			body: APIUtil.urlEncode(body),
+			redirect: 'follow'
+		}))
+			.then(response => response.text())
+			//.then(result => JSON.parse(result))
+	},
+	getPlants() {
+		return APIUtil.get(`http://${host}:${port}/adminportal`, '', {})
 	}
 }
 
