@@ -3,17 +3,17 @@ import time
 import requests
 import base64
 import json
+import smbus
+import time
 
-# ser = serial.Serial('/dev/ttyACM0', 9600)
-
-# Dictionary with all components related to it's tier
-pinDict = []
-# Adding Tier 1 pins to Dictionary
-#pinDict.append({"EC": ECpin, "pH": pHpin, "WL_0": WL_0pin, "WL_1": WL_1pin}) # TODO
-# Adding Tier 2 pins to Dictionary
-#pinDict.append({"EC": ECpin, "pH": pHpin, "WL_0": WL_0pin, "WL_1": WL_1pin}) # TODO
-# Adding Tier 3 pins to Dictionary
-#pinDict.append({"EC": ECpin, "pH": pHpin, "WL_0": WL_0pin, "WL_1": WL_1pin}) # TODO
+ser = serial.Serial(
+	port = '/dev/ttyACM0',
+	baudrate = 9600,
+	parity = serial.PARITY_NONE,
+	stopbits = serial.STOPBITS_ONE,
+	bytesize = serial.EIGHTBITS,
+	timeout = 1
+)
 
 # Class used to store reading data
 class Readings:
@@ -34,6 +34,11 @@ def jprint(obj):
 	text = json.dumps(obj, sort_keys=True, indent=4)
 	print(text)
 	
+def SerialWrite(data):
+	data = data + '`'
+	ser.write(data)
+	
+# Get data for a specific tier
 def getAPIData(tierNum):
 	url = "http://10.171.204.187:8080/sensorgrid/adjustments/tierdata"
 	getHeaders = {
@@ -58,21 +63,29 @@ def sendAPIData(readings, tierNum):
 	print(response.status_code)
 	jprint(response.text)
 	
-# (OLD CODE)Returns the value of the component based on tier and component type
-def getCompVal(tierNum, component):
-	pin = pinDict[tierNum-1][component]
-	# TODO: val = # get value from pin
-	return val
+def parseForReadingData(data):
+	splitData = data.split()
+	return Readings(splitData[0], splitData[1], splitData[2])
 	
-# Checks the readings from all the tiers and performs ther desired actions
+def getMCUData(tierNum):
+	SerialWrite("requesting data")
+	#time.sleep(1)
+	SerialWrite(str(tierNum))
+	print("Requesting Data")
+	while 1:
+		tierData = ser.readline()
+		time.sleep(1)
+		print(("Tier data: %s")%tierData)
+		if(len(tierData) > 6): # Ask CS Peps about better way to read in data
+			print("We have the data")
+			break
+	# Parse string to get EC, pH, and Water value data
+	tierReading = parseForReadingData(tierData)
+	return tierReading
+
+# Checks the readings from all the tiers, Sends Data to API and performs the desired actions
 def checkLevels(tierNum):
-	# Find values from pins using TierNum
-	# TODO: ecValue = getCompVal(tierNum, EC)
-	# TODO: pHValue = getCompVal(tierNum, pH)
-	# TODO: WL_0 = getCompVal(tierNum, WL_0)
-	# TODO: WL_1 = getCompVal(tierNum, WL_1)
-	# TODO: waterValue = # -1 = below min fill, 0 = below max fill, 1 = at or above max fill
-	tierReading = Readings(ecValue, pHValue, waterValue)
+	tierReading = getMCUData(tierNum)
 	sendAPIData(tierReading, tierNum)
 	performAction(tierReading, getAPIData(tierNum), tierNum)
 
@@ -88,17 +101,45 @@ def performAction(readings, desiredRange, tierNum):
 	if(readings.waterValue == -1):
 		callMCU(tierNum, waterPump, 1)
 	
-def calcNutrients(ecLevel, pHLevel):
-	# TODO: Find a good numerical representation of a nutrient level
-	return ecLevel + pHLevel
-	
 def callMCU(tierNum, component, amount):
-	# Use Serial.readString on Arduino side
-	ser.write("%d %s %d \n"%(tierNum, component, amount))
+	SerialWrite("sending data")
+	print("Sending command")
 	
-sumData = getAPIData(1)
-print(sumData)
-sendAPIData(Readings(4.3,7.1,0), 4)
+	switchStmt = {
+		"waterPump": 1,
+		"nutrientPump": 2,
+		"LED": 3
+	}
+	
+	compNum = switchStmt.get(component, "Invalid")
+	time.sleep(1)
+	# Use Serial.readString on Arduino side
+	SerialWrite("%d%d%d"%(tierNum, compNum, amount))
+	print("Sending data")
+	
+	
+#sumData = getAPIData(1)
+#print(sumData)
+#sendAPIData(Readings(4.3,7.1,0), 4)
+
+# While(Every Hour):
+	# for tierNum in range(1, 5):
+		# checkLevels(tierNum)
 	
 	# If API calls to adjust light level
 	#TODO: callMCU(tierNum, LED, amount)
+tierNum = 2
+comp = "waterPump"
+amount = 1
+
+#SerialWrite("sending data");
+
+#callMCU(tierNum, comp, amount)
+
+
+# This part works!!!!!!
+#for x in range(4):
+time.sleep(2)
+reading = getMCUData(3)
+print("EC: %s, pH: %s, Water Level: %s")%(reading.ec_level, reading.pH_level, reading.water_level)
+
