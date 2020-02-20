@@ -1,4 +1,3 @@
-var mysql = require('mysql')
 var sqlController = require('../db/mySQLConnector')
 
 exports.getHashForUser = (email, callback) => {
@@ -7,10 +6,28 @@ exports.getHashForUser = (email, callback) => {
         if(result.rows.length == 1)
         {        
             callback(err, result.rows[0])
-        } 
-        else if(result.rows.length > 1)
+        }
+        else if(result.rows.length == 0)
         {
-            callback(true, undefined)
+            callback(err, undefined)
+        }
+        else
+        {
+            callback(err, undefined)
+        }
+    })
+}
+
+exports.getHashForAdminUser = (email, callback) => {
+    sqlController.execute(`select user_id, password_hash from user where email = "${email}" and admin = "1"`, function(err, result)
+    {
+        if(result.rows.length == 1)
+        {        
+            callback(err, result.rows[0])
+        }
+        else if(result.rows.length == 0)
+        {
+            callback(err, undefined)
         }
         else
         {
@@ -26,10 +43,6 @@ exports.getUserIDForUser = (email, callback) => {
         {        
             callback(err, result.rows[0])
         } 
-        else if(result.rows.length > 1)
-        {
-            callback(true, undefined)
-        }
         else
         {
             callback(err, undefined)
@@ -44,10 +57,6 @@ exports.getHashForSensorGrid = (serial_no, callback) => {
         {        
             callback(err, result.rows[0])
         } 
-        else if(result.rows.length > 1)
-        {
-            callback(true, undefined)
-        }
         else
         {
             callback(err, undefined)
@@ -103,7 +112,7 @@ exports.createGreenhouseForUser = (name, seedling_time, user_id, callback) => {
         } 
         else {
             console.log(result)
-            callback(err, result)
+            callback(err, undefined)
         }
     })
 }
@@ -118,7 +127,7 @@ exports.deleteGreenhouseForUser = (greenhouse_id, user_id, callback) => {
         if(err)
         {
             console.log(result)
-            callback(err, result)
+            callback(err, undefined)
         }
         else if(result.rows.length == 1) 
         {
@@ -169,10 +178,6 @@ exports.getUserForToken = (token, callback) => {
         {
             callback(err, result.rows[0])
         }
-        else if(result.rows.length > 1)
-        {
-            callback(true, undefined)
-        }
         else
         {
             callback(err, undefined)
@@ -180,28 +185,28 @@ exports.getUserForToken = (token, callback) => {
     })
 }
 
-exports.createPlantIdeal = (ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, callback) => {
-    sqlController.execute(`insert into plant_ideal (ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url) values (${ph_level_low}, ${ec_level_low}, ${temp_low}, ${cycle_time}, ${ph_level_high}, ${ec_level_high}, ${temp_high}, "${name}", ${light_time}, "${steps}", "${plant_url}", "${harvest_url}");`, function(err, result) {
+exports.createPlantIdeal = (ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, num_plants, callback) => {
+    sqlController.execute(`insert into plant_ideal (ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, num_plants) values (${ph_level_low}, ${ec_level_low}, ${temp_low}, ${cycle_time}, ${ph_level_high}, ${ec_level_high}, ${temp_high}, "${name}", ${light_time}, "${steps}", "${plant_url}", "${harvest_url}", ${num_plants});`, function(err, result) {
         if(!err)
         {
             callback(err, result.rows.insertId)
         } 
         else {
             console.log(result)
-            callback(err, result)
+            callback(err, undefined)
         }
     })
 }
 
-exports.updatePlantIdeal = (plant_id, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, callback) => {
-    sqlController.execute(`UPDATE plant_ideal SET ph_level_low = ${ph_level_low}, ec_level_low = ${ec_level_low}, temp_low = ${temp_low}, cycle_time = ${cycle_time}, ph_level_high = ${ph_level_high}, ec_level_high = ${ec_level_high}, temp_high = ${temp_high}, name = "${name}", light_time = ${light_time}, steps = "${steps}", plant_url = "${plant_url}", harvest_url = "${harvest_url}" where plant_id = ${plant_id}`, function(err, result) {        
+exports.updatePlantIdeal = (plant_id, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, num_plants, callback) => {
+    sqlController.execute(`UPDATE plant_ideal SET ph_level_low = ${ph_level_low}, ec_level_low = ${ec_level_low}, temp_low = ${temp_low}, cycle_time = ${cycle_time}, ph_level_high = ${ph_level_high}, ec_level_high = ${ec_level_high}, temp_high = ${temp_high}, name = "${name}", light_time = ${light_time}, steps = "${steps}", plant_url = "${plant_url}", harvest_url = "${harvest_url}", num_plants = ${num_plants} where plant_id = ${plant_id}`, function(err, result) {        
         if(err || result.rows.affectedRows == 1)
         {
             callback(err, result)
         }
         else
         {
-            callback(true, result)
+            callback(true, undefined)
         }
     })
 }
@@ -222,10 +227,6 @@ exports.getRoleForUser = (user_id, callback) => {
         {
             callback(err, result.rows[0])
         }
-        else if(result.rows.length > 1)
-        {
-            callback(true, undefined)
-        }
         else
         {
             callback(err, undefined)
@@ -233,28 +234,38 @@ exports.getRoleForUser = (user_id, callback) => {
     })
 }
 
-exports.updateTierForGreenhouse = (user_id, greenhouse_id, tier, plant_id, cycle_time, num_plants, light_start, callback) => {
-    sqlController.execute(`UPDATE tiers SET plant_id = ${plant_id}, cycle_time = "${cycle_time}", num_plants = ${num_plants}, light_start = ${light_start} WHERE user_id = ${user_id} and tier = ${tier} and greenhouse_id = ${greenhouse_id}`, function(err, result) {
+exports.updateTierForGreenhouse = (user_id, greenhouse_id, tier, plant_id, cycle_time, light_start, callback) => {
+    sqlController.execute(`UPDATE tiers SET plant_id = ${plant_id}, cycle_time = "${cycle_time}", light_start = ${light_start} WHERE user_id = ${user_id} and tier = ${tier} and greenhouse_id = ${greenhouse_id}`, function(err, result) {
         if(err || result.rows.affectedRows == 1)
         {
             callback(err, result)
         }
         else
         {
-            callback(true, result)
+            callback(true, undefined)
         }
     })
 }
 
 exports.updateGreenhouseForUser = (user_id, greenhouse_id, name, seedling_time, callback) => {
-    sqlController.execute(`UPDATE greenhouse SET name = "${name}", seedling_time = "${seedling_time}" WHERE user_id = ${user_id} and greenhouse_id = ${greenhouse_id}`, function(err, result) {
+    var query = ""
+    if(seedling_time == '')
+    {
+        query = `UPDATE greenhouse SET name = "${name}" , seedling_time=NULL WHERE user_id = ${user_id} and greenhouse_id = ${greenhouse_id}`
+    }
+    else
+    {
+        query = `UPDATE greenhouse SET name = "${name}", seedling_time = "${seedling_time}" WHERE user_id = ${user_id} and greenhouse_id = ${greenhouse_id}`
+    }
+
+    sqlController.execute(query, function(err, result) {
         if(err || result.rows.affectedRows == 1)
         {
             callback(err, result)
         }
         else
         {
-            callback(true, result)
+            callback(true, undefined)
         }
     })
 }
@@ -322,10 +333,6 @@ exports.updatePowerSourceForGreenhouse = (user_id, greenhouse_id, power_source, 
                 }
                 callback(err, result)
             })
-        } 
-        else if(result.rows.length > 1)
-        {
-            callback(true, undefined)
         }
         else
         {
@@ -353,10 +360,6 @@ exports.updateBatteryForGreenhouse = (user_id, greenhouse_id, battery, callback)
                 }
                 callback(err, result)
             })
-        } 
-        else if(result.rows.length > 1)
-        {
-            callback(true, undefined)
         }
         else
         {
@@ -371,7 +374,7 @@ exports.updateReadingsForSensorType = (user_id, greenhouse_id, tier, sensor_name
         {
             console.log(result)
         }
-        callback(err, result)
+        callback(err, undefined)
     })
 }
 
@@ -387,7 +390,7 @@ exports.getReadingForSensors = (user_id, greenhouse_id, tier, callback) => {
             {
                 console.log(err)
             }
-            callback(true, undefined)
+            callback(err, undefined)
         }
     })
 }
@@ -410,7 +413,7 @@ exports.getReadingsForGreenhouse = (user_id, greenhouse_id, callback) => {
 }
 
 exports.getTierForGreenhouse = (greenhouse_id, tier, user_id, callback) => {
-    sqlController.execute(`SELECT tier, plant_id, ph_level, ec_level, water_level, cycle_time, num_plants, light_start FROM tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id} and tier = ${tier}`, function(err, result) {
+    sqlController.execute(`SELECT tier, plant_id, ph_level, ec_level, water_level, cycle_time, light_start FROM tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id} and tier = ${tier}`, function(err, result) {
         if(result.rows.length == 1)
         {
             callback(err, result.rows[0])
@@ -555,7 +558,7 @@ exports.getPlantIdealData = (callback) => {
             {
                 console.log(err)
             }
-            callback(true, undefined)
+            callback(true, result)
         }
     })
 }
@@ -572,7 +575,7 @@ exports.getTiersAndIdeal = (user_id, greenhouse_id, callback) => {
             {
                 console.log(err)
             }
-            callback(true, undefined)
+            callback(true, result)
         }
     })
 }
@@ -583,7 +586,7 @@ exports.getGreenhouseDetail = (user_id, greenhouse_id, callback) => {
         {
             var greenhouseData = result.rows[0]
 
-            sqlController.execute(`SELECT tier, plant_id, ph_level, ec_level, water_level, cycle_time, light_start, num_plants FROM tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id}`, function(err, result) {
+            sqlController.execute(`SELECT tier, plant_id, ph_level, ec_level, water_level, cycle_time, light_start FROM tiers where greenhouse_id = ${greenhouse_id} and user_id = ${user_id}`, function(err, result) {
                 if(result.rows.length == 4)
                 {
                     greenhouseData.tiers = result.rows
@@ -599,7 +602,7 @@ exports.getGreenhouseDetail = (user_id, greenhouse_id, callback) => {
         else
         {
             console.log(err)
-            callback(true, undefined)
+            callback(true, result)
         }
     })
 }
@@ -626,6 +629,5 @@ exports.insertTokenForUser = (token, user_id, expiration, callback) => {
 
 exports.getExpirationDateString = () => {
     var date = new Date(new Date().getTime() + 30*60000)
-    console.log(date.getMonth())
     return date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours()+ ":" + date.getMinutes() + ":" + date.getSeconds()
 }

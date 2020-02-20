@@ -13,4 +13,7 @@ module.exports = function(app)
 
     app.route('/auth/create_user')
         .post(auth.createUser)
+
+    app.route('/auth/get_token_admin')
+        .get(auth.getTokenForAdmin)
 }

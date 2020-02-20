@@ -1,15 +1,19 @@
 var Promise = require('bluebird');
 var mysql = require('mysql');
 
-var pool = mysql.createPool({
-    connectionLimit : 100, 
-    host     : process.env.DB_HOST,
-    user     : process.env.DB_USER,
-    password : process.env.DB_PASS,
-    database : 'pocketponics',
-    debug    :  false,
-    connectTimeout: 3000000
-});
+createPoolConnections()
+
+function createPoolConnections() {
+    global.pool = mysql.createPool({
+        connectionLimit : 100, 
+        host     : process.env.DB_HOST,
+        user     : process.env.DB_USER,
+        password : process.env.DB_PASS,
+        database : 'pocketponics',
+        debug    :  false,
+        connectTimeout: 100000
+    });
+}
 
 exports.execute = (query,callback) => {
     pool.getConnection(function(err,connection){
@@ -26,8 +30,14 @@ exports.execute = (query,callback) => {
             }           
         });
         connection.on('error', function(err) {      
-              throw err;
-              return;     
+            if(err.code == 'PROTOCOL_CONNECTION_LOST')
+            {
+                createPoolConnections()
+            }
+            else
+            {
+                throw err;
+            }
         });
     });
 }

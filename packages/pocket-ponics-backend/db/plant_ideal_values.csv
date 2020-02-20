@@ -1,6 +1,6 @@
-plant_id,ph_level_low,ec_level_low,temp_low,cycle_time,ph_level_high,ec_level_high,temp_high,name,light_time,steps,plant_url,harvest_url
-1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,empty,NULL,NULL,NULL,NULL
-2,6.00,2.00,0.00,65,6.50,4.00,0.00,greenbeans,12,NULL,NULL,NULL
-3,5.50,1.80,0.00,60,6.60,2.30,0.00,spinach,10,NULL,NULL,NULL
-4,6.00,1.80,0.00,45,6.50,2.40,0.00,turnip,12,NULL,NULL,NULL
-5,5.50,2.00,0.00,84,6.50,5.00,0.00,tomato,10,NULL,NULL,NULL
+plant_id,ph_level_low,ec_level_low,temp_low,cycle_time,ph_level_high,ec_level_high,temp_high,name,light_time,steps,plant_url,harvest_url,num_plants
+1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,empty,NULL,NULL,NULL,NULL,NULL
+2,6.00,2.00,0.00,65,6.50,4.00,0.00,"Green Beans",12,NULL,NULL,NULL,8
+3,5.50,1.80,0.00,60,6.60,2.30,0.00,Spinach,10,NULL,NULL,NULL,18
+4,6.00,1.80,0.00,45,6.50,2.40,0.00,Turnip,12,NULL,NULL,NULL,18
+5,5.50,2.00,0.00,84,6.50,5.00,0.00,Tomato,10,NULL,NULL,NULL,1

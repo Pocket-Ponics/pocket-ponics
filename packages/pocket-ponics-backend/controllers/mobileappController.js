@@ -1,13 +1,13 @@
 import mySQL from './mySQLController';
 import notificationController from './notificationController';
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 import * as tf from '@tensorflow/tfjs-node'
-import * as t from '@tensorflow/tfjs'
-import { create } from 'domain';
 var schedule = require('node-schedule');
 const sharp = require('sharp');
 var fs = require('fs');
- 
+
+loadNeuralNetwork()
+
 var rule = new schedule.RecurrenceRule();
 rule.hour = 8;
 rule.minute = 0;
@@ -16,6 +16,12 @@ rule.second = 0;
 var n = schedule.scheduleJob(rule, function(){
     notificationController.sendSeedlingAndTierNotifications()
 });
+
+async function loadNeuralNetwork()
+{
+    global.model = await tf.loadLayersModel('file://../pocket-ponics-backend/neuralnetwork-model-anomaly/model/model.json')
+    console.log("Loaded Neural Network Model for Classification")
+}
 
 //Retrieves all greenhouses for a specific user
 exports.getGreenhouses = (req, res) => {
@@ -196,7 +202,6 @@ exports.updateTier = (req, res) => {
         //Store tier information provided
         var plant_id = req.body.plant_id
         var cycle_time = req.body.cycle_time
-        var num_plants = req.body.num_plants
         var light_start = req.body.light_start
 
         //Retrieve user_id for given auth token
@@ -208,14 +213,14 @@ exports.updateTier = (req, res) => {
             }
             else if(rec != undefined)
             {    
-                if(plant_id == undefined || cycle_time == undefined || num_plants == undefined || light_start == undefined)
+                if(plant_id == undefined || cycle_time == undefined || light_start == undefined)
                 {
                     res.status(202)
                     res.json({202: "Error: Missing data for update"})
                 }
                 else 
                 {
-                    mySQL.updateTierForGreenhouse(rec.user_id, greenhouse_id, tier, plant_id, cycle_time, num_plants, light_start, function(err, record) {
+                    mySQL.updateTierForGreenhouse(rec.user_id, greenhouse_id, tier, plant_id, cycle_time, light_start, function(err, record) {
                         if(!err)
                         {
                             res.status(200)
@@ -359,7 +364,8 @@ exports.createGreenhouse = (req, res) => {
                 var seedling_time = req.body.seedling_time
 
                 //Generate password hash for sensor grid
-                var grid_hash = bcrypt.hashSync(grid_password, 10)
+                var salt = bcrypt.genSaltSync(10)
+                var grid_hash = bcrypt.hashSync(grid_password, salt)
 
                 //Insert new greenhouse
                 mySQL.createGreenhouseForUser(greenhouse_name, seedling_time, rec.user_id, function(err, record) {
@@ -467,8 +473,6 @@ exports.getGreenhouseReadings = (req, res) => {
 
         //Store greenhouse_id and date range provided
         var greenhouse_id = req.params.greenhouse_id
-        var start_date = req.body.start_date
-        var end_date = req.body.end_date
 
         //Retrieve user_id for given auth token
         mySQL.getUserForToken(cred, function(err, rec) {
@@ -528,7 +532,8 @@ exports.updateGreenhouse = (req, res) => {
             }
             else if(rec != undefined)
             {    
-                if(seedling_time == undefined || name == undefined)
+                console.log(seedling_time)
+                if(name == undefined)
                 {
                     res.status(202)
                     res.json({202: "Error: Missing data for update"})
@@ -820,7 +825,7 @@ exports.classifyPlantImage = (req, res) => {
             console.log('File created successfully');
 
             //Classify plant image
-            classifyPlant(imageStr, (prediction, createdFiles) => {
+            classifyPlant(imageStr, (err, prediction, probability, createdFiles) => {
                 //Delete temporary files
                 createdFiles.forEach(file => {
                     fs.unlink(file, function(err) {
@@ -834,9 +839,17 @@ exports.classifyPlantImage = (req, res) => {
                         }
                     });
                 })
-                
-                res.status(200)
-                res.json({200: "Classification Complete", prediction: prediction})
+
+                if(err)
+                {
+                    res.status(201)
+                    res.json({201: "Error: Unable to Perform Classification", error: err.toString()})
+                }
+                else
+                {
+                    res.status(200)
+                    res.json({200: "Classification Complete", prediction: prediction, probability: probability})
+                }
             })
         }
         else
@@ -863,28 +876,27 @@ async function classifyPlant(imagePath, callback){
             var image = fs.readFileSync(resizedImage)
 
             //Define the classes
-            var classes = ['ripe-greenbeans','ripe-spinach','ripe-tomatoes','ripe-turnip','unripe-greenbeans','unripe-spinach','unripe-tomatoes','unripe-turnip']
+            var classes = ['not-vegetable', 'ripe-greenbeans','ripe-spinach','ripe-tomato','ripe-turnip','unripe-greenbeans','unripe-spinach','unripe-tomato','unripe-turnip']
+            
+            //Convert image to tensor
+            var tensorImage = tf.node.decodeJpeg(image, 3);
 
-            //Load trained model
-            t.loadLayersModel('file://../pocket-ponics-backend/neuralnetwork-model/model/model.json').then(async function(model){
-                //Convert image to tensor
-                var tensorImage = tf.node.decodeJpeg(image, 3);
+            //Normalize tensor values
+            var tensorImageInput = tensorImage.div(tf.scalar(255))
 
-                //Normalize tensor values
-                var tensorImageInput = tensorImage.div(tf.scalar(255))
+            //Predict class from tensor input
+            var predictionTensor = model.predict(tensorImageInput.expandDims(0))
 
-                //Predict class from tensor input
-                var predictionTensor = model.predict(tensorImageInput.expandDims(0))
-
-                //Convert tensor output to class
-                var index = predictionTensor.argMax(1).arraySync()
-                var prediction = classes[index[0]]
-                callback(prediction, createdFiles)
-            });
+            //Convert tensor output to class
+            var index = predictionTensor.argMax(1).arraySync()
+            var probability = predictionTensor.arraySync()[0][index]
+            var prediction = classes[index[0]]
+            callback(false, prediction, probability, createdFiles)
         }
         else
         {
-            console.log('Unable to resize image')
+            console.log(err)
+            callback(err, err, 0.00, [])
         }
     });
 };
