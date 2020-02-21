@@ -33,8 +33,8 @@ const AuthUtil = {
 			})
 			.then(() => {
 				window.location.href="http://localhost:3000/Admin";
-
-				return token
+console.log(token)
+				return localStorage.setItem('token', token)
 			})
 			.catch(error => {
 				window.alert('Incorrect Username or Password');

@@ -82,7 +82,7 @@ const APIUtil = {
 	},
 	createPlantIdeal(token, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url){
 		console.log("token:", token)
-		return APIUtil.post('http://localhost:3000/adminportal', token,{
+		return APIUtil.post(`http://${host}:${port}/adminportal`, token,{
 			ph_level_low,
 		    ec_level_low,
 		    temp_low,
@@ -109,7 +109,7 @@ const APIUtil = {
 			redirect: 'follow'
 		}))
 			.then(response => response.text())
-			//.then(result => JSON.parse(result))
+			.then(result => JSON.parse(result))
 	},
 	getPlants() {
 		return APIUtil.get(`http://${host}:${port}/adminportal`, '', {})

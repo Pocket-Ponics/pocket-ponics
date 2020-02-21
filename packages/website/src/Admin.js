@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Spacer from 'react-add-space';
 import { render } from 'react-dom';
 import ApiUtil from './util/api-util'
-import token from './util/api-util'
+//import token from './util/api-util'
 
 export function Admin(props){
 
@@ -21,12 +21,12 @@ export function Admin(props){
   const [plant_url, setPlant_url] = useState("");
   const [harvest_url, setHarvest_url] = useState("");
   //const [num_plants, setNum_plants] = useState("0");
-
+const token = localStorage.getItem('token')
 
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log("here")
+    console.log(token)
     return ApiUtil.createPlantIdeal(token, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url)
   } 
 
