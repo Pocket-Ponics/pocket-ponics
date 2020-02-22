@@ -12,7 +12,7 @@ import {
 } from 'react-native'
 
 import AuthUtil from '../util/auth-util'
-import { TEXT_COLOR } from '../util/constants'
+import { TEXT_COLOR, BACKGROUND_COLOR } from '../util/constants'
 
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles from './login-styles'
@@ -57,6 +57,9 @@ class LoginScreen extends React.Component {
 		return (
 			<KeyboardAvoidingView style={styles.backgroundContainer} behavior={Platform.OS === 'ios' ? 'padding' : null}>
 				<View style={styles.loginContainer}>
+					<TouchableOpacity style={{ alignSelf: 'flex-end', padding: 12 }} onPress={() => this.props.navigation.navigate('Server')}>
+						<Icon name={'ios-cloud'} size={40} color={BACKGROUND_COLOR}/>
+					</TouchableOpacity>
 					<Image source={iconImage} style={styles.icon}/>
 					<View style={styles.inputContainer}>
 						<Icon name={'ios-person'} size={28} color={TEXT_COLOR}
@@ -84,8 +87,8 @@ class LoginScreen extends React.Component {
 							secureTextEntry={true}
 							onSubmitEditing={this.login}/>
 					</View>
-					<TouchableOpacity onPress={this.login}>
-						<Text style={styles.button}>Log In</Text>
+					<TouchableOpacity style={styles.button} onPress={this.login}>
+						<Text style={styles.buttonText}>Log In</Text>
 					</TouchableOpacity>
 					<TouchableOpacity onPress={() => this.props.navigation.navigate('SignUp')}>
 						<Text style={styles.signUp}>Sign Up</Text>

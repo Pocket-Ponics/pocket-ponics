@@ -40,11 +40,13 @@ class ProfileScreen extends React.Component {
 		const greenhouses = this.props.navigation.getParam('greenhouses', [])
 		const username = this.props.navigation.getParam('username', '')
 
+		console.log(greenhouses)
+
 		return (
 			<View style={styles.container}>
 				<View style={styles.background}>
 					<Text style={styles.text}>Username: {username}</Text>
-					<Text style={styles.text}>Greenhouses: {greenhouses.length - 1}</Text>
+					<Text style={styles.text}>Greenhouses: {Object.values(global.greenhouses).length}</Text>
 					<TouchableOpacity style={styles.button} onPress={this.changePassword.bind(this)}>
 						<Text style={styles.buttonText}>Change password</Text>
 					</TouchableOpacity>

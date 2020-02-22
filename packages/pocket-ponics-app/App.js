@@ -18,6 +18,7 @@ import ProfileScreen from './screens/profile-screen'
 import ChangePasswordScreen from './screens/change-password-screen'
 import AuthLoadingScreen from './screens/auth-loading-screen'
 import LoginScreen from './screens/login-screen'
+import ServerScreen from './screens/server-screen'
 import HarvestInstructionScreen from './screens/harvest-instruction-screen'
 import TranslocationScreen from './screens/translocation-screen'
 import MLCameraScreen from './screens/ml-camera-screen'
@@ -34,6 +35,7 @@ import { Notifications } from 'expo'
 const AuthStack = createSwitchNavigator({ 
 	AuthLoading: { screen: AuthLoadingScreen },
 	Login: { screen: LoginScreen },
+	Server: { screen: ServerScreen },
 	SignUp: { screen: SignUpScreen },
 	Reset: { screen: ResetScreen }
 })
