@@ -19,7 +19,7 @@ var n = schedule.scheduleJob(rule, function(){
 
 async function loadNeuralNetwork()
 {
-    global.model = await tf.loadLayersModel('file://../pocket-ponics-backend/neuralnetwork-model-anomaly/model/model.json')
+    global.model = await tf.loadLayersModel('file://../pocket-ponics-backend/neuralnetwork-model/model/model.json')
     console.log("Loaded Neural Network Model for Classification")
 }
 
