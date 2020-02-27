@@ -822,8 +822,6 @@ exports.classifyPlantImage = (req, res) => {
     fs.writeFile(imageStr, plantImageStr, {encoding: 'base64'}, function(err) {
         if(!err)
         {
-            console.log('File created successfully');
-
             //Classify plant image
             classifyPlant(imageStr, (err, prediction, probability, createdFiles) => {
                 //Delete temporary files
@@ -832,10 +830,6 @@ exports.classifyPlantImage = (req, res) => {
                         if(!err)
                         {
                             console.log('File deleted successfully')
-                        }
-                        else 
-                        {
-                            console.log('File deleted unsuccessfully')
                         }
                     });
                 })
