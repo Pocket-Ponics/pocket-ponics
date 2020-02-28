@@ -827,9 +827,9 @@ exports.classifyPlantImage = (req, res) => {
                 //Delete temporary files
                 createdFiles.forEach(file => {
                     fs.unlink(file, function(err) {
-                        if(!err)
+                        if(err)
                         {
-                            console.log('File deleted successfully')
+                            console.log('File deleted unsuccessfully')
                         }
                     });
                 })
