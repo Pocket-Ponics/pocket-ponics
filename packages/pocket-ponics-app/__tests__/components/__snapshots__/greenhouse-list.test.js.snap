@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Greenhouse Display renders correctly 1`] = `"<RCTScrollView decelerationRate=\\"fast\\" overScrollMode=\\"never\\" initialNumToRender=\\"6\\" maxToRenderPerBatch=\\"13\\" windowSize=\\"13\\" data=\\"[object Object],[object Object],[object Object]\\" firstItem=\\"0\\" itemWidth=\\"750\\" style=\\"opacity:0;width:750px;flex-direction:row\\" sliderWidth=\\"750\\" inactiveSlideScale=\\"0.95\\" inactiveSlideOpacity=\\"1\\" activeSlideAlignment=\\"start\\" activeAnimationType=\\"spring\\" activeAnimationOptions=\\"[object Object]\\" activeSlideOffset=\\"20\\" apparitionDelay=\\"0\\" autoplayDelay=\\"1000\\" autoplayInterval=\\"3000\\" callbackOffsetMargin=\\"5\\" containerCustomStyle=\\"[object Object]\\" contentContainerCustomStyle=\\"[object Object]\\" inactiveSlideShift=\\"0\\" layout=\\"default\\" lockScrollTimeoutDuration=\\"1000\\" loopClonesPerSide=\\"3\\" slideStyle=\\"[object Object]\\" swipeThreshold=\\"20\\" contentContainerStyle=\\"[object Object],[object Object]\\" scrollEventThrottle=\\"1\\" numColumns=\\"1\\" updateCellsBatchingPeriod=\\"50\\" viewabilityConfigCallbackPairs=\\"\\" stickyHeaderIndices=\\"\\"><View><View style=\\"0:[object Object]\\"></View><View style=\\"0:[object Object]\\"></View><View style=\\"0:[object Object]\\"></View></View></RCTScrollView>"`;
+
+exports[`Greenhouse Display renders correctly 2`] = `
+<GreenhouseSwipeable
+  greenhouse={
+    Object {
+      "tiers": Array [],
+    }
+  }
+/>
+`;
+
+exports[`Greenhouse Display renders correctly 3`] = `<NewGreenhouse />`;
