@@ -292,50 +292,6 @@ exports.getTier = (req, res) => {
     }
 };
 
-//Get all plant ideal data values
-exports.getPlantData = (req, res) => {
-    if(req.headers.authorization == undefined)
-    {
-        res.status(210)
-        res.json({210: "Error: Missing Token"})
-    }
-    else
-    {
-        //Get auth token
-        let cred = req.headers.authorization.split(" ")[1]
-
-        //Retrieve user_id for given auth token
-        mySQL.getUserForToken(cred, function(err, rec) {
-            if(err)
-            {
-                res.status(403)
-                res.json({403: "Authentication Error"})
-            }
-            else if(rec != undefined)
-            {    
-                //Retrieve values from plant_ideal table 
-                mySQL.getPlantIdealData(function(err, record) {
-                    if(!err)
-                    {
-                        res.status(200)
-                        res.json(record.rows)
-                    }
-                    else
-                    {
-                        res.status(201)
-                        res.json({201: "Unable to retrieve plant ideal data"})
-                    }
-                })
-            }
-            else 
-            {
-                res.status(401)
-                res.json({401: "Unauthorized"})
-            }
-        })
-    }
-};
-
 //Create a new greenhouse with provided values
 exports.createGreenhouse = (req, res) => {
     if(req.headers.authorization == undefined)
