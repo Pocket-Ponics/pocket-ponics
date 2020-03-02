@@ -10,9 +10,6 @@ import { NavigationBar } from './components/NavigationBar';
 import { Jumbotron } from './components/Jumbotron';
 import { Adminlogin } from './components/LoginPage/Adminlogin.js';
 import { Admin } from './Admin';
-import { PrivateRoute } from './PrivateRoute'
-//const [isAuthenticated, userHasAuthenticated] = useState(false);
-
 
 
 class App extends Component {
@@ -28,7 +25,7 @@ class App extends Component {
               <Route path="/about" component={About} />
               <Route path="/contact" component={Contact} />
               <Route path="/Adminlogin" component={Adminlogin} />
-              <Route component={Admin} path="/admin" exact />
+              <Route path="/admin" component={Admin} />
               <Route component={NoMatch} />
             </Switch>
           </Layout>

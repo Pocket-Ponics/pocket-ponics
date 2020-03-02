@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Spacer from 'react-add-space';
 import { render } from 'react-dom';
 import ApiUtil from './util/api-util'
-
+//import token from './util/api-util'
 
 export function Admin(props){
 
@@ -20,7 +20,7 @@ export function Admin(props){
   const [temp_high, setTemp_high] = useState("");
   const [plant_url, setPlant_url] = useState("");
   const [harvest_url, setHarvest_url] = useState("");
-  const [num_plants, setNum_plants] = useState("0");
+  //const [num_plants, setNum_plants] = useState("0");
 const token = localStorage.getItem('token')
 
 
