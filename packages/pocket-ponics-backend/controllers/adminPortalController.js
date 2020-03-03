@@ -204,7 +204,6 @@ exports.updatePlantIdeal = (req, res) => {
                                 res.json({200: "Updated plant ideal"})
                             } else {
                                 res.status(201)
-                                console.log(record)
                                 res.json({201: "Unable to update plant ideal"})
                             }
                         })
