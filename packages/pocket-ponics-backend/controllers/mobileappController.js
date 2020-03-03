@@ -19,7 +19,7 @@ var n = schedule.scheduleJob(rule, function(){
 
 async function loadNeuralNetwork()
 {
-    global.model = await tf.loadLayersModel('file://../pocket-ponics-backend/neuralnetwork-model-anomaly/model/model.json')
+    global.model = await tf.loadLayersModel('file://../pocket-ponics-backend/neuralnetwork-model/model/model.json')
     console.log("Loaded Neural Network Model for Classification")
 }
 
@@ -282,50 +282,6 @@ exports.getTier = (req, res) => {
                     }
                 })
 
-            }
-            else 
-            {
-                res.status(401)
-                res.json({401: "Unauthorized"})
-            }
-        })
-    }
-};
-
-//Get all plant ideal data values
-exports.getPlantData = (req, res) => {
-    if(req.headers.authorization == undefined)
-    {
-        res.status(210)
-        res.json({210: "Error: Missing Token"})
-    }
-    else
-    {
-        //Get auth token
-        let cred = req.headers.authorization.split(" ")[1]
-
-        //Retrieve user_id for given auth token
-        mySQL.getUserForToken(cred, function(err, rec) {
-            if(err)
-            {
-                res.status(403)
-                res.json({403: "Authentication Error"})
-            }
-            else if(rec != undefined)
-            {    
-                //Retrieve values from plant_ideal table 
-                mySQL.getPlantIdealData(function(err, record) {
-                    if(!err)
-                    {
-                        res.status(200)
-                        res.json(record.rows)
-                    }
-                    else
-                    {
-                        res.status(201)
-                        res.json({201: "Unable to retrieve plant ideal data"})
-                    }
-                })
             }
             else 
             {
@@ -822,18 +778,12 @@ exports.classifyPlantImage = (req, res) => {
     fs.writeFile(imageStr, plantImageStr, {encoding: 'base64'}, function(err) {
         if(!err)
         {
-            console.log('File created successfully');
-
             //Classify plant image
             classifyPlant(imageStr, (err, prediction, probability, createdFiles) => {
                 //Delete temporary files
                 createdFiles.forEach(file => {
                     fs.unlink(file, function(err) {
-                        if(!err)
-                        {
-                            console.log('File deleted successfully')
-                        }
-                        else 
+                        if(err)
                         {
                             console.log('File deleted unsuccessfully')
                         }
