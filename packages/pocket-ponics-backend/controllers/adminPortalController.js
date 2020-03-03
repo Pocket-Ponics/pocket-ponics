@@ -28,7 +28,7 @@ exports.deletePlantIdeal = (req, res) => {
         let cred = req.headers.authorization.split(" ")[1]
 
         //Store plant id
-        var plant_id = req.body.plant_id
+        var plant_id = req.params.plant_id
 
         //Retrieve user_id for given auth token
         mySQL.getUserForToken(cred, function(err, rec) {
@@ -163,7 +163,7 @@ exports.updatePlantIdeal = (req, res) => {
         let cred = req.headers.authorization.split(" ")[1]
 
         //Store values provided
-        var plant_id = req.body.plant_id
+        var plant_id = req.params.plant_id
         var ph_level_low = req.body.ph_level_low
         var ec_level_low = req.body.ec_level_low
         var temp_low = req.body.temp_low
@@ -204,6 +204,7 @@ exports.updatePlantIdeal = (req, res) => {
                                 res.json({200: "Updated plant ideal"})
                             } else {
                                 res.status(201)
+                                console.log(record)
                                 res.json({201: "Unable to update plant ideal"})
                             }
                         })
