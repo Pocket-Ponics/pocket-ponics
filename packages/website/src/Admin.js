@@ -20,20 +20,22 @@ export function Admin(props){
   const [temp_high, setTemp_high] = useState("");
   const [plant_url, setPlant_url] = useState("");
   const [harvest_url, setHarvest_url] = useState("");
-  //const [num_plants, setNum_plants] = useState("0");
+  const [num_plants, setNum_plants] = useState("");
 const token = localStorage.getItem('token')
 
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(token)
-    return ApiUtil.createPlantIdeal(token, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url)
+    return ApiUtil.createPlantIdeal(token, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, num_plants)
   } 
 
   return(
     <form onSubmit={handleSubmit}>
       <label> Plant name: </label>
-        <input type="text" name="name" value={name} onChange={event => setName(event.target.value)}/><br /><br />
+        <input type="text" name="name" value={name} onChange={event => setName(event.target.value)}/><Spacer amount={51} />
+
+      <label> Number of plants: </label>
+        <input type="text" num_plants="num_plants" value={num_plants} onChange={event => setNum_plants(event.target.value)}/><br /><br />
 
       <label> Cycle time (days): </label>
         <input type="text" cycle_time="cycle_time" value={cycle_time} onChange={event => setCycle_time(event.target.value)}/><Spacer amount={40} />

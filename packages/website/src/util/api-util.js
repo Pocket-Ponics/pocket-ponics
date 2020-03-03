@@ -9,6 +9,19 @@ const APIUtil = {
 	processTextResults(res) {
 		return Promise.resolve(res.text())
 	},
+	put(endpoint, token, body) {
+		return APIUtil.timeoutFetch(waitingTime, fetch(endpoint, {
+			method: 'PUT',
+			headers: new Headers({
+				'Authorization': 'Bearer ' + token,
+				'Content-Type': 'application/x-www-form-urlencoded'
+			}),
+			body: APIUtil.urlEncode(body),
+			redirect: 'follow'
+		}))
+			.then(response => response.text())
+			.then(result => {console.log(result); JSON.parse(result)})
+	},
 	urlEncode(object) {
 		var url = []
 		for (var property in object) {
@@ -80,7 +93,7 @@ const APIUtil = {
 			new_password
 		})
 	},
-	createPlantIdeal(token, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url){
+	createPlantIdeal(token, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, num_plants){
 		console.log("token:", token)
 		return APIUtil.post(`http://${host}:${port}/adminportal`, token,{
 			ph_level_low,
@@ -94,8 +107,9 @@ const APIUtil = {
 		    light_time, 
 		    steps, 
 		    plant_url, 
-		    harvest_url
-		}) 
+		    harvest_url,
+		    num_plants
+		})
 	},
 	post(endpoint, token, body) {
 		console.log("body:", body)
@@ -109,7 +123,8 @@ const APIUtil = {
 			redirect: 'follow'
 		}))
 			.then(response => response.text())
-			.then(result => JSON.parse(result))
+			.then(result => {console.log(result); JSON.parse(result); window.alert(result); window.location.href="http://localhost:3000/AdminHome"})
+
 	},
 	getPlants() {
 		return APIUtil.get(`http://${host}:${port}/adminportal`, '', {})

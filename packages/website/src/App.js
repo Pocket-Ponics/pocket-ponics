@@ -10,6 +10,7 @@ import { NavigationBar } from './components/NavigationBar';
 import { Jumbotron } from './components/Jumbotron';
 import { Adminlogin } from './components/LoginPage/Adminlogin.js';
 import { Admin } from './Admin';
+import { AdminHome } from './AdminHome';
 
 
 class App extends Component {
@@ -26,6 +27,7 @@ class App extends Component {
               <Route path="/contact" component={Contact} />
               <Route path="/Adminlogin" component={Adminlogin} />
               <Route path="/admin" component={Admin} />
+              <Route path="/AdminHome" component={AdminHome} />
               <Route component={NoMatch} />
             </Switch>
           </Layout>

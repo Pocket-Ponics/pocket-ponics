@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/runtime": "^7.8.4",
     "aws-sdk": "^2.610.0",
     "base-64": "^0.1.0",
     "bcrypt": "^3.0.7",
