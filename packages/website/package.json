@@ -1,0 +1,45 @@
+{
+  "name": "react-bootstrap",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "aws-sdk": "^2.610.0",
+    "base-64": "^0.1.0",
+    "bcrypt": "^3.0.7",
+    "bootstrap": "^4.3.1",
+    "core-util-is": "^1.0.2",
+    "email-validator": "^2.0.4",
+    "mysql": "^2.18.1",
+    "node-sass": "^4.13.1",
+    "nodemailer": "^6.4.2",
+    "npm": "^6.14.2",
+    "os-homedir": "^2.0.0",
+    "password-validator": "^5.0.3",
+    "react": "^16.13.0",
+    "react-add-space": "^1.0.7",
+    "react-bootstrap": "^1.0.0-beta.6",
+    "react-dom": "^16.13.0",
+    "react-native-gesture-handler": "^1.5.6",
+    "react-navigation": "^4.1.0",
+    "react-navigation-stack": "^2.1.0",
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "2.1.8",
+    "reactstrap": "^8.4.1",
+    "styled-components": "^4.4.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
