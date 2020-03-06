@@ -11,6 +11,7 @@ import { Jumbotron } from './components/Jumbotron';
 import { Adminlogin } from './components/LoginPage/Adminlogin.js';
 import { Admin } from './Admin';
 import { AdminHome } from './AdminHome';
+import PrivateRoute from './PrivateRoute';
 
 
 class App extends Component {
@@ -26,7 +27,7 @@ class App extends Component {
               <Route path="/about" component={About} />
               <Route path="/contact" component={Contact} />
               <Route path="/Adminlogin" component={Adminlogin} />
-              <Route path="/admin" component={Admin} />
+              <PrivateRoute exact path="/admin" component={Admin}/>
               <Route path="/AdminHome" component={AdminHome} />
               <Route component={NoMatch} />
             </Switch>
