@@ -126,9 +126,19 @@ const APIUtil = {
 			.then(result => {console.log(result); JSON.parse(result); window.alert(result); window.location.href="http://localhost:3000/AdminHome"})
 
 	},
-	getPlants() {
-		return APIUtil.get(`http://${host}:${port}/adminportal`, '', {})
+	async getPlants(token) {
+		return APIUtil.timeoutFetch(10000, fetch(`http://${host}:${port}/adminportal`, {
+			method: 'GET',
+			headers: new Headers({
+				'Authorization': 'Bearer' + token,
+				'Content-Type': 'application/x-www-form-urlencoded'
+			}),
+			redirect: 'follow'
+		}))
+			.then(response => response.text())
+			.then(result => JSON.parse(result))
 	}
+
 }
 
 export default APIUtil
