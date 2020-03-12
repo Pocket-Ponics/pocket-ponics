@@ -18,7 +18,7 @@ import styles from './login-styles'
 
 const iconImage = require('../assets/pocket-ponics.png')
 
-class SignUpScreen extends React.Component {
+class ChangePasswordScreen extends React.Component {
 	constructor(props) {
 		super(props)
 
@@ -137,4 +137,4 @@ class SignUpScreen extends React.Component {
 	}
 }
 
-export default SignUpScreen
+export default ChangePasswordScreen

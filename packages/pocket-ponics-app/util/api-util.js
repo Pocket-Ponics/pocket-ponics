@@ -1,10 +1,7 @@
 import base64 from 'base-64'
 import { Notifications } from 'expo'
 
-// EC2 Server
-const host = 'ec2-54-198-116-93.compute-1.amazonaws.com'
-// UCF Server
-// const host = '10.171.204.187'
+const host = 'ec2-184-73-127-118.compute-1.amazonaws.com'
 const port = '8080'
 
 const greenhouse = '169.254.146.181'

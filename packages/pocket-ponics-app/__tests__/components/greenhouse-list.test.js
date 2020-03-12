@@ -4,7 +4,7 @@ import Carousel from 'react-native-snap-carousel'
 
 import GreenhouseList from '../../components/greenhouse/greenhouse-list'
 
-describe('Greenhouse Display', () => {
+describe('Greenhouse List', () => {
 	test('renders correctly', () => {
 		const tree = shallow(
 			<GreenhouseList

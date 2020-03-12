@@ -35,7 +35,8 @@ class HarvestInstructionScreen extends React.Component {
 	}
 
 	getHarvestInstructions(id) {
-		return global.plants[id].steps
+		const plant = global.plants[id] || {}
+		return plant.steps
 	}
 
 	goToNext(id) {

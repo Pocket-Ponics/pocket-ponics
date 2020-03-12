@@ -1,10 +1,9 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { TouchableOpacity, Text } from 'react-native'
 
 import History from '../../components/greenhouse/history'
 
-describe('Greenhouse Display', () => {
+describe('History Display', () => {
 	test('renders correctly', () => {
 		const tree = shallow(
 			<History

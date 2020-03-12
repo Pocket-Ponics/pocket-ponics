@@ -72,7 +72,8 @@ class ReplantScreen extends React.Component {
 
 	render() {
 		const plantId = this.props.navigation.getParam('id')
-		const seedsArray = (new Array(global.plants[plantId].num_plants || 1)).fill(plantId)
+		const plant = global.plants[plantId] || {}
+		const seedsArray = (new Array(plant.num_plants || 1)).fill(plantId)
 		console.log(plantId, seedsArray)
 		
 		return (

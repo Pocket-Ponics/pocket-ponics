@@ -8,12 +8,6 @@ import GreenhouseStatsDisplay from './stats'
 import GreenhouseHistoryDisplay from './history'
 
 class GreenhouseSwipeable extends React.Component {
-	constructor(props) {
-		super(props)
-
-		this.swipeable = React.createRef()
-	}
-
 	getStats() {
 		return {
 			battery: this.props.greenhouse.battery,
@@ -35,7 +29,7 @@ class GreenhouseSwipeable extends React.Component {
 						name={this.props.greenhouse.name}
 						id={this.props.greenhouse.greenhouse_id}/>
 				</View>
-				<GreenhouseStatsDisplay stats={this.getStats() || {}} navigation={this.props.navigation} />
+				<GreenhouseStatsDisplay stats={this.getStats()} navigation={this.props.navigation} />
 				<GreenhouseHistoryDisplay navigation={this.props.navigation} history={this.props.greenhouse.history}/>
 			</ScrollView>
 		)

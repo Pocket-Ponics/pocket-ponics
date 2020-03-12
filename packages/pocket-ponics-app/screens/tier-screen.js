@@ -27,21 +27,22 @@ class TierScreen extends React.Component {
 	constructor(props) {
 		super(props)
 
-		const greenhouses = global.greenhouses
 		const greenhouseId = this.props.navigation.getParam('greenhouseId', 0)
+		const currentGreenhouse = global.greenhouses[greenhouseId] || { tiers: [null,null,null,null] }
 		const tierId = this.props.navigation.getParam('tierId', 0)
+		const plant = currentGreenhouse.tiers[tierId-1] || {}
 
 		this.state = {
-			plant: greenhouses[greenhouseId].tiers[tierId-1],
+			plant,
 		}
 	}
 
-	componentDidMount() {
-		const greenhouses = global.greenhouses
-		const greenhouseId = this.props.navigation.getParam('greenhouseId', 0)
+	componentDidMount() {const greenhouseId = this.props.navigation.getParam('greenhouseId', 0)
+		const currentGreenhouse = global.greenhouses[greenhouseId] || { tiers: [null,null,null,null] }
 		const tierId = this.props.navigation.getParam('tierId', 0)
+		const plant = currentGreenhouse.tiers[tierId-1] || {}
 
-		this.setState({ plant: greenhouses[greenhouseId].tiers[tierId-1] })
+		this.setState({ plant })
 	}
 
 	getImage(id) {
@@ -58,17 +59,20 @@ class TierScreen extends React.Component {
 	}
 
 	getReadableName(id) {
-		return global.plants[id].name
+		const plant = global.plants[id] || {}
+		return plant.name
 	}
 
 	isValidpH(id, pH) {
-		return pH >= global.plants[id].ph_level_low
-			&& pH <= global.plants[id].ph_level_high
+		const plant = global.plants[id] || {}
+		return pH >= plant.ph_level_low
+			&& pH <= plant.ph_level_high
 	}
 
 	isValidEC(id, ec) {
-		return ec >= global.plants[id].ec_level_low
-			&& ec <= global.plants[id].ec_level_high
+		const plant = global.plants[id] || {}
+		return ec >= plant.ec_level_low
+			&& ec <= plant.ec_level_high
 	}
 
 	statusText(name, value, checker) {
