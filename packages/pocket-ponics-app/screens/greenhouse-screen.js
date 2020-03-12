@@ -60,17 +60,7 @@ class GreenhouseScreen extends React.Component {
 		this.setState({ currentGreenhouse: index })
 	}
 
-	renderLoadingScreen() {
-		return (
-			<View style={styles.background}>
-				<Text>Loading ...</Text>
-			</View>
-		)
-	}
-
 	render() {
-		if(this.state.greenhouses.length < 1) return this.renderLoadingScreen()
-
 		return (
 			<View style={styles.background}>
 				<DotScrollMenu 
