@@ -2,49 +2,7 @@ import React, {useState, Component} from 'react';
 import { render } from 'react-dom';
 import ApiUtil from '../../util/api-util';
 import ReactDOM from 'react-dom';
-import displayplants from '../../displayplants'
 
-/*
-export function AdminHome() {
-
-	const token = localStorage.getItem('token')
-	const promise = getData()
-	promise.then(successCallback, failureCallback)
-
-	console.log(promise)
-
-	function successCallback(result) {
-		console.log("Audio file ready at URL: ", result);
-		return result
-	}
-
-	function failureCallback(error) {
-		console.error("Error generating audio file: " + error);
-	}
-
-
-	async function getData() {
-		console.log('logging');
-  		const plants = await ApiUtil.getPlants(token)
-  		console.log(plants)
-  		console.log(plants.length)
-
-	    for(let i = 0; i < plants.length; i++)
-	    {
-	        console.log(plants[i].name)
-	    }
-	    return await plants[2].name
-  	}
-
-
-
-	return (
-	  		<view>{JSON.stringify(promise)}
-	  		</view>
-	  	)
-
-}
-*/
 const token = localStorage.getItem('token')
 
 const HeadingComponent = props => React.createElement("h1", null, props.data);
@@ -70,18 +28,27 @@ class AsyncComponent extends React.Component {
   }
 
   renderChildren() {
-    return React.Children.map(this.props.children, (child) =>
-    React.cloneElement(child, {
-      data: this.state.data }));
 
-
+    const plants = this.state.data
+  	console.log(this.state.data)
+  	console.log(this.state.data.length)
+  	console.log(plants[2].name)
+    const array = plants.map((obj, index) => obj.name);
+    console.log(array)
+    return array
   }
 
   render() {
     if (this.state.resolvedError) {
       return React.createElement("h1", null, "Error Encountered");
     } else if (this.state.resolvedSuccess) {
-      return React.createElement("div", null, this.renderChildren());
+    	const array = this.renderChildren()
+    	console.log(this.renderChildren())
+      return   <ul>
+        {array.map(item => {
+          return <li><a href="adminplant" onclick="console.log('The link was clicked.'); return false">{item}</a></li>;
+        })}
+      </ul>
     } else {
       return React.createElement("h1", null, "Loading...");
     }
