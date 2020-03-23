@@ -71,3 +71,7 @@ FROM pocketponics.tiers
 LEFT JOIN plant_ideal ON tiers.plant_id=plant_ideal.plant_id
 where user_id = 10 and greenhouse_id = 6
 
+SELECT tiers.user_id, tiers.tier, tiers.greenhouse_id, tiers.plant_id,  plant_ideal.ph_level_high, tiers.ph_level, plant_ideal.ph_level_low, plant_ideal.ec_level_high, tiers.ec_level, plant_ideal.ec_level_low 
+FROM pocketponics.tiers
+LEFT JOIN plant_ideal ON tiers.plant_id=plant_ideal.plant_id
+
