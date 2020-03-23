@@ -9802,6 +9802,18 @@ react-private-route@^1.1.2:
     react "^16.6.0"
     react-router-dom "^4.3.1"
 
+react-promise-loader@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-promise-loader/-/react-promise-loader-1.0.3.tgz#f142c2739ca3d8d29795a5e47e58c3a744b02a37"
+  integrity sha512-GH5vXalT+odNrnSuS9BUU+ZRqA48EekTTAgaijH6EdrEG9DSnWEf7XTOiybjbRYu14fyVb56BkSohH+TESdRcg==
+  dependencies:
+    prop-types "^15.7.2"
+
+react-promise-tracker@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-promise-tracker/-/react-promise-tracker-2.1.0.tgz#a8ac2ca5322ca60f83fa7a00ad9d99bfbbdb8434"
+  integrity sha512-1LQSGAnFF4o++iPFgeBrMpS+ZHQg8ZGl9Zuf70v+OoLxuOnUeLCP7ugma+InBCUZzPnSLyWTLt/jyW+FAy5ELQ==
+
 react-router-dom@^4.3.1:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-4.3.1.tgz#4c2619fc24c4fa87c9fd18f4fb4a43fe63fbd5c6"

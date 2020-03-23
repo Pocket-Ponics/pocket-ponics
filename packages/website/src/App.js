@@ -10,7 +10,7 @@ import { NavigationBar } from './components/NavigationBar';
 import { Jumbotron } from './components/Jumbotron';
 import { Adminlogin } from './components/LoginPage/Adminlogin.js';
 import { Admin } from './Admin';
-import { AdminHome } from './AdminHome';
+import { AdminHome } from './components/AdminHome/AdminHome';
 import PrivateRoute from './PrivateRoute';
 
 
