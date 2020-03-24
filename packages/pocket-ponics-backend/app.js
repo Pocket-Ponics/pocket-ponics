@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-
+import cors from 'cors'
 import routes from './routes/index.js';
 
 const app = express();
@@ -15,8 +15,21 @@ if (result.error) {
     * Middleware
     */
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(bodyParser.json());
+
+var origins = ['http://localhost:3000'];
+
+app.use(cors({
+  origin: function(origin, callback){
+    if(!origin) return callback(null, true);
+    if(origins.indexOf(origin) === -1){
+      var msg = 'CORS Policy - Denied';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  }
+}));
 
 // catch 400
 app.use((err, req, res, next) => {

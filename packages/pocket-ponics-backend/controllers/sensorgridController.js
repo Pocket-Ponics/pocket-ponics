@@ -1,5 +1,4 @@
-const bcrypt = require('bcrypt');
-const crypto = require('crypto');
+const bcrypt = require('bcrypt-nodejs');
 import mySQL from './mySQLController';
 import notificationController from './notificationController'
 
@@ -391,7 +390,7 @@ exports.updateBackupBatteryLevel = (req, res) => {
     })
 };
 
-//Get the tier and ideal values from backend
+//Get the tiers' ideal values from backend
 exports.getTiersAndIdealValues = (req, res) => {
     //convert base64 credentials to ascii
     let basicAuth = req.headers.authorization.split(" ")[1]
@@ -420,7 +419,7 @@ exports.getTiersAndIdealValues = (req, res) => {
             bcrypt.compare(password, record.password_hash, (err, result) => {
                 if(result)
                 {
-                    //Update greenhouse record
+                    //Get tier ideal values
                     mySQL.getTiersAndIdeal(record.user_id, record.greenhouse_id, function(err, record) {
                         if(!err)
                         {
