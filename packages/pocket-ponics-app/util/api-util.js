@@ -7,7 +7,7 @@ const port = '8080'
 const greenhouse = '169.254.146.181'
 const greenPort = '80'
 
-const waitingTime = 15000
+const waitingTime = 5000
 
 const APIUtil = {
 	processTextResults(res) {

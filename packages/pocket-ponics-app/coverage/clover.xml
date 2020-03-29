@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1584044186059" clover="3.2.0">
-  <project timestamp="1584044186059" name="All files">
-    <metrics statements="720" coveredstatements="368" conditionals="245" coveredconditionals="100" methods="276" coveredmethods="111" elements="1241" coveredelements="579" complexity="0" loc="720" ncloc="720" packages="3" files="45" classes="45"/>
+<coverage generated="1584671201720" clover="3.2.0">
+  <project timestamp="1584671201720" name="All files">
+    <metrics statements="720" coveredstatements="372" conditionals="245" coveredconditionals="101" methods="276" coveredmethods="113" elements="1241" coveredelements="586" complexity="0" loc="720" ncloc="720" packages="3" files="45" classes="45"/>
     <package name="components.greenhouse">
       <metrics statements="95" coveredstatements="95" conditionals="33" coveredconditionals="33" methods="28" coveredmethods="28"/>
       <file name="display-styles.js" path="/Users/elli/Documents/pocket-ponics/packages/pocket-ponics-app/components/greenhouse/display-styles.js">
@@ -140,7 +140,7 @@
       </file>
     </package>
     <package name="screens">
-      <metrics statements="458" coveredstatements="250" conditionals="140" coveredconditionals="67" methods="168" coveredmethods="83"/>
+      <metrics statements="458" coveredstatements="254" conditionals="140" coveredconditionals="68" methods="168" coveredmethods="85"/>
       <file name="auth-loading-screen-styles.js" path="/Users/elli/Documents/pocket-ponics/packages/pocket-ponics-app/screens/auth-loading-screen-styles.js">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="3" count="1" type="stmt"/>
@@ -428,16 +428,16 @@
         <line num="4" count="1" type="stmt"/>
       </file>
       <file name="seedlings-screen.js" path="/Users/elli/Documents/pocket-ponics/packages/pocket-ponics-app/screens/seedlings-screen.js">
-        <metrics statements="22" coveredstatements="20" conditionals="6" coveredconditionals="4" methods="4" coveredmethods="3"/>
+        <metrics statements="22" coveredstatements="21" conditionals="6" coveredconditionals="5" methods="4" coveredmethods="3"/>
         <line num="14" count="1" type="stmt"/>
-        <line num="18" count="1" type="stmt"/>
-        <line num="20" count="1" type="stmt"/>
-        <line num="21" count="1" type="cond" truecount="2" falsecount="0"/>
-        <line num="23" count="1" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="20" count="2" type="stmt"/>
+        <line num="21" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="23" count="2" type="stmt"/>
         <line num="29" count="3" type="stmt"/>
-        <line num="33" count="1" type="stmt"/>
-        <line num="34" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="35" count="0" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="34" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="35" count="1" type="stmt"/>
         <line num="45" count="1" type="stmt"/>
         <line num="46" count="1" type="stmt"/>
         <line num="48" count="1" type="stmt"/>
@@ -528,13 +528,13 @@
         <line num="127" count="0" type="stmt"/>
       </file>
       <file name="soak-wool-screen.js" path="/Users/elli/Documents/pocket-ponics/packages/pocket-ponics-app/screens/soak-wool-screen.js">
-        <metrics statements="6" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="1"/>
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
         <line num="7" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="29" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="29" count="3" type="stmt"/>
       </file>
       <file name="start-seedlings-screen.js" path="/Users/elli/Documents/pocket-ponics/packages/pocket-ponics-app/screens/start-seedlings-screen.js">
         <metrics statements="47" coveredstatements="11" conditionals="16" coveredconditionals="2" methods="13" coveredmethods="5"/>

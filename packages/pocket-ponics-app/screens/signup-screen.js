@@ -73,7 +73,7 @@ class SignUpScreen extends React.Component {
 	}
 
 	render() {
-		const disabledStyle = { opacity: this.state.username === '' || this.state.password === '' ? 0.3 : 1 }
+		const disabledStyle = { ...styles.button, opacity: this.state.username === '' || this.state.password === '' ? 0.3 : 1 }
 
 		return (
 			<KeyboardAvoidingView style={styles.backgroundContainer} behavior={Platform.OS === 'ios' ? 'padding' : null}>
@@ -122,7 +122,7 @@ class SignUpScreen extends React.Component {
 						onPress={this.signUp} 
 						style={disabledStyle}
 						disabled={this.state.username === '' || this.state.password === ''}>
-						<Text style={styles.button}>Sign Up</Text>
+						<Text style={styles.buttonText}>Sign Up</Text>
 					</TouchableOpacity>
 					<TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
 						<Text style={styles.signUp}>Log In</Text>

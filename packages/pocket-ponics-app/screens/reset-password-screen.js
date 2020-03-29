@@ -68,8 +68,8 @@ class ResetPasswordScreen extends React.Component {
 							autoCapitalize="none"
 							textContentType="emailAddress"/>
 					</View>
-					<TouchableOpacity onPress={this.login}>
-						<Text style={styles.button}>Reset Password</Text>
+					<TouchableOpacity style={styles.button} onPress={this.login}>
+						<Text style={styles.buttonText}>Reset Password</Text>
 					</TouchableOpacity>
 					<TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
 						<Text style={styles.signUp}>Login</Text>

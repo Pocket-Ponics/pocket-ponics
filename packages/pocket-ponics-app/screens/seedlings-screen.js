@@ -31,7 +31,7 @@ export default class SeedlingsScreen extends React.Component {
 
 	render() {
 		const seedlings = this.state.seedlings
-		if(seedlings === null) {
+		if(!seedlings) {
 			return (
 				<View style={styles.backgroundContainer}>
 					<Text style={styles.title}>No seedlings currently planted</Text>

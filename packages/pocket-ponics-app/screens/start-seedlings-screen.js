@@ -1,6 +1,7 @@
 import React from 'react'
 import { AsyncStorage, Text, View, Image, TouchableOpacity, FlatList } from 'react-native'
 import APIUtil from '../util/api-util'
+import { StackActions, NavigationActions } from 'react-navigation'
 
 import styles from './setup-styles'
 
@@ -128,17 +129,25 @@ class StartSeedlingsScreen extends React.Component {
 					history: []
 				}
 				global.greenhouses[greenhouseId] = newGreenhouse
-				return this.props.navigation.navigate('Greenhouse')
+				const resetAction = StackActions.reset({
+					index: 0,
+					actions: [NavigationActions.navigate({ 
+						routeName: 'Greenhouse'
+					})],
+				})
+				this.props.navigation.dispatch(resetAction)
 			})
-			.catch(error => {
-				console.log('error', error)
-				// TODO - remove after the backend is pushed to AWS
-				return this.props.navigation.navigate('Greenhouse')
-			})
+			.catch(error => console.log('error', error))
 	}
 
 	cancel() {
-		this.props.navigation.navigate('Greenhouse')
+		const resetAction = StackActions.reset({
+			index: 0,
+			actions: [NavigationActions.navigate({ 
+				routeName: 'Greenhouse'
+			})],
+		})
+		this.props.navigation.dispatch(resetAction)
 	}
 
 	getImage(id) {

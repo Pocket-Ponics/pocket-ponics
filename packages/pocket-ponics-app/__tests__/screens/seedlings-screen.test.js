@@ -11,4 +11,16 @@ describe('Seedlings Screen', () => {
 		).html()
 		expect(tree).toMatchSnapshot()
 	})
+
+	test('renders correctly with seedlings', () => {
+		global.greenhouses = {
+			1: {
+				seedling_time: 'mock time'
+			}
+		}
+		const tree = shallow(
+			<SeedlingsScreen navigation={{ getParam: jest.fn().mockReturnValue(1) }}/>
+		).html()
+		expect(tree).toMatchSnapshot()
+	})
 })
