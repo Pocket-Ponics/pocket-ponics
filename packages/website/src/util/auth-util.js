@@ -32,7 +32,7 @@ const AuthUtil = {
 				])
 			})
 			.then(() => {
-				window.location.href="http://localhost:3000/Admin";
+				window.location.href="http://localhost:3000/AdminHome";
 console.log(token)
 				return localStorage.setItem('token', token)
 			})

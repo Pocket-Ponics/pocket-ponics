@@ -12,6 +12,7 @@ import { Adminlogin } from './components/LoginPage/Adminlogin.js';
 import { Admin } from './Admin';
 import { AdminHome } from './components/AdminHome/AdminHome';
 import PrivateRoute from './PrivateRoute';
+import { adminplant } from './adminplant';
 
 
 class App extends Component {
@@ -25,10 +26,11 @@ class App extends Component {
             <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/about" component={About} />
+              <PrivateRoute exact path="/adminplant" component={adminplant} />
               <Route path="/contact" component={Contact} />
               <Route path="/Adminlogin" component={Adminlogin} />
               <PrivateRoute exact path="/admin" component={Admin}/>
-              <Route path="/AdminHome" component={AdminHome} />
+              <PrivateRoute exact path="/AdminHome" component={AdminHome} />
               <Route component={NoMatch} />
             </Switch>
           </Layout>

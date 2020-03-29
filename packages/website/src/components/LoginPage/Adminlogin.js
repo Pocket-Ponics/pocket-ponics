@@ -14,7 +14,7 @@ export function Adminlogin(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    return AuthUtil.login(username, password, () => this.props.navigation.navigate('Admin'))
+    return AuthUtil.login(username, password, () => this.props.navigation.navigate('AdminHome'))
   }
 
   return (

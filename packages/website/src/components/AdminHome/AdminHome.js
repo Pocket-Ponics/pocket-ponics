@@ -7,52 +7,80 @@ const token = localStorage.getItem('token')
 
 const HeadingComponent = props => React.createElement("h1", null, props.data);
 
-const ParagaphComponent = props => React.createElement("p", null, props.data);
-
 class AsyncComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      resolvedError: false,
-      resolvedSuccess: false,
-      data: '',
-      error: '' };
+	constructor(props) {
+	  	super(props);
+	    this.state = {
+	      	resolvedError: false,
+	      	resolvedSuccess: false,
+	      	data: '',
+	      	plant: '',
+	      	error: '' 
+	    };
+	    this.handleClick = this.handleClick.bind(this);
+	    this.renderChildren = this.renderChildren.bind(this);
+	}
 
-    this.renderChildren = this.renderChildren.bind(this);
+  	componentDidMount() {
+    	this.props.promise()
+    	.then(data => this.setState({ resolvedSuccess: true, data }))
+    	.catch(error => this.setState({ resolvedError: true, error }));
+  	}
+
+	renderChildren() {
+	    const plants = this.state.data
+	  	console.log(this.state.data)
+	  	console.log(this.state.data.length)
+	  	console.log(plants[2].name)
+	    const array = plants.map((obj, index) => obj.name);
+	    console.log(this.state.data)
+	    return array
+	}
+	handleClick(item,array) {
+    localStorage.setItem('plant', item)
+    const plant = localStorage.getItem('plant')
+    localStorage.setItem('plantnames', array)
+    const plantnames = localStorage.getItem('plantnames')
+    console.log('The link was clicked.', plant);
+     console.log('The link was clicked.', plantnames);
+
+  }
+  handleAdd() {
+    window.location.href="http://localhost:3000/Admin"
   }
 
-  componentDidMount() {
-    this.props.promise().
-    then(data => this.setState({ resolvedSuccess: true, data })).
-    catch(error => this.setState({ resolvedError: true, error }));
-  }
 
-  renderChildren() {
+	render() {
+	    if (this.state.resolvedError) 
+	    {
+	      	return React.createElement("h1", null, "Error Encountered");
+	    } 
+	    else if (this.state.resolvedSuccess) 
+	    {
+	    	const array = this.renderChildren()
+	    	console.log(this.renderChildren())
+	    	console.log(this.state.data)
+	      	return <ul>
+		        {array.map(item => {
+		          	return <li>
+			          	<a href="adminplant" onClick={() => this.handleClick(item, array)}>
+			          		{item}
+			          	</a>
+		          	</li>;
+		        })}
 
-    const plants = this.state.data
-  	console.log(this.state.data)
-  	console.log(this.state.data.length)
-  	console.log(plants[2].name)
-    const array = plants.map((obj, index) => obj.name);
-    console.log(array)
-    return array
-  }
+		        <button onClick={() => this.handleAdd()}>
+  Add
+</button>
+	     	</ul>
 
-  render() {
-    if (this.state.resolvedError) {
-      return React.createElement("h1", null, "Error Encountered");
-    } else if (this.state.resolvedSuccess) {
-    	const array = this.renderChildren()
-    	console.log(this.renderChildren())
-      return   <ul>
-        {array.map(item => {
-          return <li><a href="adminplant" onclick="console.log('The link was clicked.'); return false">{item}</a></li>;
-        })}
-      </ul>
-    } else {
-      return React.createElement("h1", null, "Loading...");
-    }
-  }}
+	    } 
+	    else 
+	    {
+	      	return React.createElement("h1", null, "Loading...");
+	    }
+	}
+}
 
 
 const HeadingAPI = () => new Promise((resolve, reject) => {
