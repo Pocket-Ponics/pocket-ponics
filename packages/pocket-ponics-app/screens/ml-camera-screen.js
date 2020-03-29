@@ -54,7 +54,7 @@ const idMatchesResponse = (id, response) => {
 }
 
 const MLCameraScreen = props => {
-	const id = this.props.navigation.getParam('id')
+	const id = props.navigation.getParam('id')
 
 	const [hasPermission, setHasPermission] = useState(null)
 	const [processing, setProcessing] = useState(false)
