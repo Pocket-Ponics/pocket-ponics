@@ -146,6 +146,11 @@ const APIUtil = {
 			new_password
 		})
 	},
+	resetPassword(email) {
+		return APIUtil.post(`http://${global.host || host}:${global.port || port}/auth/reset_password`, '', {
+			email
+		})
+	},
 	getGreenhouses(token) {
 		return APIUtil.get(`http://${global.host || host}:${global.port || port}/mobileapp/greenhouses/`, token, {})
 	},
