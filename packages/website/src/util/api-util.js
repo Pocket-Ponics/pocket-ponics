@@ -10,7 +10,7 @@ const APIUtil = {
 		return Promise.resolve(res.text())
 	},
 	put(endpoint, token, body) {
-		console.log("body:", endpoint)
+		console.log("body:", body)
 		return APIUtil.timeoutFetch(waitingTime, fetch(endpoint, {
 			method: 'PUT',
 			headers: new Headers({
@@ -21,7 +21,7 @@ const APIUtil = {
 			redirect: 'follow'
 		}))
 			.then(response => response.text())
-			.then(result => {console.log(endpoint); window.alert(result); return JSON.parse(result)})
+			.then(result => {console.log(result); console.log(body); JSON.parse(result); window.alert(result); window.location.href="http://localhost:3000/AdminHome"})
 	},
 	urlEncode(object) {
 		var url = []
@@ -115,8 +115,7 @@ const APIUtil = {
 	
 	putPlants(token, plant_id, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, num_plants){
 		console.log("token:", token)
-		return APIUtil.put(`http://${host}:${port}/adminportal`, token,{
-			plant_id,
+		return APIUtil.put(`http://${host}:${port}/adminportal/:${plant_id}`, token,{
 			ph_level_low,
 		    ec_level_low,
 		    temp_low,
@@ -147,10 +146,10 @@ const APIUtil = {
 			.then(result => {console.log(result); console.log(body); JSON.parse(result); window.alert(result); window.location.href="http://localhost:3000/AdminHome"})
 
 	},
-	del(token, plant_id) {
-		console.log('del')
+	delete(token, plant_id) {
+		console.log('delete')
 		return APIUtil.timeoutFetch(waitingTime, fetch(`http://${host}:${port}/adminportal/:plant_id`, {
-			method: 'DEL',
+			method: 'DELETE',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
 				'Content-Type': 'application/x-www-form-urlencoded'
@@ -159,7 +158,7 @@ const APIUtil = {
 			redirect: 'follow'
 		}))
 			.then(response => response.text())
-			.then(result => {console.log(result); JSON.parse(result)})
+			.then(result => {console.log(result); JSON.parse(result); window.alert(result); window.location.href="http://localhost:3000/AdminHome"})
 
 	},
 	async getPlants(token) {

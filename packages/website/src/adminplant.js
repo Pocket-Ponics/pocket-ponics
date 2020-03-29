@@ -69,6 +69,7 @@ async function getData() {
             localStorage.setItem('ec_level_high', plants[i].ec_level_high)
             localStorage.setItem('temp_high', plants[i].temp_high)
             localStorage.setItem('plant_url', plants[i].plant_url)
+            localStorage.setItem('harvest_url', plants[i].harvest_url)
             localStorage.setItem('num_plants', plants[i].num_plants)
             localStorage.setItem('cycle_time', plants[i].cycle_time)
             localStorage.setItem('plant_id', plants[i].plant_id)
@@ -79,19 +80,18 @@ async function getData() {
       
 }
 
-function del(plant_id){
-    localStorage.setItem('plant_id', '')
-    return ApiUtil.del(token, plant_id)
+function handleDel(plant_id){
+  console.log("del1", token)
+
+
+    return ApiUtil.delete(token, plant_id)
 }
 
   function handleSubmit(event) {
+    console.log("submit")
     event.preventDefault();
     console.log(token, ph_level_low, ec_level_low, temp_low, cycle_time, ph_level_high, ec_level_high, temp_high, name, light_time, steps, plant_url, harvest_url, num_plants)
-    return ApiUtil.del(token, plant_id)
-
-
-    /*(`http://${host}:${port}/adminportal/:plant_id`, token, {
-        plant_id,
+    return ApiUtil.put(`http://${host}:${port}/adminportal/:${plant_id}`, token, {
         ph_level_low,
         ec_level_low,
         temp_low,
@@ -104,10 +104,11 @@ function del(plant_id){
         steps, 
         plant_url, 
         harvest_url,
-        num_plants})*/
+        num_plants})
   } 
 
   return(
+<ul>
     <form onSubmit={handleSubmit}>
       <label> Plant name: </label>
         <input type="text" name="name" value={name} onChange={event => setName(event.target.value)}/><Spacer amount={51} />
@@ -150,9 +151,16 @@ function del(plant_id){
 
       <label> Harvest url:</label>
         <input type="text" harvest_url="harvest_url" value={harvest_url} onChange={event => setHarvest_url(event.target.value)} /><br /><br />
-      <Spacer amount={60} /><button onClick = "del(plant_id)">Delete Plant </button><Spacer amount={8} />
+
       <input type="submit" value="Update Plant" />
+
     </form>
+    <button onClick={() => handleDel(plant_id)}>
+  Delete
+</button>
+</ul>
+
+
     
   );
 }

@@ -1,4 +1,4 @@
-import React, {useState, Component} from 'react';
+import React from 'react';
 import { render } from 'react-dom';
 import ApiUtil from '../../util/api-util';
 import ReactDOM from 'react-dom';
@@ -31,7 +31,6 @@ class AsyncComponent extends React.Component {
 	    const plants = this.state.data
 	  	console.log(this.state.data)
 	  	console.log(this.state.data.length)
-	  	console.log(plants[2].name)
 	    const array = plants.map((obj, index) => obj.name);
 	    console.log(this.state.data)
 	    return array
@@ -62,7 +61,7 @@ class AsyncComponent extends React.Component {
 	    	console.log(this.state.data)
 	      	return <ul>
 		        {array.map(item => {
-		          	return <li>
+		          	return <li key = {item}>
 			          	<a href="adminplant" onClick={() => this.handleClick(item, array)}>
 			          		{item}
 			          	</a>
@@ -87,9 +86,6 @@ const HeadingAPI = () => new Promise((resolve, reject) => {
   setTimeout(() => resolve(ApiUtil.getPlants(token)), 5000);
 });
 
-const ParagraphAPI = () => new Promise((resolve, reject) => {
-  setTimeout(() => resolve('Paragraph data'), 2000);
-});
 
 export const AdminHome = () =>
 React.createElement("div", null,
@@ -99,5 +95,5 @@ React.createElement(HeadingComponent, null)));
 
 
 
-ReactDOM.render(<AdminHome />, document.getElementById("root"));
+
 
