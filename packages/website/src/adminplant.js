@@ -11,9 +11,11 @@ const waitingTime = 15000
 
 export function adminplant(item){
   const plant = localStorage.getItem('plant')
-  console.log(plant)
+  
   getData()
-  console.log(setName)
+  const plant_id = localStorage.getItem('id')
+  
+
 
   const cycle = localStorage.getItem('cycle_time')
   const light = localStorage.getItem('light_time')
@@ -44,47 +46,43 @@ export function adminplant(item){
   const [harvest_url, setHarvest_url] = useState(harvesturl);
   const [num_plants, setNum_plants] = useState(numplant);
   const token = localStorage.getItem('token')
-  const plant_id = localStorage.getItem('plant_id')
+
 
 
 async function getData() {
+  const id = localStorage.getItem('i')
   console.log('logging');
     const plants = await ApiUtil.getPlants(token)
-      console.log(plants)
-      console.log(plants.length)
-
-      for(let i = 0; i < plants.length; i++)
-      {
-          var n = plants[i].name.localeCompare(plant);
-          if(n==0)
-          {
-            localStorage.setItem('cycle_time', plants[i].cycle_time)
-            localStorage.setItem('light_time', plants[i].light_time)
-            localStorage.setItem('steps', plants[i].steps)
-            localStorage.setItem('hsteps', plants[i].hsteps)
-            localStorage.setItem('ph_level_low', plants[i].ph_level_low)
-            localStorage.setItem('ph_level_high', plants[i].ph_level_high)
-            localStorage.setItem('temp_low', plants[i].temp_low)
-            localStorage.setItem('ec_level_low', plants[i].ec_level_low)
-            localStorage.setItem('ec_level_high', plants[i].ec_level_high)
-            localStorage.setItem('temp_high', plants[i].temp_high)
-            localStorage.setItem('plant_url', plants[i].plant_url)
-            localStorage.setItem('harvest_url', plants[i].harvest_url)
-            localStorage.setItem('num_plants', plants[i].num_plants)
-            localStorage.setItem('cycle_time', plants[i].cycle_time)
-            localStorage.setItem('plant_id', plants[i].plant_id)
-          }
-            
-
-      }
+      console.log(id)
+      console.log(plants[id].cycle_time)
+      localStorage.setItem('cycle_time', plants[id].cycle_time)
+      localStorage.setItem('light_time', plants[id].light_time)
+      localStorage.setItem('steps', plants[id].steps)
+      localStorage.setItem('hsteps', plants[id].hsteps)
+      localStorage.setItem('ph_level_low', plants[id].ph_level_low)
+      localStorage.setItem('ph_level_high', plants[id].ph_level_high)
+      localStorage.setItem('temp_low', plants[id].temp_low)
+      localStorage.setItem('ec_level_low', plants[id].ec_level_low)
+      localStorage.setItem('ec_level_high', plants[id].ec_level_high)
+      localStorage.setItem('temp_high', plants[id].temp_high)
+      localStorage.setItem('plant_url', plants[id].plant_url)
+      localStorage.setItem('harvest_url', plants[id].harvest_url)
+      localStorage.setItem('num_plants', plants[id].num_plants)
+      localStorage.setItem('cycle_time', plants[id].cycle_time)
+      
       
 }
 
-function handleDel(plant_id){
+function handleDel(){
   console.log("del1", token)
 
 
     return ApiUtil.delete(token, plant_id)
+}
+function handleCancel(){
+  localStorage.removeItem("cycle_time");
+
+    return window.location.href="http://localhost:3000/AdminHome"
 }
 
   function handleSubmit(event) {
@@ -155,8 +153,11 @@ function handleDel(plant_id){
       <input type="submit" value="Update Plant" />
 
     </form>
-    <button onClick={() => handleDel(plant_id)}>
+    <button onClick={() => handleDel()}>
   Delete
+</button>
+<button onClick={() => handleCancel()}>
+  Cancel
 </button>
 </ul>
 

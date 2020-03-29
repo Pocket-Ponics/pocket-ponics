@@ -35,16 +35,47 @@ class AsyncComponent extends React.Component {
 	    console.log(this.state.data)
 	    return array
 	}
+	getData(i) {
+      console.log(i)
+      console.log(this.state.data[i].cycle_time)
+      localStorage.setItem('cycle_time', this.state.data[i].cycle_time)
+      localStorage.setItem('light_time', this.state.data[i].light_time)
+      localStorage.setItem('steps', this.state.data[i].steps)
+      localStorage.setItem('hsteps', this.state.data[i].hsteps)
+      localStorage.setItem('ph_level_low', this.state.data[i].ph_level_low)
+      localStorage.setItem('ph_level_high', this.state.data[i].ph_level_high)
+      localStorage.setItem('temp_low', this.state.data[i].temp_low)
+      localStorage.setItem('ec_level_low', this.state.data[i].ec_level_low)
+      localStorage.setItem('ec_level_high', this.state.data[i].ec_level_high)
+      localStorage.setItem('temp_high', this.state.data[i].temp_high)
+      localStorage.setItem('plant_url', this.state.data[i].plant_url)
+      localStorage.setItem('harvest_url', this.state.data[i].harvest_url)
+      localStorage.setItem('num_plants', this.state.data[i].num_plants)
+      localStorage.setItem('cycle_time', this.state.data[i].cycle_time) 
+	}
+
 	handleClick(item,array) {
+		console.log(item)
+	for(let i = 0; i < this.state.data.length; i++)
+      {
+          var n = this.state.data[i].name.localeCompare(item);
+          if(n==0)
+          {
+          	localStorage.setItem('i', i)
+          	localStorage.setItem('id', this.state.data[i].plant_id)
+          }}
     localStorage.setItem('plant', item)
     const plant = localStorage.getItem('plant')
-    localStorage.setItem('plantnames', array)
-    const plantnames = localStorage.getItem('plantnames')
-    console.log('The link was clicked.', plant);
-     console.log('The link was clicked.', plantnames);
-
+    const id = localStorage.getItem('id')
+    const i = localStorage.getItem('i')
+     this.getData(i)
+    console.log('The link was clicked.', i);
+     console.log('The link was clicked.', id);
+     return
   }
+  
   handleAdd() {
+
     window.location.href="http://localhost:3000/Admin"
   }
 

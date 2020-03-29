@@ -147,9 +147,10 @@ const APIUtil = {
 
 	},
 	delete(token, plant_id) {
-		console.log('delete')
-		return APIUtil.timeoutFetch(waitingTime, fetch(`http://${host}:${port}/adminportal/:plant_id`, {
-			method: 'DELETE',
+		console.log('delete', plant_id)
+		let endpoint = `http://${host}:${port}/adminportal/:${plant_id}`
+		return APIUtil.timeoutFetch(waitingTime, fetch(endpoint, {
+			method: 'DEL',
 			headers: new Headers({
 				'Authorization': 'Bearer ' + token,
 				'Content-Type': 'application/x-www-form-urlencoded'
@@ -158,7 +159,7 @@ const APIUtil = {
 			redirect: 'follow'
 		}))
 			.then(response => response.text())
-			.then(result => {console.log(result); JSON.parse(result); window.alert(result); window.location.href="http://localhost:3000/AdminHome"})
+			.then(result => {console.log(); JSON.parse(result); window.alert(result); window.location.href="http://localhost:3000/AdminHome"})
 
 	},
 	async getPlants(token) {
