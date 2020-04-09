@@ -69,35 +69,11 @@ class SignUpScreen extends React.Component {
 
 		this.setState({ loading: true })
 
-		APIUtil.createUser(this.state.username, this.state.password)
-			.then(response => {
-				console.log(response)
-				if(response['202']) {
-					Alert.alert('Username already exists')
-					return Promise.reject('Username already exists')
-				}
-
-				if(!response['200']) {
-					Alert.alert('Error signing up')
-					return Promise.reject('Sign Up error: ' + JSON.stringify(response))
-				}
-
-				return Promise.all([
-					AsyncStorage.setItem('username', this.state.username),
-					AsyncStorage.setItem('password', this.state.password)
-				])
-			})
-			.then(() => AuthUtil.login(this.state.username, this.state.password, () => this.props.navigation.navigate('Greenhouse')))
-			.catch(error => {
-				console.log('error', error)
-				// TODO - remove after the backend is pushed to AWS
-				const successFn = () => this.props.navigation.navigate('Greenhouse')
-				return AuthUtil.runOfflineTestingCode(this.state.username, this.state.password, successFn)
-			})
+		return AuthUtil.signUp(this.state.username, this.state.password)		
 	}
 
 	render() {
-		const disabledStyle = { opacity: this.state.username === '' || this.state.password === '' ? 0.3 : 1 }
+		const disabledStyle = { ...styles.button, opacity: this.state.username === '' || this.state.password === '' ? 0.3 : 1 }
 
 		return (
 			<KeyboardAvoidingView style={styles.backgroundContainer} behavior={Platform.OS === 'ios' ? 'padding' : null}>
@@ -146,7 +122,7 @@ class SignUpScreen extends React.Component {
 						onPress={this.signUp} 
 						style={disabledStyle}
 						disabled={this.state.username === '' || this.state.password === ''}>
-						<Text style={styles.button}>Sign Up</Text>
+						<Text style={styles.buttonText}>Sign Up</Text>
 					</TouchableOpacity>
 					<TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
 						<Text style={styles.signUp}>Log In</Text>

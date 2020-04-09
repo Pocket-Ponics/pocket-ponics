@@ -12,6 +12,7 @@ import {
 } from 'react-native'
 
 import APIUtil from '../util/api-util'
+import AuthUtil from '../util/auth-util'
 import { TEXT_COLOR } from '../util/constants'
 
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -44,7 +45,8 @@ class ResetPasswordScreen extends React.Component {
 
 		this.setState({ loading: true })
 
-		return APIUtil.resetPassword(this.state.username)
+		return AuthUtil.loadServerInfo()
+			.then(() => APIUtil.resetPassword(this.state.username))
 			.then(() => this.props.navigation.navigate('Login'))
 			.catch(error => console.log('Reset Password Error', error))
 	}
@@ -66,8 +68,8 @@ class ResetPasswordScreen extends React.Component {
 							autoCapitalize="none"
 							textContentType="emailAddress"/>
 					</View>
-					<TouchableOpacity onPress={this.login}>
-						<Text style={styles.button}>Reset Password</Text>
+					<TouchableOpacity style={styles.button} onPress={this.login}>
+						<Text style={styles.buttonText}>Reset Password</Text>
 					</TouchableOpacity>
 					<TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
 						<Text style={styles.signUp}>Login</Text>

@@ -8,14 +8,6 @@ import GreenhouseSwipeable from './swipeable'
 import NewGreenhouse from './new-greenhouse'
 
 class GreenhouseList extends React.Component {
-	constructor(props) {
-		super(props)
-
-		this.state = {
-			currentIndex: 0
-		}
-	}
-
 	render() {
 		const { width } = Dimensions.get('window')
 

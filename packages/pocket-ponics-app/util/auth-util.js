@@ -8,8 +8,21 @@ const generateDateString = (date) => {
 }
 
 const AuthUtil = {
-	getAuthToken: async(loggedOutFn, successFn) => {
+	async loadServerInfo() {
+		const pastServers = JSON.parse(await AsyncStorage.getItem('serverInfo'))
+		const currentServer = parseInt(await AsyncStorage.getItem('currentServer') || '-1', 10)
 
+		console.log(pastServers)
+		console.log(currentServer)
+
+		if (currentServer !== -1) {
+			global.host = pastServers[currentServer].host
+			global.port = pastServers[currentServer].port
+		}
+
+		console.log(`Server: ${global.host}:${global.port}`)
+	},
+	async getAuthToken(loggedOutFn, successFn) {
 		// Retrieve username and password from storage
 		const username = await AsyncStorage.getItem('username')
 		const password = await AsyncStorage.getItem('password')
@@ -22,7 +35,8 @@ const AuthUtil = {
 		}
 
 		let token
-		APIUtil.getPlants()
+		AuthUtil.loadServerInfo()
+			.then(() => APIUtil.getPlants())
 			.then(response => {
 				global.plants = {}
 				response.forEach(plant => global.plants[plant.plant_id] = plant)
@@ -88,7 +102,14 @@ const AuthUtil = {
 	},
 	login(username, password, successFn) {
 		let token
-		APIUtil.getAuthToken(username, password)
+		AuthUtil.loadServerInfo()
+			.then(() => APIUtil.getPlants())
+			.then(response => {
+				global.plants = {}
+				response.forEach(plant => global.plants[plant.plant_id] = plant)
+
+				return APIUtil.getAuthToken(username, password)
+			})
 			.then(response => {
 				if(!response.token) {
 					Alert.alert('Invalid username or password')
@@ -97,6 +118,8 @@ const AuthUtil = {
 
 				token = response.token
 				console.log('Token: ', token)
+
+				global.username = username
 				return Promise.all([
 					AsyncStorage.setItem('username', username),
 					AsyncStorage.setItem('password', password)
@@ -120,14 +143,36 @@ const AuthUtil = {
 					return APIUtil.setDeviceKey(token)
 				}
 			})
-			.then(response => {
-				console.log('key time', response)
-				return AuthUtil.retrieveGreenhouses(token, successFn) 
-			})
+			.then(() => AuthUtil.retrieveGreenhouses(token, successFn))
 			.catch(error => {
-				console.log('error in code', error)
-				// TODO - remove after the backend is pushed to AWS
-				return AuthUtil.runOfflineTestingCode(username, password, successFn)
+				console.log('Error in Login', error)
+				return Alert.alert('Unable to access server: Pocket \'Ponics requires internet access')
+			})
+	},
+	signUp(username, password) {
+		AuthUtil.loadServerInfo()
+			.then(() => APIUtil.createUser(username, password))
+			.then(response => {
+				if(response['202']) {
+					Alert.alert('Username already exists')
+					return Promise.reject('Username already exists')
+				}
+
+				if(!response['200']) {
+					Alert.alert('Error signing up')
+					return Promise.reject('Sign Up error: ' + JSON.stringify(response))
+				}
+
+				global.username = username
+				return Promise.all([
+					AsyncStorage.setItem('username', username),
+					AsyncStorage.setItem('password', password)
+				])
+			})
+			.then(() => AuthUtil.login(this.state.username, this.state.password, () => this.props.navigation.navigate('Greenhouse')))
+			.catch(error => {
+				console.log('Error in Signup', error)
+				return Alert.alert('Unable to access server: Pocket \'Ponics requires internet access')
 			})
 	},
 	// TODO - remove after the backend is pushed to AWS

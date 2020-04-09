@@ -56,7 +56,7 @@ const GreenhouseHistoryDisplay = props => {
 					backgroundGradientFrom: '#472600',
 					backgroundGradientTo: '#472600',
 					color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-					labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+					labelColor: () => 'rgba(255, 255, 255, 1)',
 					style: {
 						borderRadius: 16
 					},

@@ -17,11 +17,11 @@ export default class SeedlingsScreen extends React.Component {
 	constructor(props) {
 		super(props)
 
-		const greenhouses = global.greenhouses
-		const greenhouseId = this.props.navigation.getParam('greenhouseId', 0) 
+		const greenhouseId = this.props.navigation.getParam('greenhouseId', 0)
+		const currentGreenhouse = global.greenhouses[greenhouseId] || {} 
 
 		this.state = {
-			seedlings: greenhouses[greenhouseId].seedling_time
+			seedlings: currentGreenhouse.seedling_time
 		}
 	}
 
@@ -31,7 +31,7 @@ export default class SeedlingsScreen extends React.Component {
 
 	render() {
 		const seedlings = this.state.seedlings
-		if(seedlings === null) {
+		if(!seedlings) {
 			return (
 				<View style={styles.backgroundContainer}>
 					<Text style={styles.title}>No seedlings currently planted</Text>

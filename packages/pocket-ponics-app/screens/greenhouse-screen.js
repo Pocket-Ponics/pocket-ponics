@@ -10,16 +10,11 @@ class GreenhouseScreen extends React.Component {
 	static navigationOptions = ({ navigation }) => {
 		return {
 			title: 'Greenhouses',
-			headerRight: () => {
-				const greenhouses = navigation.getParam('greenhouses', [])
-				const username = navigation.getParam('username', '')
-
-				return (
-					<TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Profile', { greenhouses , username })}>
-						<Text style={styles.buttonText}>Profile</Text>
-					</TouchableOpacity>
-				)
-			},
+			headerRight: () => (
+				<TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Profile', { username: global.username })}>
+					<Text style={styles.buttonText}>Profile</Text>
+				</TouchableOpacity>
+			)
 		}
 	}
 
@@ -65,17 +60,7 @@ class GreenhouseScreen extends React.Component {
 		this.setState({ currentGreenhouse: index })
 	}
 
-	renderLoadingScreen() {
-		return (
-			<View style={styles.background}>
-				<Text>Loading ...</Text>
-			</View>
-		)
-	}
-
 	render() {
-		if(this.state.greenhouses.length < 1) return this.renderLoadingScreen()
-
 		return (
 			<View style={styles.background}>
 				<DotScrollMenu 
@@ -92,8 +77,5 @@ class GreenhouseScreen extends React.Component {
 		)
 	}
 }
-
-
-				
 
 export default GreenhouseScreen

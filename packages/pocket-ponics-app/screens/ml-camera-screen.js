@@ -11,6 +11,13 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import * as ImageManipulator from 'expo-image-manipulator'
 import * as Permissions from 'expo-permissions'
 
+import { 
+	TOMATO_ID, 
+	GREENBEAN_ID, 
+	SPINACH_ID,
+	TURNIP_ID,
+} from '../util/constants'
+
 import APIUtil from '../util/api-util'
 
 import styles from './ml-camera-styles'
@@ -33,7 +40,22 @@ const displayImage = (success, accuracy) => {
 	)
 }
 
+const idMatchesResponse = (id, response) => {
+	switch(id){
+	case TOMATO_ID:
+		return response === 'tomato'
+	case GREENBEAN_ID:
+		return response === 'greenbeans'
+	case SPINACH_ID:
+		return response === 'spinach'
+	case TURNIP_ID:
+		return response === 'turnip'
+	}
+}
+
 const MLCameraScreen = props => {
+	const id = props.navigation.getParam('id')
+
 	const [hasPermission, setHasPermission] = useState(null)
 	const [processing, setProcessing] = useState(false)
 	const [success, setSuccess] = useState(null)
@@ -48,7 +70,7 @@ const MLCameraScreen = props => {
 	}, [])
 
 	if (hasPermission === null) {
-		return <View />
+		return <Text>No access to camera</Text>
 	}
 	if (hasPermission === false) {
 		return <Text>No access to camera</Text>
@@ -68,8 +90,10 @@ const MLCameraScreen = props => {
 			})
 			.then(photo => APIUtil.classifyPhoto(token, photo.base64))
 			.then(response => {
+				console.log(response)
 				setProcessing(false)
-				setSuccess(response.prediction.split('-')[0] === 'ripe')
+				const [status, veg] = response.prediction.split('-')
+				setSuccess(status === 'ripe' && idMatchesResponse(id, veg))
 				setAccuracy(response.accuracy)
 			})
 			.catch(error => {

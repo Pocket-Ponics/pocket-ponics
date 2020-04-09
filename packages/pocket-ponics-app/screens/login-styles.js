@@ -6,8 +6,6 @@ import { BACKGROUND_COLOR, TEXT_COLOR, ACTION_COLOR, PLANT_COLOR } from '../util
 
 const darkener = 'rgba(0, 0, 0, 0.35)'
 
-const { width: WIDTH } = Dimensions.get('window')
-
 const styles = StyleSheet.create({  
 	backgroundContainer: {
 		flex: 1,
@@ -17,7 +15,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
-		paddingBottom: 100
+		padding: 20,
+		marginTop: 40,
+		width: '100%'
 	},
 	icon: {
 		height: 200,
@@ -26,39 +26,79 @@ const styles = StyleSheet.create({
 	},
 	inputContainer: {
 		marginTop: 5,
-		alignItems: 'center'
+		alignItems: 'center',
+		width: '100%'
 	},
 	input: {
-		width: WIDTH - 55,
+		width: '100%',
 		height: 45,
 		borderRadius: 45,
 		fontSize: 16,
 		paddingLeft: 45,
 		backgroundColor: darkener,
 		color: TEXT_COLOR,
-		marginHorizontal: 30
 	},
 	inputIcon: {
 		position: 'absolute',
 		top: 8,
-		left: 45
+		left: 15
 	},
 	button: {
 		backgroundColor: ACTION_COLOR,
-		width: WIDTH - 55,
-		borderRadius: 22,
-		fontSize: 22,
-		color: TEXT_COLOR,
-		textAlign:'center',
-		overflow: 'hidden',
+		borderRadius: 5,
 		padding: 10,
 		margin: 10,
+		width: '100%',
+		alignItems: 'center'
+	},
+	buttonText: {
+		color: TEXT_COLOR,
+		fontSize: 22
 	},
 	signUp: {
 		color: PLANT_COLOR,
 		fontSize: 18,
 		marginBottom: 10,
-	}
+	},
+	heading: {
+		color: TEXT_COLOR,
+		fontSize: 32,
+		marginBottom: 10,
+		marginTop: 10,
+		textAlign: 'center'
+	},
+	text: {
+		color: TEXT_COLOR,
+		fontSize: 18,
+		marginBottom: 20
+	},
+	cancelButton: {
+		alignItems: 'center'
+	},
+	cancelButtonText: {
+		color: PLANT_COLOR,
+		fontSize: 22
+	},
+	serverList: {
+		margin: 0,
+		width: '100%'
+	},
+	server: {
+		borderRadius: 5,
+		padding: 10,
+		borderBottomWidth: 1,
+		borderBottomColor: TEXT_COLOR,
+	},
+	selectedServer: {
+		borderRadius: 5,
+		padding: 10,
+		borderWidth: 3,
+		borderColor: ACTION_COLOR,
+	},
+	serverText: {
+		color: TEXT_COLOR,
+		fontSize: 22,
+	},
 })
 
 export default styles

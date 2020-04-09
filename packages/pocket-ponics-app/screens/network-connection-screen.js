@@ -46,7 +46,31 @@ class NetworkConnectionScreen extends React.Component {
 				})
 				this.props.navigation.dispatch(resetAction)
 			})
-			.catch(error => console.log('error ', error))
+			.catch(error => {
+				console.log('Network Error', error)
+
+				// TODO - Remove after Demo
+				const token = this.props.navigation.getParam('token', '')
+				const resetAction = StackActions.reset({
+					index: 0,
+					actions: [NavigationActions.navigate({ 
+						routeName: 'Wifi',
+						params: { token, wifis: [
+							{
+								ssid: 'Mock Wifi 1',
+								encrypted: false
+							},
+							{
+								ssid: 'Mock Wifi 2',
+								encrypted: true
+							}
+						]} 
+					})],
+				})
+				this.props.navigation.dispatch(resetAction)
+
+				// Alert.alert('You are not connected to a greenhouse, please connect to a greenhouse and try again')
+			})
 	}
 
 	render(){

@@ -66,7 +66,7 @@ class TierSelectionScreen extends React.Component {
 		return this.setState(prevState => ({
 			modalVisible: false, 
 			tiers: this.state.tiers.map((item, index) => {
-				if(index === prevState.currIndex) return data
+				if(index === prevState.currIndex -1) return data
 
 				return item
 			})
@@ -91,7 +91,7 @@ class TierSelectionScreen extends React.Component {
 							<View style={styles.modalDisplay}>
 								<Text style={styles.modalHeading}>Plant Choices</Text>
 								<FlatList
-									data={this.state.currIndex === 0 ? this.topplants : this.plants}
+									data={this.state.currIndex === 1 ? this.topplants : this.plants}
 									renderItem={({ item }) => (
 										<TouchableOpacity style={styles.selectorButton} onPress={() => this.setTier(item.data)}>
 											<Image source={item.img} style={styles.selectorImg}/>
@@ -118,7 +118,7 @@ class TierSelectionScreen extends React.Component {
 					<View style={styles.container}>
 						<Display 
 							tiers={this.state.tiers} 
-							navigation={{navigate: (name, data) => this.setState({ modalVisible: true, currIndex: data.index })}}/>
+							navigation={{navigate: (name, data) => this.setState({ modalVisible: true, currIndex: data.tierId })}}/>
 					</View>
 					<TouchableOpacity 
 						style={{...styles.button, ...opacityStyle}} 

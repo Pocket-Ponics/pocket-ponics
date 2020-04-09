@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, FlatList, View, TouchableOpacity } from 'react-native'
+import { Text, FlatList, View, TouchableOpacity, AlertIOS } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 import { StackActions, NavigationActions } from 'react-navigation'
 
@@ -26,11 +26,32 @@ class WifiScreen extends React.Component {
 		return this.props.navigation.navigate('Greenhouse')
 	}
 
-	setWifi(wifiData) {
-		console.log('wifiData', wifiData)
+	sendToGreenhouse(wifiData) {
 		APIUtil.sendWifiData(wifiData)
 			.then(() => this.goToNext())
-			.catch(error => console.log('Wifi Registration Error', error))
+			.catch(error => {
+				console.log('Wifi Registration Error', error)
+
+				// TODO - remove after demo
+				this.goToNext()
+
+				// Alert.alert('Unable to connect to wifi, please try again')
+			})
+	}
+
+	setWifi(wifiData) {
+		console.log('wifiData', wifiData)
+
+		if (wifiData.encrypted) {
+			AlertIOS.prompt(
+				'Enter WiFi password',
+				null,
+				password => this.sendToGreenhouse({ ... wifiData, password })
+			)
+		} else {
+			this.sendToGreenhouse(wifiData)
+		}
+		
 	}
 
 	renderWifi(wifiData) {
