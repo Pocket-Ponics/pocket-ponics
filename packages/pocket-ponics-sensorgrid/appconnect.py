@@ -9,7 +9,6 @@ app = Flask(__name__)
 def index():
 	return 'Test 123'
 
-
 @app.route("/registration/")
 def action():
 	serial = math.trunc(random()*9000000 + 1000000)
