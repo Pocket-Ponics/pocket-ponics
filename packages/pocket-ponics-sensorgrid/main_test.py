@@ -130,6 +130,19 @@ def sendAPIData(readings, tierNum):
 	print(response.status_code)
 	jprint(response.text)
 	
+# Send API tier data
+def sendAPIGreenhouseData(wResVal, nResVal):
+	url = "http://"+host+":"+port+"/sensorgrid/sensor/greenhouse/general"
+	postHeaders = {
+		'Content-Type': 'application/x-www-form-urlencoded',
+		'Authorization': 'Basic ' + base64.b64encode(serialNo + ':' + password)
+	}
+	payload = 'power_supply='+str(1)+'&backup_battery_level='+str(100)+'&water_level='+str(wResVal)+'&nutrient_level='+str(nResVal)+'&light_level='+str(100)
+	
+	response = requests.request("POST", url, headers=postHeaders, data=payload)
+	print(response.status_code)
+	jprint(response.text)
+	
 # Convert tier data from String to a Readings object
 def parseForReadingData(data):
 	splitData = data.split()
@@ -142,31 +155,44 @@ def getMCUData(tierNum):
 	print("Requesting Data")
 	tierData = getDataFromArduino()
 	# Parse string to get EC, pH, and Water value data
+	print(tierData)
 	tierReading = parseForReadingData(tierData)
 	return tierReading
+	
+def getResLevels():
+	sendToArduino("Requesting Data")
+	sendToArduino(str(1))
+	print("Getting Reservoir data")
+	resData = getDataFromArduino().split()
+	print("Water Res: {}, Nutrient Res: {}".format(resData[3], resData[4]))
+	return resData
 
 # Checks the readings from all the tiers, Sends Data to API and performs the desired actions
 def checkLevels(tierNum):
 	tierReading = getMCUData(tierNum)
+	resData = getResLevels()
 	sendAPIData(tierReading, tierNum)
 	apiData = getAPIData(5-tierNum)
 	light_time = apiData.light_time if apiData.light_time != None else 0
 	light_start = apiData.light_start if apiData.light_start != None else 0
 	[onSched, offSched] = light_schedule(light_time, light_start)
 	lights = on_or_off(onSched, offSched, time.localtime(time.time()).tm_hour)
+	print("Tier: {}, TierReading: {}, Light Time: {}, Light Start: {}, Lights On: {}".format(tierNum,tierReading,light_time,light_start,lights))
 	callMCU(tierNum, "LED", lights)
 	performAction(tierReading, apiData, tierNum)
 
 # Performs the desired actions based off of the readings
 def performAction(readings, desiredRange, tierNum):
-	# If nutrient level is too low -> Turn on nutrient pump
-	if((readings.ec_level < desiredRange.ec_min) or (readings.pH_level < desiredRange.pH_min)):
+	# If nutrient level is too low and water is not at max -> Turn on nutrient pump
+	if(((readings.ec_level < desiredRange.ec_min) or (readings.pH_level > desiredRange.pH_max)) and (int(readings.water_level) != 1)):
 		callMCU(tierNum, "nutrientPump", 1)
-		print("Nutrient level low")
+		print("Nutrient level low and water is not at max")
+		print("readings.ec_level {}, desiredRange.ec_max: {}, readings.pH_level: {}, desiredRange.pH_max: {}".format(readings.ec_level, desiredRange.ec_min, readings.pH_level, desiredRange.pH_max))
 	# If nutrient level is high and the water level isn't at max -> Turn on water pump
-	if(((readings.ec_level > desiredRange.ec_max) and (readings.pH_level > desiredRange.pH_max)) and (int(readings.water_level) != 1)):
+	if(((readings.ec_level > desiredRange.ec_max) and (readings.pH_level < desiredRange.pH_min)) and (int(readings.water_level) != 1)):
 		callMCU(tierNum, "waterPump", 1)
-		print("Nutrient level is low and water isn't at max")
+		print("readings.ec_level {}, desiredRange.ec_max: {}, readings.pH_level: {}, desiredRange.pH_max: {}".format(readings.ec_level, desiredRange.ec_max, readings.pH_level, desiredRange.pH_min))
+		print("Nutrient level is high and water isn't at max")
 		print("Water level is {}, which is too high: {}".format(readings.water_level, int(readings.water_level) == 1))
 	# If water level is too low -> Turn on water pump
 	if(readings.water_level == -1):
@@ -212,14 +238,23 @@ def on_or_off(on_schedule, off_schedule, current_time):
          if(current_time >= on_schedule[r] and current_time < off_schedule[r]):
             return 1
     return 0
-
-# Main
-
-def main():
+    
+def toggleLEDs(activation):
+	for i in range(1, 5):
+		callMCU(i, "LED", activation)
+	print("Turning LED's: {}".format("Off" if (activation == 0) else "On"))
+	
+def connectToMCU():
 	setupSerial(115200, "/dev/ttyACM0")
 
+# Main
+def main():
+	connectToMCU()
 	while(True):
 		if(time.localtime(time.time()).tm_min == 0):
 			for tierNum in range(1, 5):
 				checkLevels(tierNum)
+			resLvl = getResLevels()
+			sendAPIGreenhouseData(resLvl[3], resLvl[4])
+			print("Water level: {}, Nutrient level: {}".format(resLvl[3], resLvl[4]))
 		time.sleep(60)
