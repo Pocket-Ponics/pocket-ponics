@@ -5,6 +5,9 @@ import math
 from wifi import Cell, Scheme
 
 app = Flask(__name__)
+@app.route('/')
+def index():
+	return 'Test 123'
 
 @app.route("/registration/")
 def action():
@@ -16,6 +19,11 @@ def action():
 	
 @app.route("/wifi/")
 def wifi():
+	for wifi in Cell.all('wlan0'):
+		print(wifi.ssid, wifi.channel, wifi.address, wifi.mode)
+		if wifi.encrypted:
+			print(wifi.encryption_type)
+
 	list = [{'ssid': wifi.ssid, 'encrypted': wifi.encrypted, 'type': wifi.encryption_type if wifi.encrypted else '', 'strength': wifi.quality } for wifi in Cell.all('wlan0') if wifi.channel == 1 and wifi.ssid != '\x00']
 	return jsonify(list)
 	

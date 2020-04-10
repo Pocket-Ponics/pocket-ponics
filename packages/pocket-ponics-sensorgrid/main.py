@@ -58,7 +58,7 @@ def sendAPIData(readings, tierNum):
 	print(response.status_code)
 	jprint(response.text)
 	
-# Returns the value of the component based on tier and component type
+# (OLD CODE)Returns the value of the component based on tier and component type
 def getCompVal(tierNum, component):
 	pin = pinDict[tierNum-1][component]
 	# TODO: val = # get value from pin
