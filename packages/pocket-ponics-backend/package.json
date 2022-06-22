@@ -16,7 +16,7 @@
   "dependencies": {
     "@tensorflow/tfjs": "^1.5.1",
     "@tensorflow/tfjs-node": "^1.5.1",
-    "async": "^3.1.0",
+    "async": "^3.2.2",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.7.1",
     "cors": "^2.8.5",
