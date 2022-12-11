@@ -23,7 +23,7 @@
     "dotenv": "^8.2.0",
     "email-validator": "^2.0.4",
     "expo-server-sdk": "^3.4.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "forever": "^1.0.0",
     "mysql": "^2.17.1",
     "node-gyp": "^6.1.0",
